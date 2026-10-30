@@ -97,6 +97,9 @@
 
 .page__props img:nth-child(2) { height: 92%; max-width: 46%; }
 
+/* 右位镜像：素材统一朝右生成，站在右侧的人必须翻过来才面向场景中心 */
+.page__props:not(.page__props--bed) img:nth-child(2) { transform: scaleX(-1); }
+
 /* 床面定位：睡姿立牌摆在床上，不按脚底贴边（cloud/drip 页用 stand="bed"） */
 .page__props--bed {
   inset: 0;
@@ -278,6 +281,8 @@
 }
 
 /* 各反派实心脚离底不同（pebble 绒脚发虚）：C 位按本下沉对齐基线，多余绒边藏进标题后 */
+.page__cover-cast img:nth-child(3) { transform: scaleX(-1); } /* 右位反派面向中间 */
+
 .cover--appendectomy .page__cover-cast img:nth-child(2) { transform: translateY(19px); }
 .cover--injection .page__cover-cast img:nth-child(2) { transform: translateY(7px); }
 

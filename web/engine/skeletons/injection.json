@@ -52,7 +52,7 @@
       "id": "ticket",
       "layout": "image_right",
       "title": "不给冠冠怪买车票",
-      "text": "出门前，护士给{{child.name}}戴上一只小口罩。这不是罚谁——冠冠怪最喜欢搭顺风车，戴好口罩、勤洗手，就不给它买车票；多喝温水，是让身体有力气自己送客。",
+      "text": "出门前，护士给{{child.name}}戴上一只小口罩。这不是罚谁——冠冠怪最喜欢搭顺风车，戴好口罩、勤洗手，就不给它买车票；多喝温水，是让身体有力气自己把冠冠怪请出去。",
       "asset": "scene_hospital_front",
       "props": [
         "nurse__present",
@@ -131,10 +131,10 @@
       "id": "badge",
       "layout": "badge",
       "title": "小勇士徽章",
-      "text": "{{child.name}}勇敢地伸出小手，让护士放上那只小蝴蝶，把冠冠怪送出了那个小山洞。这枚徽章，是那天早上你自己走进那道门的证明。",
+      "text": "冠冠怪搬走了，{{child.name}}的力气又回来了。这枚徽章，是那天你自己走进那扇门、又自己走出来的证明。",
       "asset": "badge_star",
       "badge": {
-        "name": "冠冠怪送行者",
+        "name": "冠冠怪不见啦",
         "engrave": "{{child.name}}"
       }
     }

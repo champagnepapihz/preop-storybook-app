@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUYXHWB",
+  "book_id": "CASE-MVUZ5565",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUYXHWB",
+    "case_id": "CASE-MVUZ5565",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -380,7 +380,7 @@
       "draft": false,
       "condition": null,
       "title": "小勇士徽章",
-      "text": "豆豆把肚子里的那只小尾巴怪请了出去。这枚徽章，是那天早上你自己走进那道门的证明。",
+      "text": "小尾巴怪搬走了，豆豆的肚子不疼了。这枚徽章，是那天你自己走进那扇门、又自己走出来的证明。",
       "image": {
         "id": "badge_star",
         "src": "assets/badges/badge_star.webp",
@@ -390,7 +390,7 @@
       "props": [],
       "fact": null,
       "badge": {
-        "name": "小尾巴怪送行者",
+        "name": "小尾巴怪搬走了",
         "engrave": "豆豆"
       }
     }
@@ -400,7 +400,7 @@
     "page_count": 9,
     "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:48:37.596Z"
+    "built_at": "2026-10-30T12:54:34.351Z"
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"
