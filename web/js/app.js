@@ -40,7 +40,9 @@ async function boot() {
     state.samples = [];
   }
 
-  await loadSample(0);
+  // ?case=N 直接打开第 N 本（演示/回归用，0 起）
+  const wantCase = Number(new URLSearchParams(location.search).get('case'));
+  await loadSample(Number.isFinite(wantCase) && wantCase > 0 ? wantCase : 0);
 
   $('#gen').addEventListener('click', () => generate($('#notice').value));
   $('#sample').addEventListener('click', () => loadSample(state.sampleIdx + 1));
