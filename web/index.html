@@ -26,7 +26,7 @@
     <section class="workbench">
       <aside class="panel felt">
         <h2 class="panel__h">① 贴一张术前须知</h2>
-        <p class="panel__hint">粘贴术前须知原文（脱敏或合成）。生成前逐条校验：每个数字都必须能在这段文字里找到。</p>
+        <p class="panel__hint">由医生或家长手动录入（脱敏或合成病例）。系统不识别图片，只做审计：录入的数字必须能在原文里逐字找到。</p>
         <textarea id="notice" spellcheck="false" aria-label="术前须知文本"></textarea>
         <div class="panel__row">
           <button class="btn btn--primary" id="gen">缝一本绘本</button>
@@ -35,6 +35,7 @@
 
         <h2 class="panel__h">② 解析出的事实</h2>
         <ul class="facts" id="facts"></ul>
+        <ul class="audit" id="audit"></ul>
         <p class="report" id="report"></p>
       </aside>
 

@@ -107,3 +107,45 @@ export function formatReport(result) {
   }
   return lines.join('\n');
 }
+
+/* ------------------------------------------------------------------
+ * 录入端审计（advisory，只提示不拦截）
+ *
+ * 前提：本系统不做 OCR，原文由人录入。所以"错"只可能来自两处：
+ * 录入打错、映射选错。这里把最常见的两类在录入当下就喊出来，
+ * 让问题停在"人还能改"的时刻，而不是流到家长手里。
+ * ------------------------------------------------------------------ */
+
+export function auditCase(caseObj) {
+  const notes = [];
+  const f = caseObj.facts || {};
+  const push = (level, text) => notes.push({ level, text });
+
+  const solid = f.fasting ? Number((f.fasting.short || '').replace(/[^\d.]/g, '')) : NaN;
+  if (f.fasting) {
+    if (!Number.isFinite(solid) || solid <= 0) {
+      push('warn', '禁食时长未能解析出具体小时数，请核对录入原文。');
+    } else if (solid > 12) {
+      push('warn', `禁食 ${solid} 小时，超出常见范围，请复核是不是录入错误。`);
+    }
+    if (!f.fasting.short_liquid || f.fasting.short_liquid === '足够时间') {
+      push('info', '未录到禁水时长，绘本里只会写禁食。');
+    }
+  }
+
+  const age = caseObj.child?.age;
+  if (Number.isFinite(age) && (age < 1 || age > 14)) {
+    push('warn', `患儿年龄 ${age} 岁，超出儿科常见区间，请核对。`);
+  }
+
+  if (caseObj.child?.name === '小勇士') {
+    push('info', '未取到患儿姓名，书名里会使用"小勇士"占位。');
+  }
+
+  const procKey = caseObj.procedure?.key;
+  if (!procKey || procKey === 'generic') {
+    push('warn', '未识别出术式，暂时出不了这本书。请核对术式名称，或补一条骨架再生成。');
+  }
+
+  return notes;
+}

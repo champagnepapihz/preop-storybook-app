@@ -1,6 +1,6 @@
 ﻿import { parseNotice, parseWithLLM } from '../engine/parse.mjs';
 import { assembleBook } from '../engine/assemble.mjs';
-import { validateBook } from '../engine/validate.mjs';
+import { validateBook, auditCase } from '../engine/validate.mjs';
 
 const $ = (s) => document.querySelector(s);
 
@@ -187,6 +187,17 @@ async function generate(text) {
 function renderFacts(caseObj, report) {
   const ul = $('#facts');
   ul.innerHTML = '';
+
+  // 录入端审计：数字越界 / 缺项 / 术式未识别，都在这里先喊一声
+  const audit = $('#audit');
+  if (audit) {
+    const notes = auditCase(caseObj);
+    audit.innerHTML = notes
+      .map((n) => `<li class="audit__item audit__item--${n.level}">${escapeHTML(n.text)}</li>`)
+      .join('');
+    audit.style.display = notes.length ? '' : 'none';
+  }
+
   const facts = Object.values(caseObj.facts || {});
 
   for (const f of facts) {
