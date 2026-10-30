@@ -356,5 +356,80 @@
       "kind": "badge",
       "placeholder": false
     }
+  },
+  "proportions": {
+    "note": "体型比例表。基准 = 患儿站立身高 1.00。所有立牌脚底同一基线，按此表缩放；姿势系数用于抵消'跪/坐/趴'本身更矮的像素高度，避免被强行拉到与站姿等高。",
+    "base": 1,
+    "roles": {
+      "kid_boy": {
+        "scale": 1,
+        "label": "患儿·男孩"
+      },
+      "kid_girl": {
+        "scale": 1,
+        "label": "患儿·女孩"
+      },
+      "friend": {
+        "scale": 0.96,
+        "label": "同龄病房朋友"
+      },
+      "mom": {
+        "scale": 1.44,
+        "label": "妈妈"
+      },
+      "dad": {
+        "scale": 1.5,
+        "label": "爸爸"
+      },
+      "doctor": {
+        "scale": 1.5,
+        "label": "医生"
+      },
+      "nurse": {
+        "scale": 1.42,
+        "label": "护士"
+      },
+      "nurse_cloud": {
+        "scale": 1.42,
+        "label": "云朵护士"
+      },
+      "villain_pebble": {
+        "scale": 0.9,
+        "label": "小尾巴怪"
+      },
+      "villain_volcano": {
+        "scale": 1.2,
+        "label": "火山怪"
+      },
+      "villain_corona": {
+        "scale": 0.72,
+        "label": "冠冠怪"
+      },
+      "villain_dino": {
+        "scale": 1.32,
+        "label": "紫色小恐龙"
+      },
+      "badge_star": {
+        "scale": 1,
+        "label": "徽章"
+      }
+    },
+    "poses": {
+      "stand": 1,
+      "wave": 1,
+      "cheer": 1,
+      "thumb": 1,
+      "back": 1,
+      "shy": 1,
+      "peek": 1,
+      "hug": 0.66,
+      "sit": 0.6,
+      "bear": 0.62,
+      "bed": 0.72,
+      "sleep": 0.5
+    },
+    "special": {
+      "_comment": "sleep / bed 姿势走床面版式（stand=\"bed\"），不参与地面基线缩放"
+    }
   }
 }

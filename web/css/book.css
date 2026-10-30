@@ -74,11 +74,18 @@
 
 .page--imgleft .page__fact { margin-top: 12px; }
 
-/* 布偶站位：角色立牌压在场景上 */
+/* 布偶站位：角色立牌压在场景上
+ *
+ * 体型规则（唯一真相：web/engine/proportions.json，随 manifest 下发）：
+ *   --s = 角色系数 × 姿势系数，基准 = 患儿站立身高 1.00
+ *   --k = 本页同框系数（人越多整体越小，但相互比例不变）
+ *
+ * 尺寸单位是 --ph（页高 px，由 JS 在翻页器定尺寸后写入），因此无论这一页的
+ * 图片区多高、立牌站在哪一页，同一个角色永远同一身高 —— 比例是全局的。
+ */
 .page__props {
   position: absolute;
   inset: auto 0 0 0;
-  height: 74%;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -86,29 +93,26 @@
   pointer-events: none;
 }
 
+.page__props--n1 { --k: 1; }
+.page__props--n2 { --k: .72; }
+.page__props--n3 { --k: .54; }
+
 .page__props img {
-  height: 92%;
+  height: calc(var(--ph, 560px) * .4 * var(--s, 1) * var(--k, 1));
   width: auto;
-  max-width: 54%;
+  max-width: calc(var(--ph, 560px) * .48);
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 10px 10px rgba(60, 34, 18, .3));
 }
 
-.page__props img:nth-child(2) { height: 92%; max-width: 46%; }
-
 /* 右位镜像：素材统一朝右生成，站在右侧的人必须翻过来才面向场景中心 */
 .page__props:not(.page__props--bed) img:not(:only-child):last-child { transform: scaleX(-1); }
 .page__props:not(.page__props--bed) img:nth-child(2):not(:last-child) { transform: none; }
 
-/* 三人同框：各自收窄，否则会互相挤出画面 */
-.page__props--n3 img { height: 84%; max-width: 32%; }
-.page__props--n3 img:nth-child(2) { height: 84%; max-width: 32%; }
-
 /* 床面定位：睡姿立牌摆在床上，不按脚底贴边（cloud/drip 页用 stand="bed"） */
 .page__props--bed {
   inset: 0;
-  height: auto;
   align-items: flex-start;
   justify-content: center;
   padding: 0;
@@ -124,18 +128,20 @@
   transform: none;
 }
 
-/* 全幅页：双立牌并排站在文字卡上方，脚被卡片自然遮住 */
-.page--full .page__props { bottom: 26%; }
+/* 微距特写页（手背留置针等）：场景本身是近景，人物按比例站进去必然"小人国"，
+   所以缩到 .5 并压到下角，读作「画面边角上的讲述者」，不参与与场景的大小比较。 */
+.page__props--micro { --k: .5; padding: 0 14px 4px; }
 
-.page--full .page__props img { max-width: 46%; }
+/* 全幅页：立牌并排站在文字卡上方，脚被卡片自然遮住 */
+.page--full .page__props { bottom: 26%; --k: .8; }
 
-.page--full .page__props img:nth-child(2) {
-  max-width: 46%;
-  transform: scaleX(-1); /* 反派转身面向医生 */
+/* 长文案全幅页：立牌站到上半区，不被高字卡埋掉 */
+.page--stand-high .page__props {
+  bottom: auto; top: 19%;
+  justify-content: flex-start;
+  padding-left: 20%;
+  --k: .68;
 }
-
-/* 长文案全幅页：立牌站到上半区，不被高字卡埋掉（脚允许轻微压住卡片上沿） */
-.page--stand-high .page__props { bottom: auto; top: 19%; height: 38%; justify-content: flex-start; padding-left: 20%; }
 
 /* ---------- 文字 ---------- */
 
@@ -277,9 +283,9 @@
 }
 
 .page__cover-cast img {
-  height: 176px;
+  height: calc(var(--ph, 560px) * .3 * var(--s, 1));
   width: auto;
-  max-width: 33%;
+  max-width: none;
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));

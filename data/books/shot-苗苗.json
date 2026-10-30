@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUZAMAF",
+  "book_id": "CASE-MVUZU78H",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUZAMAF",
+    "case_id": "CASE-MVUZU78H",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -92,26 +92,30 @@
         "id": "scene_cover",
         "src": "assets/scenes/scene_cover.jpg",
         "alt": "封面舞台",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "mom__hug",
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.95
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.72
         }
       ],
       "fact": null,
@@ -129,14 +133,16 @@
         "id": "scene_fever_night",
         "src": "assets/scenes/scene_fever_night.jpg",
         "alt": "发热之夜",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "villain_corona__smug",
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.72
         }
       ],
       "fact": null,
@@ -154,26 +160,30 @@
         "id": "scene_ward_talk",
         "src": "assets/scenes/scene_ward_talk.jpg",
         "alt": "病房谈话",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "doctor__wave",
           "src": "assets/characters/doctor__wave.webp",
           "alt": "白大褂医生·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.5
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         },
         {
           "id": "nurse__wave",
           "src": "assets/characters/nurse__wave.webp",
           "alt": "护士·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.42
         }
       ],
       "fact": null,
@@ -191,20 +201,23 @@
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
         "alt": "医院门前",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "nurse__present",
           "src": "assets/characters/nurse__present.webp",
           "alt": "护士·present",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.42
         },
         {
           "id": "villain_corona__smug",
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.72
         }
       ],
       "fact": null,
@@ -213,7 +226,7 @@
     {
       "id": "needle",
       "layout": "image_left",
-      "stand": null,
+      "stand": "micro",
       "draft": false,
       "condition": null,
       "title": "手上停一只小蝴蝶",
@@ -222,20 +235,23 @@
         "id": "scene_butterfly_hand",
         "src": "assets/scenes/scene_butterfly_hand.jpg",
         "alt": "手背小蝴蝶",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "nurse__wave",
           "src": "assets/characters/nurse__wave.webp",
           "alt": "护士·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.42
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         }
       ],
       "fact": {
@@ -259,14 +275,16 @@
         "id": "scene_drip_rain",
         "src": "assets/scenes/scene_drip_rain.jpg",
         "alt": "输液雨夜",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "kid_boy__sleep",
           "src": "assets/characters/kid_boy__sleep.png",
           "alt": "小患者·男孩·睡着",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.5
         }
       ],
       "fact": null,
@@ -284,20 +302,23 @@
         "id": "scene_wake_up",
         "src": "assets/scenes/scene_wake_up.jpg",
         "alt": "醒来",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "kid_boy__cheer",
           "src": "assets/characters/kid_boy__cheer.png",
           "alt": "小患者·男孩·欢呼",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         },
         {
           "id": "mom__hug",
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.95
         }
       ],
       "fact": {
@@ -321,20 +342,23 @@
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
         "alt": "医院门前",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "doctor__cheer",
           "src": "assets/characters/doctor__cheer.webp",
           "alt": "白大褂医生·欢呼",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.5
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.72
         }
       ],
       "fact": null,
@@ -352,7 +376,8 @@
         "id": "badge_star",
         "src": "assets/badges/badge_star.webp",
         "alt": "小勇士徽章",
-        "kind": "badge"
+        "kind": "badge",
+        "scale": 1
       },
       "props": [],
       "fact": null,
@@ -367,7 +392,7 @@
     "page_count": 9,
     "fact_pages": 2,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:58:49.815Z"
+    "built_at": "2026-10-30T13:14:03.425Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

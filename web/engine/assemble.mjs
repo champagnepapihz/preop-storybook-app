@@ -38,10 +38,20 @@ export function pickSkeleton(caseObj, skeletons) {
  * @param {object} skeletons  { key: skeleton }
  */
 export function assembleBook(caseObj, manifest, skeletons) {
+  // 体型比例：角色系数 × 姿势系数，基准 = 患儿站立身高 1.00
+  // 图已裁到不透明包围盒，所以「图片高度」＝「角色视觉高度」，等比缩放即可对齐基线
+  const PROP = manifest?.proportions || {};
+  const scaleOf = (id) => {
+    const [role, pose] = String(id).split('__');
+    const r = PROP.roles?.[role]?.scale ?? 1;
+    const pz = PROP.poses?.[pose || 'stand'] ?? 1;
+    return Number((r * pz).toFixed(3));
+  };
+
   const asset = (id) => {
     const a = manifest?.assets?.[id];
-    if (!a) return { id, src: null, alt: id };
-    return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags };
+    if (!a) return { id, src: null, alt: id, scale: 1 };
+    return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags, scale: scaleOf(id) };
   };
 
   // 主角立牌由性别决定：kid:stand → kid_boy__stand / kid_girl__stand

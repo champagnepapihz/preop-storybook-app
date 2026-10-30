@@ -12,6 +12,7 @@ const state = {
   presetIdx: 0,
   flip: null,
   book: null,
+  phObserver: null,
 };
 
 /* ---------------- 数据加载 ---------------- */
@@ -313,7 +314,8 @@ function el(html) {
 
 function imgTag(asset, cls = '') {
   if (!asset?.src) return '';
-  return `<img class="${cls}" src="${asset.src}" alt="${escapeHTML(asset.alt || '')}" loading="lazy" />`;
+  const s = asset.scale && asset.scale !== 1 ? ` style="--s:${asset.scale}"` : '';
+  return `<img class="${cls}" src="${asset.src}" alt="${escapeHTML(asset.alt || '')}" loading="lazy"${s} />`;
 }
 
 function propsHTML(props, stand) {
@@ -514,6 +516,21 @@ function renderBook(book) {
     mobileScrollSupport: true,
   });
   flip.loadFromHTML(pages);
+
+  // 立牌尺寸以「整页高度」为单位：把实际页高写进 --ph，比例才不会受图片区高度影响
+  const syncPageHeight = () => {
+    const el = host.querySelector('.page');
+    const h = el?.clientHeight || 0;
+    if (h > 0) host.style.setProperty('--ph', `${h}px`);
+  };
+  syncPageHeight();
+  if (state.phObserver) state.phObserver.disconnect();
+  const firstPage = host.querySelector('.page');
+  if (firstPage) {
+    state.phObserver = new ResizeObserver(syncPageHeight);
+    state.phObserver.observe(firstPage);
+  }
+
   state.flip = flip;
   flip.on('flip', (e) => {
     const i = e.data;

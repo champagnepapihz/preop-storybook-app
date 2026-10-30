@@ -39,8 +39,28 @@ for (const [key, sk] of Object.entries(skeletons)) {
     }
   }
 }
+// —— 体型比例校验：每个会用到的角色都必须在 proportions.json 里有明确系数，
+//    否则会静默回落到 1.0（医生和孩子一样高）——这种错最不容易被发现。
+const roles = manifest?.proportions?.roles || {};
+const checkRole = (id) => {
+  if (id.startsWith('kid:')) return true;             // 运行时展开为 kid_boy / kid_girl
+  const role = id.split('__')[0];
+  if (!roles[role]) {
+    console.error(`✗ MISSING_PROPORTION  素材 ${id} 在 proportions.json 里没有角色系数`);
+    return false;
+  }
+  return true;
+};
+for (const [key, sk] of Object.entries(skeletons)) {
+  for (const pg of sk.pages || []) {
+    for (const id of pg.props || []) {
+      if (!checkRole(id)) process.exitCode = 1;
+    }
+  }
+}
+
 if (process.exitCode === 1) {
-  console.error('素材引用校验未通过，构建中止。');
+  console.error('素材引用 / 体型比例校验未通过，构建中止。');
   process.exit(1);
 }
 

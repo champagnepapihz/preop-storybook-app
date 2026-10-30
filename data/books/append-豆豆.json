@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUZAMA8",
+  "book_id": "CASE-MVUZU789",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUZAMA8",
+    "case_id": "CASE-MVUZU789",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -122,26 +122,30 @@
         "id": "scene_cover",
         "src": "assets/scenes/scene_cover.jpg",
         "alt": "封面舞台",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "mom__hug",
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.95
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         },
         {
           "id": "villain_pebble__happy",
           "src": "assets/characters/villain_pebble__happy.webp",
           "alt": "小尾巴怪·happy",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -159,14 +163,16 @@
         "id": "scene_belly_pocket",
         "src": "assets/scenes/scene_belly_pocket.jpg",
         "alt": "肚子小口袋",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "villain_pebble__angry",
           "src": "assets/characters/villain_pebble__angry.webp",
           "alt": "小尾巴怪·angry",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -184,20 +190,23 @@
         "id": "scene_ward_talk",
         "src": "assets/scenes/scene_ward_talk.jpg",
         "alt": "病房谈话",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "doctor__wave",
           "src": "assets/characters/doctor__wave.webp",
           "alt": "白大褂医生·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.5
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         }
       ],
       "fact": null,
@@ -215,14 +224,16 @@
         "id": "scene_fasting_moon",
         "src": "assets/scenes/scene_fasting_moon.jpg",
         "alt": "夜里空肚子",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         }
       ],
       "fact": {
@@ -249,14 +260,16 @@
         "id": "scene_ward_bed_close",
         "src": "assets/scenes/scene_ward_bed_close.jpg",
         "alt": "病房床头特写",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "kid_boy__sleep",
           "src": "assets/characters/kid_boy__sleep.png",
           "alt": "小患者·男孩·睡着",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.5
         }
       ],
       "fact": {
@@ -271,7 +284,7 @@
     {
       "id": "needle",
       "layout": "image_right",
-      "stand": null,
+      "stand": "micro",
       "draft": false,
       "condition": null,
       "title": "第三件事：手上停一只小蝴蝶",
@@ -280,20 +293,23 @@
         "id": "scene_butterfly_hand",
         "src": "assets/scenes/scene_butterfly_hand.jpg",
         "alt": "手背小蝴蝶",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "nurse__wave",
           "src": "assets/characters/nurse__wave.webp",
           "alt": "护士·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.42
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         }
       ],
       "fact": {
@@ -317,20 +333,23 @@
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
         "alt": "医院门前",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "doctor__wave",
           "src": "assets/characters/doctor__wave.webp",
           "alt": "白大褂医生·挥手",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1.5
         },
         {
           "id": "villain_pebble__angry",
           "src": "assets/characters/villain_pebble__angry.webp",
           "alt": "小尾巴怪·angry",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -348,20 +367,23 @@
         "id": "scene_wake_up",
         "src": "assets/scenes/scene_wake_up.jpg",
         "alt": "醒来",
-        "kind": "scene"
+        "kind": "scene",
+        "scale": 1
       },
       "props": [
         {
           "id": "kid_boy__cheer",
           "src": "assets/characters/kid_boy__cheer.png",
           "alt": "小患者·男孩·欢呼",
-          "kind": "character"
+          "kind": "character",
+          "scale": 1
         },
         {
           "id": "mom__hug",
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
-          "kind": "character"
+          "kind": "character",
+          "scale": 0.95
         }
       ],
       "fact": {
@@ -385,7 +407,8 @@
         "id": "badge_star",
         "src": "assets/badges/badge_star.webp",
         "alt": "小勇士徽章",
-        "kind": "badge"
+        "kind": "badge",
+        "scale": 1
       },
       "props": [],
       "fact": null,
@@ -400,7 +423,7 @@
     "page_count": 9,
     "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:58:49.809Z"
+    "built_at": "2026-10-30T13:14:03.417Z"
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"

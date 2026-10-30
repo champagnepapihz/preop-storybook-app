@@ -9,7 +9,8 @@
     "build": "node tooling/build.mjs",
     "dev": "node tooling/serve.mjs",
     "cases": "node tooling/make-cases.mjs",
-    "mcp": "node mcp/server.mjs"
+    "mcp": "node mcp/server.mjs",
+    "trim": "node tooling/trim-webp.mjs"
   },
   "dependencies": {
     "page-flip": "2.0.7"

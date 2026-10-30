@@ -295,6 +295,13 @@ for (const [id, , ,] of [...SCENES, ...CHARACTERS, ...BADGES]) {
   manifest.assets[id] = { src: rel, alt: labelOf(id), kind: 'placeholder', placeholder: true };
 }
 
+// 体型比例表随 manifest 一起发布（前端与 MCP 共用同一份真相）
+try {
+  manifest.proportions = JSON.parse(readFileSync(join(ROOT, 'web/engine/proportions.json'), 'utf8'));
+} catch {
+  console.warn('⚠ 未找到 web/engine/proportions.json，角色按等高渲染');
+}
+
 writeFileSync(join(ROOT, 'assets/manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
 
 const ids = Object.keys(manifest.assets);
