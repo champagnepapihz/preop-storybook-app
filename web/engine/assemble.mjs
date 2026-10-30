@@ -37,7 +37,7 @@ export function pickSkeleton(caseObj, skeletons) {
  * @param {object} manifest   assets/manifest.json
  * @param {object} skeletons  { key: skeleton }
  */
-export function assembleBook(caseObj, manifest, skeletons) {
+export function assembleBook(caseObj, manifest, skeletons, modules) {
   // 体型比例：角色系数 × 姿势系数，基准 = 患儿站立身高 1.00
   // 图已裁到不透明包围盒，所以「图片高度」＝「角色视觉高度」，等比缩放即可对齐基线
   const PROP = manifest?.proportions || {};
@@ -63,8 +63,73 @@ export function assembleBook(caseObj, manifest, skeletons) {
   const sk = pickSkeleton(caseObj, skeletons);
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
 
+  const baseCtx = { child: caseObj.child, fact: caseObj.facts };
+
+  /**
+   * 通用模块页：只看「某一项事实有没有」，与术式无关。
+   * 选了留置针 → 「手上停一只小蝴蝶」；填了禁食 → 「肚子空一会儿」。
+   * 骨架里已有的同 id 页不会重复插（故事书自己写得更细）。
+   */
+  const buildModules = (existingIds) => {
+    const out = [];
+    for (const m of modules?.modules || []) {
+      if (existingIds.has(m.id)) continue;
+      const w = m.when || {};
+      const f = caseObj.facts[w.fact];
+      if (!f) continue;
+      if (w.has_id && !(f.ids || []).includes(w.has_id)) continue;
+      out.push({
+        id: m.id,
+        layout: m.layout || 'image_left',
+        stand: m.stand || null,
+        draft: false,
+        condition: null,
+        title: resolve(m.title, baseCtx, `${m.id}.title`),
+        text: resolve(m.text, baseCtx, `${m.id}.text`),
+        image: asset(m.asset),
+        props: (m.props || []).map(resolveProp).map(asset),
+        fact: m.fact
+          ? {
+              key: m.fact.key,
+              label: m.fact.label,
+              value: m.fact.display === 'value_text' ? f.value_text : f.short,
+              evidence: f.evidence ?? null,
+              source: f.source || 'catalog',
+            }
+          : null,
+        badge: null,
+      });
+    }
+    return out;
+  };
+
   // —— 没有骨架：清单书。不出故事，一个字也不编。 ——
   if (!sk) {
+    const clPages = [
+      {
+        id: 'checklist-cover',
+        layout: 'checklist',
+        title: `${caseObj.procedure?.label || '待确认术式'}`,
+        text: '这本还没有故事。故事要等医生把术式、麻醉和时间都确认了才能写 —— 在那之前，先把要问的事情列清楚。',
+        image: null,
+        props: ['kid:stand', 'villain_dino__peek'].map(resolveProp).map(asset),
+        fact: null,
+        badge: null,
+      },
+      ...buildModules(new Set(['checklist-cover'])),
+    ];
+    if ((clPages.length + 1) % 2 !== 0) {
+      clPages.push({
+        id: 'notes',
+        layout: 'notes',
+        title: `写给${caseObj.child?.name || '孩子'}的一句话`,
+        text: '这一页空着。等这本书读完，你可以在这里写一句话，或者贴一张照片。',
+        image: null,
+        props: [],
+        fact: null,
+        badge: null,
+      });
+    }
     return {
       book_id: caseObj.case_id,
       mode: 'checklist',
@@ -79,25 +144,18 @@ export function assembleBook(caseObj, manifest, skeletons) {
       cautions: caseObj.cautions || [],
       missing: caseObj.missing || [],
       questions: caseObj.questions || [],
-      pages: [
-        {
-          id: 'checklist-cover',
-          layout: 'checklist',
-          title: `${caseObj.procedure?.label || '待确认术式'}`,
-          text: '这本还没有故事。故事要等医生把术式、麻醉和时间都确认了才能写 —— 在那之前，先把要问的事情列清楚。',
-          image: null,
-          props: ['kid:stand', 'villain_dino__peek'].map(resolveProp).map(asset),
-          fact: null,
-          badge: null,
-        },
-      ],
+      pages: clPages,
       skipped: [],
-      stats: { page_count: 1, fact_pages: 0, built_at: new Date().toISOString() },
+      stats: {
+        page_count: clPages.length,
+        fact_pages: clPages.filter((p) => p.fact).length,
+        draft_pages: 0,
+        built_at: new Date().toISOString(),
+      },
       manifest_version: manifest?.version || 'unknown',
     };
   }
 
-  const baseCtx = { child: caseObj.child, fact: caseObj.facts };
   const villain = { ...sk.villain, line: resolve(sk.villain.line, baseCtx, 'villain.line') };
   const hero = { ...sk.hero, line: resolve(sk.hero.line, baseCtx, 'hero.line') };
   const ctx = { ...baseCtx, villain, hero };
@@ -145,6 +203,9 @@ export function assembleBook(caseObj, manifest, skeletons) {
       };
     })
     .filter(Boolean);
+
+  // 骨架没写到、但事实已经确认的通用页，补在故事之后（不重复）
+  pages.push(...buildModules(new Set(pages.map((p) => p.id))));
 
   // —— 面数奇偶：封底必须单独占一面（左侧单页）。
   // PageFlip 的跨页是 [1,2][3,4]…，总面数为奇数时封底会被拼进跨页。

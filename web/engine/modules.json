@@ -1,0 +1,26 @@
+{
+  "note": "通用模块页：只依赖某一项事实、与具体术式无关的页面。选了对应的事实，就把这一页塞进去；没选就不出现。清单书与故事书共用。",
+  "modules": [
+    {
+      "id": "needle",
+      "when": { "fact": "device", "has_id": "iv" },
+      "layout": "image_right",
+      "title": "手上停一只小蝴蝶",
+      "text": "{{fact.device.short}}就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
+      "asset": "scene_butterfly_hand",
+      "props": ["nurse__wave", "kid:stand"],
+      "stand": "micro",
+      "fact": { "key": "device", "label": "手上装置", "display": "value_text" }
+    },
+    {
+      "id": "fasting",
+      "when": { "fact": "fasting" },
+      "layout": "image_left",
+      "title": "肚子空一会儿",
+      "text": "从术前{{fact.fasting.short}}开始，{{child.name}}的肚子要空着 —— 不吃东西，也不喝水。空肚子是为了让手术更安全，不是罚站。",
+      "asset": "scene_fasting_moon",
+      "props": ["kid:stand"],
+      "fact": { "key": "fasting", "label": "术前禁食", "display": "value_text" }
+    }
+  ]
+}

@@ -448,6 +448,7 @@ textarea:focus {
 .status--confirmed .status__chip { background: rgba(150, 205, 175, .34); color: #2f6b53; }
 .status--draft .status__chip { background: rgba(240, 190, 120, .30); color: #8a5a1e; }
 .status--checklist .status__chip { background: rgba(180, 170, 160, .28); color: #6b5b4c; }
+.status--idle .status__chip { background: rgba(180, 170, 160, .22); color: #837363; }
 
 /* 录入端审计提示 */
 .audit {
@@ -518,6 +519,14 @@ textarea:focus {
   filter: blur(10px);
   pointer-events: none;
 }
+
+.book--idle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book--idle .page { flex: 0 0 auto; }
 
 .book {
   position: relative;

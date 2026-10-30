@@ -25,6 +25,7 @@ import { validateBook } from '../web/engine/validate.mjs';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const manifest = JSON.parse(readFileSync(join(ROOT, 'assets/manifest.json'), 'utf8'));
+const modules = JSON.parse(readFileSync(join(ROOT, 'web/engine/modules.json'), 'utf8'));
 const catalog = JSON.parse(readFileSync(join(ROOT, 'web/engine/catalog.json'), 'utf8'));
 
 const skDir = join(ROOT, 'web/engine/skeletons');
@@ -107,7 +108,7 @@ function call(name, args) {
       stayDays: args.stay_days ?? null,
       devices: args.devices ?? [],
     });
-    const book = assembleBook(caseObj, manifest, skeletons);
+    const book = assembleBook(caseObj, manifest, skeletons, modules);
     const report = validateBook(book);
     if (!report.ok) {
       throw new Error(

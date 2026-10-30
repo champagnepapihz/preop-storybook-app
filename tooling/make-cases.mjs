@@ -64,6 +64,8 @@ if (process.exitCode === 1) {
   process.exit(1);
 }
 
+const modules = JSON.parse(readFileSync(join(ROOT, 'web/engine/modules.json'), 'utf8'));
+
 const files = readdirSync(rawDir).filter((f) => f.endsWith('.txt'));
 let failed = 0;
 const index = [];
@@ -71,7 +73,7 @@ const index = [];
 for (const f of files) {
   const raw = readFileSync(join(rawDir, f), 'utf8');
   const caseObj = parseNotice(raw);
-  const book = assembleBook(caseObj, manifest, skeletons);
+  const book = assembleBook(caseObj, manifest, skeletons, modules);
   const result = validateBook(book);
 
   const slug = basename(f, '.txt');

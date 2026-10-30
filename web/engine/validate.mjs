@@ -182,7 +182,7 @@ export function auditCase(caseObj) {
   if (!procKey || procKey === 'generic') {
     // 词表里选得到、但没有专属骨架 → 清单书（不编故事），不是"识别失败"
     if (caseObj.procedure?.id) {
-      push('info', '这类手术还没有专属故事，只会出事实与注意事项清单，不编故事。');
+      // 不再重复提示：状态条已经写明"这类术式还没有专属故事"
     } else {
       push('warn', '未识别出术式，暂时出不了这本书。请核对术式名称，或补一条骨架再生成。');
     }

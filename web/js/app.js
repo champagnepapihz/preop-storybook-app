@@ -12,6 +12,7 @@ const state = {
   presetIdx: 0,
   flip: null,
   book: null,
+  modules: null,
   pageHeight: 0,
 };
 
@@ -24,13 +25,15 @@ async function loadJSON(url) {
 }
 
 async function boot() {
-  const [manifest, skIndex, catalog] = await Promise.all([
+  const [manifest, skIndex, catalog, modules] = await Promise.all([
     loadJSON('assets/manifest.json'),
     loadJSON('engine/skeletons/index.json'),
     loadJSON('engine/catalog.json'),
+    loadJSON('engine/modules.json'),
   ]);
   state.manifest = manifest;
   state.catalog = catalog;
+  state.modules = modules;
 
   const entries = await Promise.all(
     Object.entries(skIndex).map(async ([k, file]) => [k, await loadJSON(`engine/skeletons/${file}`)])
@@ -41,7 +44,10 @@ async function boot() {
   buildPicker();
 
   $('#gen').addEventListener('click', () => generate());
-  $('#sample').addEventListener('click', () => applyPreset(state.presetIdx + 1));
+  $('#sample').addEventListener('click', () => {
+    // 空白状态下第一次点：从第一份演示病例开始，而不是跳过它
+    applyPreset(state.book ? state.presetIdx + 1 : 0);
+  });
   $('#prev').addEventListener('click', () => goPrev());
   $('#next').addEventListener('click', () => goNext());
   document.addEventListener('keydown', (e) => {
@@ -53,9 +59,51 @@ async function boot() {
   // 窗口尺寸变了，页面被 PageFlip 重算，立牌基准跟着更新（防抖，翻页时不参与）
   window.addEventListener('resize', schedulePageHeightSync);
 
-  // ?case=N 直接打开第 N 份演示病例（0 起）
-  const wantCase = Number(new URLSearchParams(location.search).get('case'));
-  applyPreset(Number.isFinite(wantCase) && wantCase > 0 ? wantCase : 0);
+  // 默认：不预填任何东西，书位显示"待选"卡片。
+  // 只有 ?case=N（演示/回归）或点「换个病例」才会填入具体值。
+  const raw = new URLSearchParams(location.search).get('case');
+  if (raw !== null) {
+    const n = Number(raw);
+    applyPreset(Number.isFinite(n) && n > 0 ? n : 0);
+  } else {
+    renderIdle();
+  }
+}
+
+/* ---------------- 空白态 ---------------- */
+
+function renderIdle(hint) {
+  setFlipDetached(false);
+  if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
+  state.book = null;
+
+  const reader = document.querySelector('.reader');
+  document.getElementById('book')?.remove();
+  const host = document.createElement('div');
+  host.className = 'book book--idle';
+  host.id = 'book';
+  host.innerHTML = `<div class="page page--checklist" data-density="hard">
+    <div class="page__inner">
+      <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有选病例</span>
+      <h2 class="cl-title" style="font-size:19px;line-height:1.55">从左边选一个病种开始</h2>
+      <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">
+        科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和装置。<br />填了什么就出现什么，没填的不会出现在书里。
+      </p>
+      <p class="page__text" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">
+        想先看一眼成品？点「换个病例」。
+      </p>
+    </div>
+  </div>`;
+  reader.insertBefore(host, reader.querySelector('.reader__bar'));
+
+  const info = $('#pageinfo');
+  if (info) info.textContent = '未选择';
+  const st = $('#status');
+  st.className = 'status status--idle';
+  st.innerHTML = '<span class="status__chip">未开始</span><span class="status__text">选择科室、病种、术式后生成</span>';
+  $('#audit').innerHTML = hint ? `<li class="audit__item audit__item--warn">${escapeHTML(hint)}</li>` : '';
+  $('#audit').style.display = hint ? '' : 'none';
+  $('#report').textContent = '';
 }
 
 /* ---------------- 选择器（受控词表） ---------------- */
@@ -67,10 +115,11 @@ function opt(value, label) {
 function buildPicker() {
   const c = state.catalog;
 
-  // 科室 → 病种 → 术式
-  $('#f-dept').innerHTML = c.departments.map((d) => opt(d.id, d.label)).join('');
-  $('#f-dept').addEventListener('change', () => { fillGroups(true); });
-  $('#f-group').addEventListener('change', () => { fillProcedures(true); });
+  // 科室 → 病种 → 术式：三级都从「未选择」开始，
+  // 不存在任何默认值 —— 每一项都必须有人亲手选一次，才算确认。
+  $('#f-dept').innerHTML = opt('', '未选择') + c.departments.map((d) => opt(d.id, d.label)).join('');
+  $('#f-dept').addEventListener('change', () => { fillGroups(false); });
+  $('#f-group').addEventListener('change', () => { fillProcedures(false); });
 
   // 麻醉：默认"未确认"
   $('#f-anes').innerHTML = opt('', '未确认') + c.anesthesia.map((a) => opt(a.id, a.label)).join('');
@@ -93,29 +142,43 @@ function buildPicker() {
   fillGroups(false);
 }
 
-function fillGroups(keepFirst) {
+function fillGroups() {
   const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
-  $('#f-group').innerHTML = (dept?.groups || []).map((g) => opt(g.id, g.label)).join('');
-  fillProcedures(keepFirst);
+  const groups = dept?.groups || [];
+  $('#f-group').innerHTML = opt('', groups.length ? '未选择' : '—') + groups.map((g) => opt(g.id, g.label)).join('');
+  fillProcedures();
 }
 
-function fillProcedures(keepFirst) {
+function fillProcedures() {
   const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
   const group = (dept?.groups || []).find((g) => g.id === $('#f-group').value);
-  $('#f-proc').innerHTML = (group?.procedures || [])
-    .map((p) => opt(p.id, p.label + (p.skeleton ? '' : '（暂无故事）')))
-    .join('');
-  if (!keepFirst) $('#f-proc').selectedIndex = 0;
+  const procs = group?.procedures || [];
+  $('#f-proc').innerHTML = opt('', procs.length ? '未选择' : '—')
+    + procs.map((p) => opt(p.id, p.label + (p.skeleton ? '' : '（暂无故事）'))).join('');
 }
 
 function selectProcedure(id) {
   const found = findProcedure(state.catalog, id);
   if (!found) return;
   $('#f-dept').value = found.dept.id;
-  fillGroups(false);
+  fillGroups();
   $('#f-group').value = found.group.id;
-  fillProcedures(true);
+  fillProcedures();
   $('#f-proc').value = id;
+}
+
+/** 清空整个表单（回到"什么都没确认"的状态） */
+function resetForm() {
+  $('#f-dept').value = '';
+  fillGroups();
+  $('#f-name').value = '';
+  $('#f-age').value = '';
+  $('#f-gender').value = '';
+  $('#f-anes').value = '';
+  $('#f-fast').value = '';
+  $('#f-liquid').value = '';
+  $('#f-stay').value = '';
+  $('#f-device').value = '';
 }
 
 /** 演示病例：这是唯一的"预填"来源，用于演示与回归 */
@@ -164,8 +227,13 @@ async function generate() {
   btn.textContent = '正在缝…';
 
   try {
-    const caseObj = composeCase({ catalog: state.catalog, ...readForm() });
-    const book = assembleBook(caseObj, state.manifest, state.skeletons);
+    const form = readForm();
+    if (!form.procedureId) {
+      renderIdle('请先选择科室、病种和术式 —— 这三项都不是默认值。');
+      return;
+    }
+    const caseObj = composeCase({ catalog: state.catalog, ...form });
+    const book = assembleBook(caseObj, state.manifest, state.skeletons, state.modules);
     const report = validateBook(book);
 
     state.book = book;
@@ -274,10 +342,10 @@ function renderStatus(caseObj, book, report) {
   st.className = `status status--${book.version}`;
   st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
     <span class="status__text">${book.mode === 'checklist'
-      ? `${book.pages.length} 面 · 这类术式还没有专属故事，只出事实与注意事项`
+      ? `${book.pages.length + 1} 面 · 这类术式还没有专属故事，只出事实与注意事项`
       : book.stats.draft_pages
-        ? `${book.pages.length} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`
-        : `${book.pages.length} 面 · 事实齐全，无“如果……”页`}</span>`;
+        ? `${book.pages.length + 1} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`
+        : `${book.pages.length + 1} 面 · 事实齐全，无“如果……”页`}</span>`;
 
   // 缺口：只列"未确认"，不猜
   const audit = $('#audit');

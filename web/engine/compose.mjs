@@ -104,6 +104,7 @@ export function composeCase(input) {
       label: '手上装置',
       short: chosen[0].label,
       value_text: chosen.map((d) => d.label).join('、'),
+      ids: chosen.map((d) => d.id),   // 通用模块页按 id 判断该不该插（如 iv → 留置针页）
       evidence: null,
       source: 'catalog',
     };

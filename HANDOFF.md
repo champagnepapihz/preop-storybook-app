@@ -574,3 +574,29 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - `injection` 骨架的 `label`（封面类目）同步改为「呼吸道感染」。
 
 **顺带**：状态条文案分三态 —— 清单「这类术式还没有专属故事」、草稿「其中 N 页是"如果……"」、已确认「事实齐全，无"如果……"页」。之前已确认的书也会显示"其中 0 页是如果"，读着像没排完。
+
+---
+
+## 24. 加（Kestrel）：通用模块页 + 面板默认无缓存
+
+### A. 通用模块页（填了哪项，就出哪一页）
+
+新增 `web/engine/modules.json`：只依赖「某一项事实」、与术式无关的页面。
+
+| 模块 | 触发 | 页面 |
+|---|---|---|
+| `needle` | `facts.device.ids` 含 `iv` | 手上停一只小蝴蝶（micro 版式，场景 `scene_butterfly_hand`） |
+| `fasting` | `facts.fasting` 存在 | 肚子空一会儿（场景 `scene_fasting_moon`） |
+
+- `compose` 给 `facts.device` 补 `ids`（前端只存 label，模块要按 id 判断）。
+- `assembleBook(caseObj, manifest, skeletons, modules)` 增加第 4 参数；`buildModules(existingIds)` 负责按 id 去重 —— 骨架里已有的 `needle`/`fasting` 页不会被重复插入（故事书写得更细，保留原版）。
+- **清单书不再只有一页**：`checklist-cover` → 命中的模块页 → 偶数补齐 → 封底。例：疝气 + 留置针 + 禁食 = 4 面。
+
+### B. 面板默认无缓存
+
+- 三级选择器全部以「未选择」为初值（原来默认选中第一个科室第一术式，等于替人做了确认）。
+- 启动不再加载演示病例：`?case=N` 才进演示，否则显示空白卡（`.book--idle`），状态条「未开始」。
+- 未选术式点「缝一本绘本」→ 不生成，直接提示「请先选择科室、病种和术式」。
+- 「换个病例」在空白状态下第一次点击从第 1 份演示开始（原来会跳过它）。
+
+**验证**：空白 → 选科室（病种/术式仍为空）→ 选病种 → 选术式 + 数值 → 生成，得到 `cover | 手上停一只小蝴蝶 | 肚子空一会儿 | 封底` 4 面。五本演示 10/10/10/10/4 面、0 坏图；MCP 同输入返回同一份 4 面书。
