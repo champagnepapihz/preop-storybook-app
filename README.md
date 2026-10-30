@@ -49,6 +49,10 @@ npm run placeholders   # 生成占位素材 + assets/manifest.json
 npm run cases          # data/raw/*.txt → data/books/*.json（含校验报告）
 npm run build          # 产物输出到 dist/（netlify.toml 已指向这里）
 npm run dev            # http://localhost:5173 预览 dist/
+
+**带走一本书**：点面板上的「打印 / PDF」→ 浏览器打印对话框里目标选"另存为 PDF"。
+页面按 430×560 一页一张输出（9 正文 + 封底 = 10 页），文字是矢量的，图像 1:1 不重采样。
+要印成 A4 纸，在打印设置里勾"适合页面"即可。
 ```
 
 MCP 接口（零依赖 stdio）：
