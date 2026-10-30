@@ -318,7 +318,8 @@ function pageHTML(page, book) {
 }
 
 function colophonHTML(book) {
-  const rows = Object.values(book.case.facts || {})
+  const facts = Object.values(book.case.facts || {});
+  const rows = facts
     .map((f) => {
       const ev = Array.isArray(f.evidence) ? f.evidence.join(' / ') : f.evidence;
       return `<li class="cl-item">
@@ -330,9 +331,19 @@ function colophonHTML(book) {
     })
     .join('');
 
-  const sparse = Object.keys(book.case.facts || {}).length <= 2;
+  // 注意事项：原文照录，一个字不改。这一类内容不接受任何"合理改写"。
+  const cauGroups = Array.isArray(book.cautions) ? book.cautions : [];
+  const cautions = cauGroups
+    .map((g) => `<div class="cl-cau-row">
+        <span class="cl-cau-tag">${escapeHTML(g.label)}</span>
+        <ul class="cl-cau-items">${g.items.map((t) => `<li>${escapeHTML(t)}</li>`).join('')}</ul>
+      </div>`)
+    .join('');
 
-  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}" data-density="soft">
+  const sparse = facts.length <= 2 && cauGroups.length <= 1;
+  const dense = facts.length + cauGroups.reduce((n, g) => n + g.items.length, 0) > 6;
+
+  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}${dense ? ' is-dense' : ''}" data-density="soft">
     <div class="page__inner">
       <div class="cl-head">
         <span class="cl-kicker">术前准备 · 陪护</span>
@@ -340,6 +351,7 @@ function colophonHTML(book) {
         <span class="cl-flourish" aria-hidden="true"></span>
       </div>
       <ul class="cl-list">${rows}</ul>
+      ${cautions ? `<div class="cl-cautions"><h4 class="cl-cau-head">家长还要做的 · 原文照录</h4>${cautions}</div>` : ''}
       <p class="cl-note">陪护请对照上表落实术前准备；住院期间孩子如有不适，或您有任何疑问，请及时告知医护人员。</p>
     </div>
   </div>`;

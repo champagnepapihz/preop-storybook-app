@@ -69,6 +69,20 @@ export function validateBook(book) {
     }
   }
 
+  // 2.5 —— 注意事项必须逐字来自原文（不许改写、不许润色）
+  for (const group of book.cautions || []) {
+    for (const item of group.items) {
+      if (raw && !raw.includes(item)) {
+        issues.push({
+          level: 'error',
+          page: 'colophon',
+          code: 'CAUTION_NOT_VERBATIM',
+          message: `注意事项「${item}」不在原文中，属于改写风险`,
+        });
+      }
+    }
+  }
+
   // 3 —— 缺页提示（降级而非报错，但要可见）
   for (const s of book.skipped || []) {
     issues.push({

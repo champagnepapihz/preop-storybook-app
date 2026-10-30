@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUVVOL9",
+  "book_id": "CASE-MVUWCOSY",
   "skeleton": {
     "key": "appendectomy",
     "label": "腹腔镜阑尾切除术"
@@ -22,7 +22,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUVVOL9",
+    "case_id": "CASE-MVUWCOSY",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -66,9 +66,45 @@
         "evidence": "住院天数：4天"
       }
     },
+    "cautions": [
+      {
+        "label": "术前准备",
+        "items": [
+          "留置针穿刺",
+          "脐部及下腹备皮",
+          "术前排空小便"
+        ],
+        "source_line": "术前准备：留置针穿刺；脐部及下腹备皮；术前排空小便"
+      },
+      {
+        "label": "术后注意",
+        "items": [
+          "早期下床活动，观察伤口敷料有无渗液"
+        ],
+        "source_line": "术后注意：早期下床活动，观察伤口敷料有无渗液"
+      }
+    ],
     "missing": [],
     "raw": "姓名：豆豆　　性别：男　　年龄：8岁\n手术名称：腹腔镜阑尾切除术\n麻醉方式：全身麻醉\n术前禁食时间 6 小时，禁水 2 小时\n术前准备：留置针穿刺；脐部及下腹备皮；术前排空小便\n住院天数：4天\n术后注意：早期下床活动，观察伤口敷料有无渗液\n"
   },
+  "cautions": [
+    {
+      "label": "术前准备",
+      "items": [
+        "留置针穿刺",
+        "脐部及下腹备皮",
+        "术前排空小便"
+      ],
+      "source_line": "术前准备：留置针穿刺；脐部及下腹备皮；术前排空小便"
+    },
+    {
+      "label": "术后注意",
+      "items": [
+        "早期下床活动，观察伤口敷料有无渗液"
+      ],
+      "source_line": "术后注意：早期下床活动，观察伤口敷料有无渗液"
+    }
+  ],
   "pages": [
     {
       "id": "cover",
@@ -409,7 +445,7 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 4,
-    "built_at": "2026-10-30T11:23:14.109Z"
+    "built_at": "2026-10-30T11:36:27.539Z"
   },
   "manifest_version": "0.2.0",
   "slug": "append-豆豆"

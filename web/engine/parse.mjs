@@ -138,6 +138,7 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
     procedure,
     child,
     facts,
+    cautions: extractCautions(raw),
     missing,
     raw,
   };
@@ -185,4 +186,32 @@ export async function parseWithLLM(text, opts = {}) {
     missing: parsed.missing || [],
     raw: text,
   };
+}
+
+/* ------------------------------------------------------------------
+ * 注意事项抽取（原文照录，不做任何改写）
+ *
+ * 为什么单独一层：术前准备、术后注意这类句子是自由文本，模板装不下、
+ * 也不该被故事化改写 —— 一个字的差别在医疗场景里就是事故。
+ * 所以这里只做两件事：认出「哪一行是注意事项」、按分号切成条目，
+ * 条目的文字一个字节都不动，装配层直接原样印到封底。
+ * ------------------------------------------------------------------ */
+
+const CAUTION_LINE = /(术前准备|术前注意|术后注意|术后护理|住院注意|注意事项|出院指导|特别交代)[：:]\s*(.+)$/;
+
+export function extractCautions(raw) {
+  const out = [];
+  for (const line of String(raw || '').split(/\r?\n/)) {
+    const m = line.match(CAUTION_LINE);
+    if (!m) continue;
+    const label = m[1];
+    const body = m[2].trim();
+    const items = body
+      .split(/[；;]/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    if (!items.length) continue;
+    out.push({ label, items, source_line: line.trim() });
+  }
+  return out;
 }

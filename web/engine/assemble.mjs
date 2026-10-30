@@ -99,6 +99,7 @@ export function assembleBook(caseObj, manifest, skeletons) {
     },
     cast: { villain, hero },
     case: caseObj,
+    cautions: caseObj.cautions || [],
     pages,
     skipped,
     stats: {
