@@ -409,3 +409,28 @@ Colophon cards removed per user: fact rows are now plain text with hairline sepa
 
 Fonts unified inside the book: .page now sets font-family var(--font-round), so body
 text/evidence/colophon/badge all match headings; flip bar label too. Panel console untouched.
+
+---
+
+## 15. Appended (2026-10-30 晚 · Kestrel): 徽章页裸放素材 + 仓库卫生
+
+**徽章页**（`web/js/app.js` badge 分支 + `web/css/book.css`）
+- 删掉手绘圆盘 `.badge-coin`（圆形渐变 + 虚线描边 + 内嵌标题文字），素材裸放。
+- 新增 `.badge-art`：`width: min(292px, 80%)`，仅保留一层 drop-shadow。
+- 称号与名字拆成两级：`.badge-name`（称号，19px，`#9a7433`）、`.badge-engrave`（患儿名，25px，`#6f4d1c`），正文 `.badge-text` 12.5px。
+- 三本（豆豆/苗苗/果果）徽章页均已截图确认：不溢出、三行文字在页内收住。
+
+**素材目录**
+- 34 个占位 SVG 从 `assets/{scenes,characters,badges}/` 迁到 `assets/_placeholder/`，与真图彻底分离。
+- `tooling/placeholders.mjs` 的生成路径与 manifest 兜底路径同步改到 `_placeholder`；构建输出 `真实素材 34，占位 0`，即当前无任何 id 会回落到占位图。
+
+**新增 URL 参数**：`?case=N`（0 起）直接打开第 N 本，配合 `?page=N` 用于演示和回归截图。
+
+**仓库**
+- `.gitignore` 增补 `rawpic/`、`.cutout-profile*/`（`assets/_src/`、`.venv/`、`.shots/`、`dist/` 原本已忽略）。
+- 首次完整提交：`3fbab03`（104 文件），随后 `530bde3`（?case 参数）。此前仓库只有 starter 一个 commit，其余全是 untracked。
+
+**回归**（本次改动后）
+- `npm run build`：3 本全过事实保真校验。
+- 1440×900 iframe 内实测：无横向溢出（scrollW 1425 < clientW 1440）、三本各 10 面、21–24 张图 0 坏图、无 console/pageerror。
+- 未改动：翻页防抽动机制、封面/封底位姿、立牌构图、stage.webp 背景。
