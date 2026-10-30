@@ -442,3 +442,21 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - `.reader__bar` 加 `margin-top: 6px`（书与条之间从"贴着"变成"留一口气"，用户要求只动一点点）。
 - 同步把短屏限宽公式里的常量 `326px → 332px`（`.book { max-width: min(100%, calc((100vh - 332px) * 1.536)) }`），
   否则短屏会因为这 6px 把翻页条挤出首屏。1366×768 实测条底边 757 < 768，仍在首屏内。
+
+---
+
+## 17. 追加（Kestrel）：输入改成受控词表，砍掉自由文本
+
+**定位变化**：从"贴一张纸"改成"选四下"。系统不认字，也不让人写字 —— 没有自由文本，就没有"读错"这一层风险。
+
+- 新增 `web/engine/catalog.json`：4 科室 / 9 术式 / 5 麻醉 / 3 装置。**只描述病种，不含任何默认数值**（默认值＝揣测，已删除）。
+- 新增 `web/engine/compose.mjs`：选择 → 病例；没选＝缺失；缺口反推 `questions`（只问事实，不问感受/风险，最多 3 条）。
+- `assemble.mjs`：无骨架术式 → **清单书**（只出事实 + 注意事项，不编故事）；缺事实的页 → **conditional 条件句**（"如果……"），整页跳过只在没有条件句时发生。
+- 前端：去掉 textarea，改三级级联 + 麻醉 / 禁食 / 禁水 / 住院 / 装置；数字一律"未确认"，只有演示病例（`catalog.presets`）预填。
+- 面板：版本状态条（已确认 / 草稿 / 清单）+ 缺口提示；短屏（≤880px 高）压缩密度并允许面板内滚动。
+- 封底：草稿版追加「带去问医生的几件事」；无事实时显示占位说明。
+- `mcp/server.mjs` 重写：`list_catalog` + `build_preop_book`，**只收枚举与整数，无 text 参数**；未知术式直接拒。旧的 `parse_preop_notice` 与 `list_skeletons` 已删除。
+
+**三态判定**：`missing.length === 0` → confirmed；否则 draft；术式无骨架 → checklist。B（家长自述）只能产出 draft，confirmed 必须来自受控选择。
+
+**验证**：5 份演示病例（`?case=0..4`）全部渲染、0 坏图、无 console error、无横向溢出；1366×768 面板完整可见。

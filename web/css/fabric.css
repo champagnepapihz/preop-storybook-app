@@ -596,6 +596,32 @@ textarea:focus {
 
 /* ---------- 适配 ---------- */
 
+/* 短屏：压缩控制台密度（先减内容，再考虑滚动） */
+@media (max-height: 880px) {
+  .panel__hint { display: none; }
+  .panel__h { margin-bottom: 6px; }
+  .picker { gap: 6px; margin-top: 6px; }
+  .field select,
+  .field input { padding: 5px 8px; padding-right: 22px; font-size: 11.5px; }
+  .panel__row { margin-top: 10px; }
+  .btn { padding: 8px 14px; font-size: 12.5px; }
+  .status { margin-top: 10px; }
+  .audit { gap: 4px; }
+  .audit__item { padding: 5px 8px 5px 22px; font-size: 10px; }
+
+  .panel {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(150, 112, 74, .35) transparent;
+  }
+  .panel::-webkit-scrollbar { width: 6px; }
+  .panel::-webkit-scrollbar-thumb {
+    background: rgba(150, 112, 74, .3);
+    border-radius: 3px;
+  }
+}
+
 @media (max-height: 960px) {
   .stage { padding-top: 94px; padding-bottom: 22px; }
   .marquee { margin-bottom: 16px; }
