@@ -1,5 +1,7 @@
 {
-  "book_id": "CASE-MVUWQ18I",
+  "book_id": "CASE-MVUXXN7N",
+  "mode": "story",
+  "version": "draft",
   "skeleton": {
     "key": "injection",
     "label": "静脉输液"
@@ -22,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUWQ18I",
+    "case_id": "CASE-MVUXXN7N",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -72,11 +74,18 @@
       "source_line": "住院注意：多喝温水，勤洗手，戴口罩"
     }
   ],
+  "missing": [
+    "fasting",
+    "anesthesia"
+  ],
+  "questions": [],
   "pages": [
     {
       "id": "cover",
       "layout": "cover",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "苗苗和鼻子后面的冠冠怪",
       "text": "这是苗苗的故事。故事里有一位小勇士，还有一只头顶小皇冠、毛茸茸的小访客。",
       "image": {
@@ -128,6 +137,8 @@
       "id": "meet",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "冠冠怪住进来了",
       "text": "它住在苗苗鼻子和喉咙中间的那个小山洞里，一身紫紫的绒毛，头上顶着一顶小小的皇冠。大人把它写在本子上叫「上呼吸道感染」，我们叫它冠冠怪。它不是大坏蛋，只是不请自来、来了就不肯走——它一赖着，苗苗就发烧、流鼻涕，两条腿软得像棉花。晚上它把小山洞当成自己的家，白天也没有一点要走的意思。",
       "image": {
@@ -159,6 +170,8 @@
       "id": "invite",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "白大褂医生和护士来了",
       "text": "白大褂医生带着一根细细的、透明的小管子，能把药水一滴一滴送进身体里，帮苗苗把温度降下来、把力气找回来。医生说：我们客客气气地请冠冠怪搬走，办法就是打一针、输一点凉凉的药水。护士在旁边挥挥手：别怕，我会一直陪着你。",
       "image": {
@@ -200,6 +213,8 @@
       "id": "ticket",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "不给冠冠怪买车票",
       "text": "出门前，护士给苗苗戴上一只小口罩。这不是罚谁——冠冠怪最喜欢搭顺风车，戴好口罩、勤洗手，就不给它买车票；多喝温水，是让身体有力气自己送客。",
       "image": {
@@ -241,6 +256,8 @@
       "id": "needle",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "手上停一只小蝴蝶",
       "text": "护士先抱抱苗苗，再在手背上放一只小蝴蝶——那是留置针。它亲上去的时候有一点点痒，像被蚊子轻轻亲了一下，数到三就贴好了。之后所有的针都从这只小蝴蝶走，不用再受第二次惊。冠冠怪瞪圆了眼睛：原来打针一下子就过去了。",
       "image": {
@@ -279,7 +296,8 @@
         "key": "device",
         "label": "手上装置",
         "value": "留置针",
-        "evidence": "留置针"
+        "evidence": "留置针",
+        "source": "notice"
       },
       "badge": null
     },
@@ -287,6 +305,8 @@
       "id": "drip",
       "layout": "full",
       "stand": "high",
+      "draft": false,
+      "condition": null,
       "title": "身体里下了一场凉凉的小雨",
       "text": "小蝴蝶后面接上一根细细的管子，药水一滴一滴走进去，像身体里下了一场又轻又凉的小雨。小雨一落下来，身体就有了帮手：烧慢慢退下去，力气一点一点回到苗苗的腿上。冠冠怪在洞里待不住了，开始收拾自己的小行李。",
       "image": {
@@ -318,6 +338,8 @@
       "id": "wake",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "输完液，身上轻了",
       "text": "苗苗靠在枕头上，护士把小被子往上拉了拉。窗外那个紫色的背影抱起行李，有点不好意思地挥挥手，飘走了。医生说：住院2天，我们就能回家，回家记得多喝温水。",
       "image": {
@@ -356,7 +378,8 @@
         "key": "stay",
         "label": "住院时长",
         "value": "住院2天",
-        "evidence": "住院时间：住院2天"
+        "evidence": "住院时间：住院2天",
+        "source": "notice"
       },
       "badge": null
     },
@@ -364,6 +387,8 @@
       "id": "promise",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "回家的约定",
       "text": "出院前，医生蹲下来和苗苗拉钩：回家要多喝温水、勤洗手、出门戴口罩，这样冠冠怪就找不到回来的路。冠冠怪抱着小行李认真点头——它再也不想住回那个小山洞了。",
       "image": {
@@ -405,6 +430,8 @@
       "id": "badge",
       "layout": "badge",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "小勇士徽章",
       "text": "苗苗勇敢地伸出小手，让护士放上那只小蝴蝶，把冠冠怪送出了那个小山洞。这枚徽章，是那天早上你自己走进那道门的证明。",
       "image": {
@@ -429,7 +456,8 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 2,
-    "built_at": "2026-10-30T11:46:50.178Z"
+    "draft_pages": 0,
+    "built_at": "2026-10-30T12:20:44.867Z"
   },
   "manifest_version": "0.2.0",
   "slug": "shot-苗苗"

@@ -21,7 +21,11 @@
       "title": "{{child.name}}和肚子里的小尾巴怪",
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
       "asset": "scene_cover",
-      "props": ["doctor__wave", "villain_pebble__happy", "nurse__wave"]
+      "props": [
+        "doctor__wave",
+        "villain_pebble__happy",
+        "nurse__wave"
+      ]
     },
     {
       "id": "meet",
@@ -29,7 +33,9 @@
       "title": "小尾巴怪生气了",
       "text": "{{villain.line}}它一生气，肚子就一抽一抽地疼，{{child.name}}连笑都要先想一想。",
       "asset": "scene_belly_pocket",
-      "props": ["villain_pebble__angry"]
+      "props": [
+        "villain_pebble__angry"
+      ]
     },
     {
       "id": "invite",
@@ -37,7 +43,9 @@
       "title": "白大褂医生的三个小圆镜",
       "text": "{{hero.line}}他说：我从这三条小通道进去，把小尾巴怪请出来，你的肚子上只会留下三个小小的印子。",
       "asset": "scene_ward_talk",
-      "props": ["doctor__wave"]
+      "props": [
+        "doctor__wave"
+      ]
     },
     {
       "id": "fasting",
@@ -45,9 +53,21 @@
       "title": "第一件事：肚子要空空的",
       "text": "医生说要{{fact.fasting.short}}不吃东西、{{fact.fasting.short_liquid}}不喝水。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。饿的时候可以想一想，等事情办完，第一口粥会有多香。",
       "asset": "scene_fasting_moon",
-      "props": ["doctor__wave"],
-      "requires": ["fasting"],
-      "fact": { "key": "fasting", "label": "术前禁食", "display": "value_text" }
+      "props": [
+        "doctor__wave"
+      ],
+      "requires": [
+        "fasting"
+      ],
+      "fact": {
+        "key": "fasting",
+        "label": "术前禁食",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "如果医生说，得先让肚子空一会儿",
+        "text": "有时候要把{{villain.name}}请出去，前一天晚上就得让肚子空着。具体从几点开始不能吃、不能喝，医生会告诉你。"
+      }
     },
     {
       "id": "cloud",
@@ -55,9 +75,21 @@
       "title": "第二件事：一朵会睡觉的云",
       "text": "{{fact.anesthesia.short}}，就是坐上这朵云。{{child.name}}从一数到三，数到二的时候可能就睡着了。醒来的时候，事情已经办完了。",
       "asset": "scene_cloud_anesthesia",
-      "props": ["nurse__present"],
-      "requires": ["anesthesia"],
-      "fact": { "key": "anesthesia", "label": "麻醉方式", "display": "value_text" }
+      "props": [
+        "nurse__present"
+      ],
+      "requires": [
+        "anesthesia"
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "如果要做手术，会先坐一朵云",
+        "text": "如果医生决定把它搬出去，会有人送来一朵会睡觉的云。坐上它，数到三就睡着了，中间什么都不知道。"
+      }
     },
     {
       "id": "needle",
@@ -65,9 +97,21 @@
       "title": "第三件事：手上停一只小蝴蝶",
       "text": "{{fact.device.short}}就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
       "asset": "scene_butterfly_hand",
-      "props": ["nurse__hug"],
-      "requires": ["device"],
-      "fact": { "key": "device", "label": "手上装置", "display": "value_text" }
+      "props": [
+        "nurse__hug"
+      ],
+      "requires": [
+        "device"
+      ],
+      "fact": {
+        "key": "device",
+        "label": "手上装置",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "如果手上要留一只小蝴蝶",
+        "text": "有时候护士会在手上放一只小蝴蝶 —— 那是留置针。有一点点痒，之后打针都从它这儿走，不用再扎一次。"
+      }
     },
     {
       "id": "battle",
@@ -75,7 +119,10 @@
       "title": "医院门口，医生拦住了它",
       "text": "进手术室前，白大褂医生站在医院门口，对着小尾巴怪伸出一只手：{{child.name}}要去做一件勇敢的事，你别再闹了。",
       "asset": "scene_hospital_front",
-      "props": ["doctor__wave", "villain_pebble__wow"]
+      "props": [
+        "doctor__wave",
+        "villain_pebble__wow"
+      ]
     },
     {
       "id": "wake",
@@ -83,9 +130,22 @@
       "title": "醒来，肚子轻了",
       "text": "{{child.name}}睁开眼睛，肚子上盖着一块软软的纱布，小尾巴怪已经搬走了。医生说：{{fact.stay.short}}，就能回家吃第一口粥。",
       "asset": "scene_wake_up",
-      "props": ["doctor__cheer", "villain_pebble__sad"],
-      "requires": ["stay"],
-      "fact": { "key": "stay", "label": "住院时长", "display": "value_text" }
+      "props": [
+        "doctor__cheer",
+        "villain_pebble__sad"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "醒过来的时候",
+        "text": "不管走哪一条路，醒来的时候都会舒服一点。要住几天，医生会告诉你。"
+      }
     },
     {
       "id": "badge",
@@ -93,7 +153,10 @@
       "title": "小勇士徽章",
       "text": "{{child.name}}把肚子里的那只小尾巴怪请了出去。这枚徽章，是那天早上你自己走进那道门的证明。",
       "asset": "badge_star",
-      "badge": { "name": "小尾巴怪送行者", "engrave": "{{child.name}}" }
+      "badge": {
+        "name": "小尾巴怪送行者",
+        "engrave": "{{child.name}}"
+      }
     }
   ]
 }

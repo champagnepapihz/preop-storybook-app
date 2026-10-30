@@ -20,9 +20,23 @@ export function validateBook(book) {
   const allFactText = JSON.stringify(book.case?.facts || {}) + raw;
   const allowed = new Set(numbersIn(allFactText));
 
-  // 1 & 2 —— 逐页检查
+  const fromCatalog = book.case?.source === 'catalog' || !raw;
+
+  // 1 & 2 —— 逐页检查（有原文才谈"溯源"；词表录入的书没有原文可对）
   for (const page of book.pages) {
     const prose = `${page.title || ''} ${page.text || ''}`;
+    if (fromCatalog) {
+      // 词表来源：只查"这一页是不是 draft 却硬塞了事实卡"
+      if (page.draft && page.fact) {
+        issues.push({
+          level: 'error',
+          page: page.id,
+          code: 'DRAFT_PAGE_WITH_FACT',
+          message: '条件句页不应带事实卡',
+        });
+      }
+      continue;
+    }
     for (const n of new Set(numbersIn(prose))) {
       if (!allowed.has(n)) {
         issues.push({
@@ -34,7 +48,7 @@ export function validateBook(book) {
       }
     }
 
-    if (page.fact) {
+    if (page.fact && !fromCatalog) {
       const evs = Array.isArray(page.fact.evidence) ? page.fact.evidence : [page.fact.evidence];
       if (!evs.length || evs.some((e) => !e)) {
         issues.push({
@@ -69,8 +83,19 @@ export function validateBook(book) {
     }
   }
 
-  // 2.5 —— 注意事项必须逐字来自原文（不许改写、不许润色）
+  // 2.5 —— 注意事项必须逐字来自原文（词表来源没有原文，改为"必须来自词表"）
   for (const group of book.cautions || []) {
+    if (fromCatalog) {
+      if (group.source !== 'catalog') {
+        issues.push({
+          level: 'error',
+          page: 'colophon',
+          code: 'CAUTION_NOT_FROM_CATALOG',
+          message: `注意事项「${group.label}」不是词表条目`,
+        });
+      }
+      continue;
+    }
     for (const item of group.items) {
       if (raw && !raw.includes(item)) {
         issues.push({
@@ -144,7 +169,12 @@ export function auditCase(caseObj) {
 
   const procKey = caseObj.procedure?.key;
   if (!procKey || procKey === 'generic') {
-    push('warn', '未识别出术式，暂时出不了这本书。请核对术式名称，或补一条骨架再生成。');
+    // 词表里选得到、但没有专属骨架 → 清单书（不编故事），不是"识别失败"
+    if (caseObj.procedure?.id) {
+      push('info', '这类手术还没有专属故事，只会出事实与注意事项清单，不编故事。');
+    } else {
+      push('warn', '未识别出术式，暂时出不了这本书。请核对术式名称，或补一条骨架再生成。');
+    }
   }
 
   return notes;

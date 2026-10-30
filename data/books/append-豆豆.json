@@ -1,5 +1,7 @@
 {
-  "book_id": "CASE-MVUWQ184",
+  "book_id": "CASE-MVUXXN7H",
+  "mode": "story",
+  "version": "confirmed",
   "skeleton": {
     "key": "appendectomy",
     "label": "腹腔镜阑尾切除术"
@@ -22,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUWQ184",
+    "case_id": "CASE-MVUXXN7H",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -105,11 +107,15 @@
       "source_line": "术后注意：早期下床活动，观察伤口敷料有无渗液"
     }
   ],
+  "missing": [],
+  "questions": [],
   "pages": [
     {
       "id": "cover",
       "layout": "cover",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "豆豆和肚子里的小尾巴怪",
       "text": "这是豆豆的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
       "image": {
@@ -161,6 +167,8 @@
       "id": "meet",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "小尾巴怪生气了",
       "text": "它住在豆豆肚子右下角的小口袋里，鼓鼓的、胀胀的，一走快就拽着肚子往下沉。它一生气，肚子就一抽一抽地疼，豆豆连笑都要先想一想。",
       "image": {
@@ -192,6 +200,8 @@
       "id": "invite",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "白大褂医生的三个小圆镜",
       "text": "白大褂医生带着三个小圆镜子，能从肚子上开三条很小很小的通道。他说：我从这三条小通道进去，把小尾巴怪请出来，你的肚子上只会留下三个小小的印子。",
       "image": {
@@ -223,6 +233,8 @@
       "id": "fasting",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第一件事：肚子要空空的",
       "text": "医生说要6小时不吃东西、2小时不喝水。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。饿的时候可以想一想，等事情办完，第一口粥会有多香。",
       "image": {
@@ -254,7 +266,8 @@
         "evidence": [
           "禁食时间 6 小时",
           "禁水 2 小时"
-        ]
+        ],
+        "source": "notice"
       },
       "badge": null
     },
@@ -262,6 +275,8 @@
       "id": "cloud",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第二件事：一朵会睡觉的云",
       "text": "全身麻醉，就是坐上这朵云。豆豆从一数到三，数到二的时候可能就睡着了。醒来的时候，事情已经办完了。",
       "image": {
@@ -290,7 +305,8 @@
         "key": "anesthesia",
         "label": "麻醉方式",
         "value": "全身麻醉",
-        "evidence": "全身麻醉"
+        "evidence": "全身麻醉",
+        "source": "notice"
       },
       "badge": null
     },
@@ -298,6 +314,8 @@
       "id": "needle",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第三件事：手上停一只小蝴蝶",
       "text": "留置针就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
       "image": {
@@ -326,7 +344,8 @@
         "key": "device",
         "label": "手上装置",
         "value": "留置针",
-        "evidence": "留置针"
+        "evidence": "留置针",
+        "source": "notice"
       },
       "badge": null
     },
@@ -334,6 +353,8 @@
       "id": "battle",
       "layout": "full",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "医院门口，医生拦住了它",
       "text": "进手术室前，白大褂医生站在医院门口，对着小尾巴怪伸出一只手：豆豆要去做一件勇敢的事，你别再闹了。",
       "image": {
@@ -375,6 +396,8 @@
       "id": "wake",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "醒来，肚子轻了",
       "text": "豆豆睁开眼睛，肚子上盖着一块软软的纱布，小尾巴怪已经搬走了。医生说：住院4天，就能回家吃第一口粥。",
       "image": {
@@ -413,7 +436,8 @@
         "key": "stay",
         "label": "住院时长",
         "value": "住院4天",
-        "evidence": "住院天数：4天"
+        "evidence": "住院天数：4天",
+        "source": "notice"
       },
       "badge": null
     },
@@ -421,6 +445,8 @@
       "id": "badge",
       "layout": "badge",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "小勇士徽章",
       "text": "豆豆把肚子里的那只小尾巴怪请了出去。这枚徽章，是那天早上你自己走进那道门的证明。",
       "image": {
@@ -445,7 +471,8 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 4,
-    "built_at": "2026-10-30T11:46:50.165Z"
+    "draft_pages": 0,
+    "built_at": "2026-10-30T12:20:44.861Z"
   },
   "manifest_version": "0.2.0",
   "slug": "append-豆豆"

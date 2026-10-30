@@ -21,7 +21,11 @@
       "title": "{{child.name}}和鼻子后面的冠冠怪",
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只头顶小皇冠、毛茸茸的小访客。",
       "asset": "scene_cover",
-      "props": ["doctor__wave", "villain_corona__happy", "nurse__wave"]
+      "props": [
+        "doctor__wave",
+        "villain_corona__happy",
+        "nurse__wave"
+      ]
     },
     {
       "id": "meet",
@@ -29,7 +33,9 @@
       "title": "冠冠怪住进来了",
       "text": "{{villain.line}}晚上它把小山洞当成自己的家，白天也没有一点要走的意思。",
       "asset": "scene_fever_night",
-      "props": ["villain_corona__smug"]
+      "props": [
+        "villain_corona__smug"
+      ]
     },
     {
       "id": "invite",
@@ -37,7 +43,10 @@
       "title": "白大褂医生和护士来了",
       "text": "{{hero.line}}医生说：我们客客气气地请冠冠怪搬走，办法就是打一针、输一点凉凉的药水。护士在旁边挥挥手：别怕，我会一直陪着你。",
       "asset": "scene_ward_talk",
-      "props": ["doctor__wave", "nurse__wave"]
+      "props": [
+        "doctor__wave",
+        "nurse__wave"
+      ]
     },
     {
       "id": "ticket",
@@ -45,7 +54,10 @@
       "title": "不给冠冠怪买车票",
       "text": "出门前，护士给{{child.name}}戴上一只小口罩。这不是罚谁——冠冠怪最喜欢搭顺风车，戴好口罩、勤洗手，就不给它买车票；多喝温水，是让身体有力气自己送客。",
       "asset": "scene_hospital_front",
-      "props": ["nurse__present", "villain_corona__smug"]
+      "props": [
+        "nurse__present",
+        "villain_corona__smug"
+      ]
     },
     {
       "id": "needle",
@@ -53,9 +65,22 @@
       "title": "手上停一只小蝴蝶",
       "text": "护士先抱抱{{child.name}}，再在手背上放一只小蝴蝶——那是{{fact.device.short}}。它亲上去的时候有一点点痒，像被蚊子轻轻亲了一下，数到三就贴好了。之后所有的针都从这只小蝴蝶走，不用再受第二次惊。冠冠怪瞪圆了眼睛：原来打针一下子就过去了。",
       "asset": "scene_butterfly_hand",
-      "props": ["nurse__hug", "villain_corona__wow"],
-      "requires": ["device"],
-      "fact": { "key": "device", "label": "手上装置", "display": "value_text" }
+      "props": [
+        "nurse__hug",
+        "villain_corona__wow"
+      ],
+      "requires": [
+        "device"
+      ],
+      "fact": {
+        "key": "device",
+        "label": "手上装置",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "如果手上要留一只小蝴蝶",
+        "text": "护士可能会在手上放一只小蝴蝶 —— 那是留置针。有一点点痒，之后输液都从它这儿走。"
+      }
     },
     {
       "id": "drip",
@@ -63,7 +88,9 @@
       "title": "身体里下了一场凉凉的小雨",
       "text": "小蝴蝶后面接上一根细细的管子，药水一滴一滴走进去，像身体里下了一场又轻又凉的小雨。小雨一落下来，身体就有了帮手：烧慢慢退下去，力气一点一点回到{{child.name}}的腿上。冠冠怪在洞里待不住了，开始收拾自己的小行李。",
       "asset": "scene_drip_rain",
-      "props": ["villain_corona__sad"],
+      "props": [
+        "villain_corona__sad"
+      ],
       "stand": "high"
     },
     {
@@ -72,9 +99,22 @@
       "title": "输完液，身上轻了",
       "text": "{{child.name}}靠在枕头上，护士把小被子往上拉了拉。窗外那个紫色的背影抱起行李，有点不好意思地挥挥手，飘走了。医生说：{{fact.stay.short}}，我们就能回家，回家记得多喝温水。",
       "asset": "scene_wake_up",
-      "props": ["nurse__cuddle", "villain_corona__happy"],
-      "requires": ["stay"],
-      "fact": { "key": "stay", "label": "住院时长", "display": "value_text" }
+      "props": [
+        "nurse__cuddle",
+        "villain_corona__happy"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      },
+      "conditional": {
+        "title": "打完针以后",
+        "text": "打完针，{{child.name}}会舒服一些。要观察多久，医生会告诉你。"
+      }
     },
     {
       "id": "promise",
@@ -82,7 +122,10 @@
       "title": "回家的约定",
       "text": "出院前，医生蹲下来和{{child.name}}拉钩：回家要多喝温水、勤洗手、出门戴口罩，这样冠冠怪就找不到回来的路。冠冠怪抱着小行李认真点头——它再也不想住回那个小山洞了。",
       "asset": "scene_hospital_front",
-      "props": ["doctor__cheer", "villain_corona__happy"]
+      "props": [
+        "doctor__cheer",
+        "villain_corona__happy"
+      ]
     },
     {
       "id": "badge",
@@ -90,7 +133,10 @@
       "title": "小勇士徽章",
       "text": "{{child.name}}勇敢地伸出小手，让护士放上那只小蝴蝶，把冠冠怪送出了那个小山洞。这枚徽章，是那天早上你自己走进那道门的证明。",
       "asset": "badge_star",
-      "badge": { "name": "冠冠怪送行者", "engrave": "{{child.name}}" }
+      "badge": {
+        "name": "冠冠怪送行者",
+        "engrave": "{{child.name}}"
+      }
     }
   ]
 }

@@ -355,6 +355,94 @@ textarea:focus {
 .fact--missing { background: rgba(230, 147, 121, .16); box-shadow: inset 0 0 0 1px rgba(200, 100, 80, .3); }
 .fact--missing .fact__label { color: #b5573c; }
 
+/* ---------- 受控词表选择器 ---------- */
+
+.picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.field > span {
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ink-soft);
+}
+
+.field select,
+.field input {
+  width: 100%;
+  font: inherit;
+  font-size: 12px;
+  padding: 7px 9px;
+  color: var(--ink-solid);
+  border-radius: 10px;
+  border: 1.5px solid rgba(150, 112, 74, .22);
+  background:
+    var(--grain),
+    linear-gradient(180deg, #fffaf0, #fdf3e0);
+  background-size: 180px 180px, auto;
+  box-shadow: inset 0 2px 5px rgba(140, 104, 68, .14);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.field select {
+  padding-right: 24px;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1.5L5 5.5L9 1.5' fill='none' stroke='%238a7358' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #fffaf0, #fdf3e0);
+  background-repeat: no-repeat, no-repeat;
+  background-position: right 8px center, 0 0;
+  background-size: 10px 7px, auto;
+}
+
+.field select:focus,
+.field input:focus {
+  border-color: var(--mint-deep);
+  box-shadow: inset 0 2px 5px rgba(140, 104, 68, .1), 0 0 0 3px rgba(166, 211, 189, .32);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.field-row .field { grid-template-columns: 40px minmax(0, 1fr); }
+.field--narrow { grid-template-columns: 40px minmax(0, 1fr); }
+
+/* 版本状态条 */
+.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+
+.status__chip {
+  font-family: var(--font-round);
+  font-size: 10px;
+  letter-spacing: .1em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.status--confirmed .status__chip { background: rgba(150, 205, 175, .34); color: #2f6b53; }
+.status--draft .status__chip { background: rgba(240, 190, 120, .30); color: #8a5a1e; }
+.status--checklist .status__chip { background: rgba(180, 170, 160, .28); color: #6b5b4c; }
+
 /* 录入端审计提示 */
 .audit {
   list-style: none;

@@ -2,7 +2,10 @@
  * 故事装配引擎：case + 骨架 → 一页一页的书
  *
  * 确定性：同一个 case 永远装配出同一本书，零随机、零 LLM 调用。
- * 降级策略：requires 里的字段缺失时整页跳过（宁缺页，不编事实）。
+ * 降级策略（按顺序）：
+ *   1. 页面缺事实，但骨架给了 conditional → 用"如果……"的条件句版本（draft）
+ *   2. 页面缺事实且没条件句 → 整页跳过（宁缺页，不编事实）
+ *   3. 术式没有骨架 → 出清单书：不出故事，只出事实 + 注意事项（不编故事）
  *
  * 骨架由调用方注入（浏览器 fetch JSON / Node 读文件），引擎本身不绑运行时。
  */
@@ -22,33 +25,61 @@ function resolve(str, ctx, where = '') {
   });
 }
 
-/** 按术式选骨架 */
+/** 按术式选骨架；没有骨架返回 null（走清单书，而不是报错） */
 export function pickSkeleton(caseObj, skeletons) {
   const key = caseObj.procedure?.key;
-  const sk = skeletons[key];
-  if (!sk) {
-    const err = new Error(
-      `暂不支持该术式「${caseObj.procedure?.label || key}」。当前骨架库：` +
-        Object.values(skeletons).map((s) => s.label).join('、')
-    );
-    err.code = 'UNSUPPORTED_PROCEDURE';
-    throw err;
-  }
-  return sk;
+  if (!key || key === 'generic') return null;
+  return skeletons[key] || null;
 }
 
 /**
- * @param {object} caseObj    parseNotice 的输出
+ * @param {object} caseObj    parseNotice / composeCase 的输出
  * @param {object} manifest   assets/manifest.json
  * @param {object} skeletons  { key: skeleton }
  */
 export function assembleBook(caseObj, manifest, skeletons) {
-  const sk = pickSkeleton(caseObj, skeletons);
   const asset = (id) => {
     const a = manifest?.assets?.[id];
     if (!a) return { id, src: null, alt: id };
     return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags };
   };
+
+  const sk = pickSkeleton(caseObj, skeletons);
+  const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
+
+  // —— 没有骨架：清单书。不出故事，一个字也不编。 ——
+  if (!sk) {
+    return {
+      book_id: caseObj.case_id,
+      mode: 'checklist',
+      version: 'checklist',
+      skeleton: { key: 'generic', label: caseObj.procedure?.label || '待确认术式' },
+      cover: {
+        title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
+        subtitle: '这类手术还没有专属故事。下面这几页，全是需要确认的事实。',
+      },
+      cast: { villain: null, hero: null },
+      case: caseObj,
+      cautions: caseObj.cautions || [],
+      missing: caseObj.missing || [],
+      questions: caseObj.questions || [],
+      pages: [
+        {
+          id: 'checklist-cover',
+          layout: 'checklist',
+          title: `${caseObj.procedure?.label || '待确认术式'}`,
+          text: '这本还没有故事。故事要等医生把术式、麻醉和时间都确认了才能写 —— 在那之前，先把要问的事情列清楚。',
+          image: null,
+          props: [],
+          fact: null,
+          badge: null,
+        },
+      ],
+      skipped: [],
+      stats: { page_count: 1, fact_pages: 0, built_at: new Date().toISOString() },
+      manifest_version: manifest?.version || 'unknown',
+    };
+  }
 
   const baseCtx = { child: caseObj.child, fact: caseObj.facts };
   const villain = { ...sk.villain, line: resolve(sk.villain.line, baseCtx, 'villain.line') };
@@ -57,41 +88,52 @@ export function assembleBook(caseObj, manifest, skeletons) {
   const skipped = [];
 
   const pages = sk.pages
-    .filter((p) => {
-      const lack = (p.requires || []).filter((k) => !caseObj.facts[k]);
-      if (lack.length) { skipped.push({ id: p.id, reason: `缺少事实: ${lack.join(',')}` }); return false; }
-      return true;
-    })
     .map((p) => {
-      const fact = p.fact
+      const lack = (p.requires || []).filter((k) => !caseObj.facts[k]);
+      const draft = lack.length > 0;
+
+      // 缺事实时优先用条件句版本，其次跳过
+      if (draft && !p.conditional) {
+        skipped.push({ id: p.id, reason: `缺少事实: ${lack.join(',')}` });
+        return null;
+      }
+
+      const src = draft ? { ...p, ...p.conditional } : p;
+      const fact = !draft && p.fact
         ? (() => {
             const f = caseObj.facts[p.fact.key];
             return {
               key: p.fact.key,
               label: p.fact.label,
               value: p.fact.display === 'value_text' ? f.value_text : f.short,
-              evidence: f.evidence,
+              evidence: f.evidence ?? null,
+              source: f.source || 'notice',
             };
           })()
         : null;
 
       return {
         id: p.id,
-        layout: p.layout,
-        stand: p.stand || null,
-        title: resolve(p.title, ctx, `${p.id}.title`),
-        text: resolve(p.text, ctx, `${p.id}.text`),
-        image: asset(p.asset),
-        props: (p.props || []).map(asset),
+        layout: src.layout || p.layout,
+        stand: src.stand || p.stand || null,
+        draft,
+        condition: draft ? lack : null,
+        title: resolve(src.title, ctx, `${p.id}.title`),
+        text: resolve(src.text, ctx, `${p.id}.text`),
+        image: asset(src.asset || p.asset),
+        props: (src.props || p.props || []).map(asset),
         fact,
-        badge: p.badge
-          ? { name: resolve(p.badge.name, ctx, `${p.id}.badge`), engrave: resolve(p.badge.engrave, ctx, `${p.id}.badge`) }
+        badge: src.badge
+          ? { name: resolve(src.badge.name, ctx, `${p.id}.badge`), engrave: resolve(src.badge.engrave, ctx, `${p.id}.badge`) }
           : null,
       };
-    });
+    })
+    .filter(Boolean);
 
   return {
     book_id: caseObj.case_id,
+    mode: 'story',
+    version,
     skeleton: { key: sk.key, label: sk.label },
     cover: {
       title: resolve(sk.title, ctx, 'title'),
@@ -100,11 +142,14 @@ export function assembleBook(caseObj, manifest, skeletons) {
     cast: { villain, hero },
     case: caseObj,
     cautions: caseObj.cautions || [],
+    missing: caseObj.missing || [],
+    questions: caseObj.questions || [],
     pages,
     skipped,
     stats: {
       page_count: pages.length,
       fact_pages: pages.filter((p) => p.fact).length,
+      draft_pages: pages.filter((p) => p.draft).length,
       built_at: new Date().toISOString(),
     },
     manifest_version: manifest?.version || 'unknown',

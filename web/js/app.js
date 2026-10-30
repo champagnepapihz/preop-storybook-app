@@ -1,5 +1,5 @@
-﻿import { parseNotice, parseWithLLM } from '../engine/parse.mjs';
-import { assembleBook } from '../engine/assemble.mjs';
+﻿import { assembleBook } from '../engine/assemble.mjs';
+import { composeCase, findProcedure } from '../engine/compose.mjs';
 import { validateBook, auditCase } from '../engine/validate.mjs';
 
 const $ = (s) => document.querySelector(s);
@@ -7,8 +7,9 @@ const $ = (s) => document.querySelector(s);
 const state = {
   manifest: null,
   skeletons: {},
-  samples: [],
-  sampleIdx: 0,
+  catalog: null,
+  presets: [],
+  presetIdx: 0,
   flip: null,
   book: null,
 };
@@ -22,37 +23,154 @@ async function loadJSON(url) {
 }
 
 async function boot() {
-  const [manifest, skIndex] = await Promise.all([
+  const [manifest, skIndex, catalog] = await Promise.all([
     loadJSON('assets/manifest.json'),
     loadJSON('engine/skeletons/index.json'),
+    loadJSON('engine/catalog.json'),
   ]);
   state.manifest = manifest;
+  state.catalog = catalog;
 
   const entries = await Promise.all(
     Object.entries(skIndex).map(async ([k, file]) => [k, await loadJSON(`engine/skeletons/${file}`)])
   );
   state.skeletons = Object.fromEntries(entries);
 
-  try {
-    const idx = await loadJSON('data/books/index.json');
-    state.samples = idx.books.map((b) => b.slug);
-  } catch {
-    state.samples = [];
-  }
+  state.presets = catalog.presets || [];
+  buildPicker();
 
-  // ?case=N 直接打开第 N 本（演示/回归用，0 起）
-  const wantCase = Number(new URLSearchParams(location.search).get('case'));
-  await loadSample(Number.isFinite(wantCase) && wantCase > 0 ? wantCase : 0);
-
-  $('#gen').addEventListener('click', () => generate($('#notice').value));
-  $('#sample').addEventListener('click', () => loadSample(state.sampleIdx + 1));
+  $('#gen').addEventListener('click', () => generate());
+  $('#sample').addEventListener('click', () => applyPreset(state.presetIdx + 1));
   $('#prev').addEventListener('click', () => goPrev());
   $('#next').addEventListener('click', () => goNext());
   document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'TEXTAREA') return;
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
     if (e.key === 'ArrowLeft') goPrev();
     if (e.key === 'ArrowRight') goNext();
   });
+
+  // ?case=N 直接打开第 N 份演示病例（0 起）
+  const wantCase = Number(new URLSearchParams(location.search).get('case'));
+  applyPreset(Number.isFinite(wantCase) && wantCase > 0 ? wantCase : 0);
+}
+
+/* ---------------- 选择器（受控词表） ---------------- */
+
+function opt(value, label) {
+  return `<option value="${escapeHTML(value)}">${escapeHTML(label)}</option>`;
+}
+
+function buildPicker() {
+  const c = state.catalog;
+
+  // 科室 → 病种 → 术式
+  $('#f-dept').innerHTML = c.departments.map((d) => opt(d.id, d.label)).join('');
+  $('#f-dept').addEventListener('change', () => { fillGroups(true); });
+  $('#f-group').addEventListener('change', () => { fillProcedures(true); });
+
+  // 麻醉：默认"未确认"
+  $('#f-anes').innerHTML = opt('', '未确认') + c.anesthesia.map((a) => opt(a.id, a.label)).join('');
+
+  // 数字一律不预填：0-24 小时 / 0-10 天
+  const hours = (id) => {
+    const el = $(id);
+    el.innerHTML = opt('', '未确认');
+    for (let i = 0; i <= 24; i++) el.innerHTML += opt(String(i), `${i} 小时`);
+  };
+  hours('#f-fast');
+  hours('#f-liquid');
+
+  const stay = $('#f-stay');
+  stay.innerHTML = opt('', '未确认');
+  for (let i = 0; i <= 10; i++) stay.innerHTML += opt(String(i), `${i} 天`);
+
+  $('#f-device').innerHTML = opt('', '未选') + c.devices.map((d) => opt(d.id, d.label)).join('');
+
+  fillGroups(false);
+}
+
+function fillGroups(keepFirst) {
+  const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
+  $('#f-group').innerHTML = (dept?.groups || []).map((g) => opt(g.id, g.label)).join('');
+  fillProcedures(keepFirst);
+}
+
+function fillProcedures(keepFirst) {
+  const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
+  const group = (dept?.groups || []).find((g) => g.id === $('#f-group').value);
+  $('#f-proc').innerHTML = (group?.procedures || [])
+    .map((p) => opt(p.id, p.label + (p.skeleton ? '' : '（暂无故事）')))
+    .join('');
+  if (!keepFirst) $('#f-proc').selectedIndex = 0;
+}
+
+function selectProcedure(id) {
+  const found = findProcedure(state.catalog, id);
+  if (!found) return;
+  $('#f-dept').value = found.dept.id;
+  fillGroups(false);
+  $('#f-group').value = found.group.id;
+  fillProcedures(true);
+  $('#f-proc').value = id;
+}
+
+/** 演示病例：这是唯一的"预填"来源，用于演示与回归 */
+function applyPreset(i) {
+  if (!state.presets.length) return;
+  state.presetIdx = ((i % state.presets.length) + state.presets.length) % state.presets.length;
+  const p = state.presets[state.presetIdx];
+
+  selectProcedure(p.procedure);
+  $('#f-name').value = p.name || '';
+  $('#f-age').value = p.age ?? '';
+  $('#f-anes').value = p.anesthesia || '';
+  $('#f-fast').value = p.fasting == null ? '' : String(p.fasting);
+  $('#f-liquid').value = p.liquid == null ? '' : String(p.liquid);
+  $('#f-stay').value = p.stay == null ? '' : String(p.stay);
+  $('#f-device').value = (p.devices && p.devices[0]) || '';
+
+  generate();
+}
+
+/* ---------------- 生成 ---------------- */
+
+let generating = false;
+
+function readForm() {
+  const num = (v) => (v === '' ? null : Number(v));
+  return {
+    procedureId: $('#f-proc').value,
+    childName: $('#f-name').value.trim(),
+    age: num($('#f-age').value),
+    anesthesiaId: $('#f-anes').value || null,
+    fastingHours: num($('#f-fast').value),
+    liquidHours: num($('#f-liquid').value),
+    stayDays: num($('#f-stay').value),
+    devices: $('#f-device').value ? [$('#f-device').value] : [],
+  };
+}
+
+async function generate() {
+  if (generating) return;
+  generating = true;
+  const btn = $('#gen');
+  const label = btn.textContent;
+  btn.textContent = '正在缝…';
+
+  try {
+    const caseObj = composeCase({ catalog: state.catalog, ...readForm() });
+    const book = assembleBook(caseObj, state.manifest, state.skeletons);
+    const report = validateBook(book);
+
+    state.book = book;
+    renderStatus(caseObj, book, report);
+    renderBook(book);
+  } catch (err) {
+    renderError(err);
+  } finally {
+    btn.textContent = label;
+    generating = false;
+  }
 }
 
 /* ---------------- 封面/封底位姿：先挪书、停稳、再翻 ---------------- */
@@ -142,91 +260,33 @@ async function goPrev() {
   flip.flipPrev();
 }
 
-async function loadSample(i) {
-  if (!state.samples.length) { generate($('#notice').value || ''); return; }
-  state.sampleIdx = ((i % state.samples.length) + state.samples.length) % state.samples.length;
-  const slug = state.samples[state.sampleIdx];
-  try {
-    const txt = await (await fetch(`data/raw/${encodeURIComponent(slug)}.txt`)).text();
-    $('#notice').value = txt;
-  } catch { /* 原文缺失时用当前文本框内容 */ }
-  generate($('#notice').value);
-}
-
-/* ---------------- 生成 ---------------- */
-
-let generating = false;
-
-async function generate(text) {
-  if (generating) return;
-  generating = true;
-  const btn = $('#gen');
-  const label = btn.textContent;
-  btn.textContent = '正在缝…';
-
-  try {
-    let caseObj = await parseWithLLM(text).catch(() => null);
-    if (!caseObj) caseObj = parseNotice(text);
-
-    const book = assembleBook(caseObj, state.manifest, state.skeletons);
-    const report = validateBook(book);
-
-    state.book = book;
-    renderFacts(caseObj, report);
-    renderBook(book);
-  } catch (err) {
-    renderError(err);
-  } finally {
-    btn.textContent = label;
-    generating = false;
-  }
-}
-
 /* ---------------- 侧栏：事实与校验 ---------------- */
 
-function renderFacts(caseObj, report) {
-  const ul = $('#facts');
-  ul.innerHTML = '';
+function renderStatus(caseObj, book, report) {
+  const VERSION_LABEL = { confirmed: '已确认', draft: '草稿', checklist: '清单' };
+  const st = $('#status');
+  st.className = `status status--${book.version}`;
+  st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
+    <span class="status__text">${book.mode === 'checklist'
+      ? '这类手术还没有专属故事，只出事实与注意事项'
+      : `${book.pages.length} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`}</span>`;
 
-  // 录入端审计：数字越界 / 缺项 / 术式未识别，都在这里先喊一声
+  // 缺口：只列"未确认"，不猜
   const audit = $('#audit');
-  if (audit) {
-    const notes = auditCase(caseObj);
-    audit.innerHTML = notes
-      .map((n) => `<li class="audit__item audit__item--${n.level}">${escapeHTML(n.text)}</li>`)
-      .join('');
-    audit.style.display = notes.length ? '' : 'none';
-  }
+  const notes = auditCase(caseObj);
+  const gaps = (caseObj.missing || []).map((k) => missingName(k));
+  const items = [];
+  if (gaps.length) items.push(`<li class="audit__item audit__item--warn">未确认：${gaps.map(escapeHTML).join('、')} —— 书里只会出现“如果……”，不出现数字</li>`);
+  for (const n of notes) items.push(`<li class="audit__item audit__item--${n.level}">${escapeHTML(n.text)}</li>`);
+  audit.innerHTML = items.join('');
+  audit.style.display = items.length ? '' : 'none';
 
-  const facts = Object.values(caseObj.facts || {});
-
-  for (const f of facts) {
-    const li = document.createElement('li');
-    li.className = 'fact';
-    const ev = Array.isArray(f.evidence) ? f.evidence.join(' / ') : f.evidence;
-    li.innerHTML = `
-      <span class="fact__label">${escapeHTML(f.label)}</span>
-      <span class="fact__value">${escapeHTML(f.value_text || f.short || '')}</span>
-      <span class="fact__ev">原文：${escapeHTML(ev || '—')}</span>`;
-    ul.appendChild(li);
-  }
-
-  for (const key of caseObj.missing || []) {
-    const li = document.createElement('li');
-    li.className = 'fact fact--missing';
-    li.innerHTML = `
-      <span class="fact__label">未取到</span>
-      <span class="fact__value">${escapeHTML(missingName(key))}</span>
-      <span class="fact__ev">对应页会自动跳过，绝不编造数字</span>`;
-    ul.appendChild(li);
-  }
-
-  const el = $('#report');
+  const el2 = $('#report');
   if (report.ok) {
-    el.innerHTML = `<strong>事实保真校验通过</strong> · ${report.checked_pages} 页 · 每条数字均可溯源到原文`;
+    el2.innerHTML = `<strong>校验通过</strong> · ${report.checked_pages} 面 · 事实逐项来自你的确认，注意事项来自词表`;
   } else {
     const bad = report.issues.filter((i) => i.level === 'error');
-    el.innerHTML = `<span style="color:#b5573c">校验未通过 ${bad.length} 项</span>：${escapeHTML(bad[0].message)}`;
+    el2.innerHTML = `<span style="color:#b5573c">校验未通过 ${bad.length} 项</span>：${escapeHTML(bad[0].message)}`;
   }
 }
 
@@ -235,7 +295,9 @@ function missingName(key) {
 }
 
 function renderError(err) {
-  $('#facts').innerHTML = `<li class="fact fact--missing"><span class="fact__label">装配失败</span><span class="fact__value">${escapeHTML(err.message)}</span><span class="fact__ev">换个支持的术式，或补充缺失字段</span></li>`;
+  $('#status').className = 'status status--draft';
+  $('#status').innerHTML = '<span class="status__chip">未能生成</span>';
+  $('#audit').innerHTML = `<li class="audit__item audit__item--warn">${escapeHTML(err.message)}</li>`;
   $('#report').textContent = '';
 }
 
@@ -270,6 +332,17 @@ function pageHTML(page, book) {
           <h2 class="page__cover-title">${escapeHTML(book.cover.title)}</h2>
           <p class="page__cover-sub">${escapeHTML(book.cover.subtitle)}</p>
         </div>
+      </div>
+    </div>`;
+  }
+
+  if (page.layout === 'checklist') {
+    return `<div class="page page--checklist" data-density="hard">
+      <div class="page__inner">
+        <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有故事</span>
+        <h2 class="cl-title" style="font-size:20px;line-height:1.5">${escapeHTML(page.title)}</h2>
+        <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">${escapeHTML(page.text)}</p>
+        <p class="page__text cl-questions__lead" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">翻到下一页：要确认的事实、要问医生的问题。</p>
       </div>
     </div>`;
   }
@@ -330,14 +403,16 @@ function pageHTML(page, book) {
 
 function colophonHTML(book) {
   const facts = Object.values(book.case.facts || {});
-  const rows = facts
+  const emptyLine = '<li class="cl-empty">数值尚未确认 —— 逐项确认后，这里会按项列出，并标明来源。</li>';
+  const rows = facts.length === 0 ? emptyLine : facts
     .map((f) => {
       const ev = Array.isArray(f.evidence) ? f.evidence.join(' / ') : f.evidence;
+      const evLine = ev ? `原文：${escapeHTML(ev)}` : '来源：录入时逐项确认';
       return `<li class="cl-item">
         <span class="cl-label">${escapeHTML(f.label)}</span>
         <span class="cl-dots" aria-hidden="true"></span>
         <span class="cl-value">${escapeHTML(f.value_text || f.short)}</span>
-        <span class="cl-ev">原文：${escapeHTML(ev || '—')}</span>
+        <span class="cl-ev">${evLine}</span>
       </li>`;
     })
     .join('');
@@ -351,6 +426,15 @@ function colophonHTML(book) {
       </div>`)
     .join('');
 
+  // 草稿书：把"还没确认的事"变成带去问医生的问题（只问事实，不制造预期）
+  const qs = Array.isArray(book.questions) ? book.questions : [];
+  const questions = qs.length
+    ? `<div class="cl-questions">
+        <h4 class="cl-cau-head">带去问医生的几件事</h4>
+        <ul class="cl-q-list">${qs.map((q) => `<li>${escapeHTML(q.question)}</li>`).join('')}</ul>
+      </div>`
+    : '';
+
   const sparse = facts.length <= 2 && cauGroups.length <= 1;
   const dense = facts.length + cauGroups.reduce((n, g) => n + g.items.length, 0) > 6;
 
@@ -361,7 +445,8 @@ function colophonHTML(book) {
         <h3 class="cl-title">家长陪护说明</h3>
         <span class="cl-flourish" aria-hidden="true"></span>
       </div>
-      <ul class="cl-list">${rows}</ul>
+      <ul class="cl-list${facts.length === 0 ? ' cl-list--empty' : ''}">${rows}</ul>
+      ${questions}
       ${cautions ? `<div class="cl-cautions"><h4 class="cl-cau-head">家长还要做的 · 原文照录</h4>${cautions}</div>` : ''}
       <p class="cl-note">陪护请对照上表落实术前准备；住院期间孩子如有不适，或您有任何疑问，请及时告知医护人员。</p>
     </div>

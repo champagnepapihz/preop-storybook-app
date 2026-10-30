@@ -1,27 +1,32 @@
 #!/usr/bin/env node
 /**
  * MCP 接口（stdio JSON-RPC，零依赖）
- * 把管线暴露给任意 Agent：贴一张术前须知 → 拿回一本绘本的 JSON。
+ *
+ * 设计原则：接口只收「枚举 + 整数」，不收自由文本。
+ *   —— 调用方可以是大模型，但它没法把"大概禁食 8 小时吧"变成数字，
+ *      因为 fasting_hours 要么是 0-24 的整数，要么不存在。
+ *      揣测在 schema 层被挡住，不靠提示词祈祷。
  *
  * 注册到 WorkBuddy / Claude Desktop：
  *   { "command": "node", "args": ["<绝对路径>/mcp/server.mjs"] }
  *
- * 暴露的工具：
- *   list_skeletons     当前支持的术式骨架
- *   parse_preop_notice 术前须知 → 结构化病例（含事实出处）
- *   build_preop_book   术前须知 → 完整绘本 JSON（含事实保真校验结果）
+ * 工具：
+ *   list_catalog      科室/病种/术式树 + 麻醉/装置枚举（调用方先查可选值）
+ *   build_preop_book  受控参数 → 绘本 JSON（含缺失项、建议提问、版本）
  */
 import { createInterface } from 'node:readline';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseNotice } from '../web/engine/parse.mjs';
+import { composeCase, flattenProcedures } from '../web/engine/compose.mjs';
 import { assembleBook } from '../web/engine/assemble.mjs';
 import { validateBook } from '../web/engine/validate.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const manifest = JSON.parse(readFileSync(join(ROOT, 'assets/manifest.json'), 'utf8'));
+const catalog = JSON.parse(readFileSync(join(ROOT, 'web/engine/catalog.json'), 'utf8'));
+
 const skDir = join(ROOT, 'web/engine/skeletons');
 const skeletons = {};
 for (const f of readdirSync(skDir).filter((x) => x.endsWith('.json') && x !== 'index.json')) {
@@ -29,50 +34,96 @@ for (const f of readdirSync(skDir).filter((x) => x.endsWith('.json') && x !== 'i
   skeletons[sk.key] = sk;
 }
 
+const PROCEDURE_IDS = flattenProcedures(catalog).map((p) => p.id);
+const ANESTHESIA_IDS = (catalog.anesthesia || []).map((a) => a.id);
+const DEVICE_IDS = (catalog.devices || []).map((d) => d.id);
+
 const TOOLS = [
   {
-    name: 'list_skeletons',
-    description: '列出当前故事骨架库支持的术式（骨架=疾病角色+章节结构）。',
+    name: 'list_catalog',
+    description:
+      '返回受控词表：科室/病种/术式（含是否有专属故事）+ 麻醉方式 + 装置枚举。任何生成前先调它拿可选值。',
     inputSchema: { type: 'object', properties: {} },
   },
   {
-    name: 'parse_preop_notice',
-    description: '把术前须知文本解析成结构化病例：术式、麻醉方式、禁食时长、留置针、住院天数，每条事实都带原文出处。只抽取不推断。',
-    inputSchema: {
-      type: 'object',
-      properties: { text: { type: 'string', description: '术前须知全文（脱敏或合成）' } },
-      required: ['text'],
-    },
-  },
-  {
     name: 'build_preop_book',
-    description: '把术前须知装配成一本患儿绘本的完整 JSON：封面、逐页文案、每页配图素材 id、医学事实卡、徽章。返回前会做事实保真校验。',
+    description:
+      '用受控参数生成一本术前绘本。只接受枚举与整数，不接受自由文本；未提供的字段不会出现在书里，' +
+      '只会在 missing 与 questions 中体现。返回 { version, mode, missing, questions, book }。',
     inputSchema: {
       type: 'object',
       properties: {
-        text: { type: 'string', description: '术前须知全文（脱敏或合成）' },
-        child_name: { type: 'string', description: '患儿昵称（可选，缺省从须知里取）' },
+        procedure_id: { type: 'string', enum: PROCEDURE_IDS, description: '术式 id（来自 list_catalog）' },
+        child_name: { type: 'string', description: '患儿昵称，可省略' },
+        age: { type: 'integer', minimum: 0, maximum: 18, description: '年龄（岁）' },
+        anesthesia_id: { type: 'string', enum: ANESTHESIA_IDS },
+        fasting_hours: { type: 'integer', minimum: 0, maximum: 24, description: '术前禁食小时数：确认过才传' },
+        liquid_hours: { type: 'integer', minimum: 0, maximum: 24, description: '术前禁水小时数：确认过才传' },
+        stay_days: { type: 'integer', minimum: 0, maximum: 30 },
+        devices: { type: 'array', items: { type: 'string', enum: DEVICE_IDS } },
       },
-      required: ['text'],
+      required: ['procedure_id'],
+      additionalProperties: false,
     },
   },
 ];
 
 function call(name, args) {
-  if (name === 'list_skeletons') {
-    return Object.values(skeletons).map((s) => ({ key: s.key, label: s.label, pages: s.pages.length }));
+  if (name === 'list_catalog') {
+    return {
+      note: catalog.note,
+      review: catalog.review,
+      departments: (catalog.departments || []).map((d) => ({
+        id: d.id,
+        label: d.label,
+        groups: (d.groups || []).map((g) => ({
+          id: g.id,
+          label: g.label,
+          procedures: (g.procedures || []).map((p) => ({
+            id: p.id,
+            label: p.label,
+            has_story: Boolean(p.skeleton),
+          })),
+        })),
+      })),
+      anesthesia: catalog.anesthesia,
+      devices: catalog.devices,
+    };
   }
-  if (name === 'parse_preop_notice') {
-    const c = parseNotice(args.text, { childName: args.child_name });
-    return { procedure: c.procedure, child: c.child, facts: c.facts, missing: c.missing };
-  }
+
   if (name === 'build_preop_book') {
-    const c = parseNotice(args.text, { childName: args.child_name });
-    const book = assembleBook(c, manifest, skeletons);
+    // 未知术式直接拒，不做任何猜测
+    if (!PROCEDURE_IDS.includes(args.procedure_id)) {
+      throw new Error(`procedure_id 不在词表内：${args.procedure_id}`);
+    }
+    const caseObj = composeCase({
+      catalog,
+      procedureId: args.procedure_id,
+      childName: args.child_name,
+      age: args.age ?? null,
+      anesthesiaId: args.anesthesia_id ?? null,
+      fastingHours: args.fasting_hours ?? null,
+      liquidHours: args.liquid_hours ?? null,
+      stayDays: args.stay_days ?? null,
+      devices: args.devices ?? [],
+    });
+    const book = assembleBook(caseObj, manifest, skeletons);
     const report = validateBook(book);
-    return { book, validation: report };
+    if (!report.ok) {
+      throw new Error(
+        `事实校验未通过：${report.issues.filter((i) => i.level === 'error').map((i) => i.message).join('；')}`
+      );
+    }
+    return {
+      version: book.version,
+      mode: book.mode,
+      missing: book.missing,
+      questions: book.questions,
+      book,
+    };
   }
-  throw new Error(`未知工具: ${name}`);
+
+  throw new Error(`未知工具：${name}`);
 }
 
 const send = (msg) => process.stdout.write(JSON.stringify(msg) + '\n');
@@ -90,7 +141,7 @@ rl.on('line', (line) => {
       result: {
         protocolVersion: '2024-11-05',
         capabilities: { tools: {} },
-        serverInfo: { name: 'preop-storybook', version: '0.1.0' },
+        serverInfo: { name: 'preop-storybook', version: '0.2.0' },
       },
     });
   }
@@ -105,7 +156,7 @@ rl.on('line', (line) => {
     } catch (e) {
       return send({
         jsonrpc: '2.0', id,
-        result: { content: [{ type: 'text', text: `错误: ${e.message}` }], isError: true },
+        result: { content: [{ type: 'text', text: `错误：${e.message}` }], isError: true },
       });
     }
   }
@@ -113,5 +164,5 @@ rl.on('line', (line) => {
     if (id != null) send({ jsonrpc: '2.0', id, result: {} });
     return;
   }
-  if (id != null) send({ jsonrpc: '2.0', id, error: { code: -32601, message: `未支持: ${method}` } });
+  if (id != null) send({ jsonrpc: '2.0', id, error: { code: -32601, message: `未支持：${method}` } });
 });

@@ -1,5 +1,7 @@
 {
-  "book_id": "CASE-MVUWQ18S",
+  "book_id": "CASE-MVUXXN7R",
+  "mode": "story",
+  "version": "confirmed",
   "skeleton": {
     "key": "tonsillectomy",
     "label": "扁桃体切除术"
@@ -22,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUWQ18S",
+    "case_id": "CASE-MVUXXN7R",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -105,11 +107,15 @@
       "source_line": "术后注意：术后当天进温凉流质，避免剧烈哭闹与奔跑"
     }
   ],
+  "missing": [],
+  "questions": [],
   "pages": [
     {
       "id": "cover",
       "layout": "cover",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "果果和喉咙里的火山怪",
       "text": "这是果果的故事。故事里有一位小勇士，还有一只住在喉咙里的火山怪。",
       "image": {
@@ -161,6 +167,8 @@
       "id": "meet",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "火山怪住进了山洞",
       "text": "它住在果果喉咙的山洞里，脾气热烘烘的，一闹起来喉咙就疼。它有时候喷出小小的火苗，让果果连咽口水都皱着眉头。",
       "image": {
@@ -192,6 +200,8 @@
       "id": "invite",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "白大褂医生来了",
       "text": "白大褂医生不打人，他只会轻轻地跟火山怪讲道理。他说：我可以帮你把火山怪请出去，但你得跟我做三件事。果果点点头，握紧了拳头。",
       "image": {
@@ -223,6 +233,8 @@
       "id": "fasting",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第一件事：先让肚子空一会儿",
       "text": "医生说，火山怪的力气来自果果肚子里的食物。所以手术前要8小时不吃东西、2小时不喝水。肚子空空的不是惩罚，是在帮火山怪变小一点。",
       "image": {
@@ -254,7 +266,8 @@
         "evidence": [
           "禁食：禁食8小时",
           "禁水2小时"
-        ]
+        ],
+        "source": "notice"
       },
       "badge": null
     },
@@ -262,6 +275,8 @@
       "id": "cloud",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第二件事：坐一朵会睡觉的云",
       "text": "麻醉医生会送来一朵软软的云。果果坐上全身麻醉，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
       "image": {
@@ -290,7 +305,8 @@
         "key": "anesthesia",
         "label": "麻醉方式",
         "value": "全身麻醉",
-        "evidence": "全身麻醉"
+        "evidence": "全身麻醉",
+        "source": "notice"
       },
       "badge": null
     },
@@ -298,6 +314,8 @@
       "id": "needle",
       "layout": "image_right",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "第三件事：手上有一只小蝴蝶",
       "text": "护士会在手上放一只小蝴蝶——那是留置针。它会有一点痒，像被蚊子轻轻亲了一下，数三下就过去了。之后打针、喝水都从这只小蝴蝶走，不用再扎第二次。",
       "image": {
@@ -326,7 +344,8 @@
         "key": "device",
         "label": "手上装置",
         "value": "留置针",
-        "evidence": "留置针"
+        "evidence": "留置针",
+        "source": "notice"
       },
       "badge": null
     },
@@ -334,6 +353,8 @@
       "id": "battle",
       "layout": "full",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "医院门口的那场较量",
       "text": "第二天早上，白大褂医生站在医院门口，对着火山怪张开手：果果还在睡，这场较量，交给我。",
       "image": {
@@ -375,6 +396,8 @@
       "id": "wake",
       "layout": "image_left",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "醒了，喉咙凉丝丝的",
       "text": "果果睁开眼睛的时候，火山怪已经搬走了。喉咙里凉丝丝的，像刚喝过一口温水。医生说：住院3天，我们就能回家。",
       "image": {
@@ -413,7 +436,8 @@
         "key": "stay",
         "label": "住院时长",
         "value": "住院3天",
-        "evidence": "住院时间：住院3天"
+        "evidence": "住院时间：住院3天",
+        "source": "notice"
       },
       "badge": null
     },
@@ -421,6 +445,8 @@
       "id": "badge",
       "layout": "badge",
       "stand": null,
+      "draft": false,
+      "condition": null,
       "title": "小勇士徽章",
       "text": "果果战胜了喉咙里的火山怪。这枚徽章，是那天晚上你自己走出来的证明。",
       "image": {
@@ -445,7 +471,8 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 4,
-    "built_at": "2026-10-30T11:46:50.188Z"
+    "draft_pages": 0,
+    "built_at": "2026-10-30T12:20:44.871Z"
   },
   "manifest_version": "0.2.0",
   "slug": "tonsil-果果"

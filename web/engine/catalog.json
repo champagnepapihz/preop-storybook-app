@@ -1,0 +1,306 @@
+{
+  "version": "0.2.0-demo",
+  "review": "demo",
+  "note": "演示用受控词表，结构参照临床开单习惯。条目内容由本项目编写，未经临床审核；上线前须由医院逐条审定。词表只描述『这种病/这个术式』，不含任何默认数值——数值必须由录入者逐项确认。",
+  "departments": [
+    {
+      "id": "ent",
+      "label": "耳鼻咽喉科",
+      "groups": [
+        {
+          "id": "tonsil",
+          "label": "扁桃体 / 腺样体",
+          "procedures": [
+            {
+              "id": "tonsillectomy",
+              "label": "扁桃体切除术",
+              "skeleton": "tonsillectomy",
+              "cautions": {
+                "术前准备": [
+                  "手背留置针建立静脉通路",
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "术后当天进温凉流质",
+                  "避免剧烈哭闹与奔跑"
+                ]
+              }
+            },
+            {
+              "id": "adenoidectomy",
+              "label": "腺样体切除术",
+              "skeleton": "tonsillectomy",
+              "cautions": {
+                "术前准备": [
+                  "手背留置针建立静脉通路",
+                  "更换病号服"
+                ],
+                "术后注意": [
+                  "术后当天进温凉流质"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gs",
+      "label": "小儿外科",
+      "groups": [
+        {
+          "id": "appendix",
+          "label": "阑尾",
+          "procedures": [
+            {
+              "id": "appendectomy",
+              "label": "腹腔镜阑尾切除术",
+              "skeleton": "appendectomy",
+              "cautions": {
+                "术前准备": [
+                  "留置针穿刺",
+                  "脐部及下腹备皮",
+                  "术前排空小便"
+                ],
+                "术后注意": [
+                  "早期下床活动",
+                  "观察伤口敷料有无渗液"
+                ]
+              }
+            },
+            {
+              "id": "appendectomy-open",
+              "label": "开腹阑尾切除术",
+              "skeleton": "appendectomy",
+              "cautions": {
+                "术前准备": [
+                  "留置针穿刺",
+                  "腹部备皮",
+                  "术前排空小便"
+                ],
+                "术后注意": [
+                  "早期下床活动",
+                  "观察伤口敷料有无渗液"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "hernia",
+          "label": "腹股沟疝",
+          "procedures": [
+            {
+              "id": "hernia",
+              "label": "腹腔镜腹股沟疝修补术",
+              "skeleton": null,
+              "cautions": {
+                "术前准备": [
+                  "留置针穿刺",
+                  "脐部备皮",
+                  "术前排空小便"
+                ],
+                "术后注意": [
+                  "避免剧烈哭闹与奔跑",
+                  "观察伤口敷料有无渗液"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "circumcision",
+          "label": "包茎 / 包皮",
+          "procedures": [
+            {
+              "id": "circumcision",
+              "label": "包皮环切术",
+              "skeleton": null,
+              "cautions": {
+                "术前准备": [
+                  "局部清洁",
+                  "更换病号服"
+                ],
+                "术后注意": [
+                  "保持伤口干燥",
+                  "观察有无渗血"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ped",
+      "label": "儿内科",
+      "groups": [
+        {
+          "id": "infusion",
+          "label": "静脉输液",
+          "procedures": [
+            {
+              "id": "iv-infusion",
+              "label": "静脉输液治疗",
+              "skeleton": "injection",
+              "cautions": {
+                "住院注意": [
+                  "多喝温水",
+                  "勤洗手",
+                  "戴口罩"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "fever",
+          "label": "发热待查",
+          "procedures": [
+            {
+              "id": "fever-watch",
+              "label": "发热待查观察",
+              "skeleton": null,
+              "cautions": {
+                "住院注意": [
+                  "多喝温水",
+                  "按时测量体温",
+                  "如精神差请及时告知医护人员"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ortho",
+      "label": "骨科",
+      "groups": [
+        {
+          "id": "fracture",
+          "label": "骨折",
+          "procedures": [
+            {
+              "id": "closed-reduction",
+              "label": "闭合复位石膏固定",
+              "skeleton": null,
+              "cautions": {
+                "术前准备": [
+                  "患肢制动",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "观察手指末梢颜色与温度",
+                  "保持石膏干燥"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "anesthesia": [
+    {
+      "id": "general",
+      "label": "全身麻醉"
+    },
+    {
+      "id": "regional",
+      "label": "椎管内麻醉"
+    },
+    {
+      "id": "sedation",
+      "label": "静脉镇静"
+    },
+    {
+      "id": "local",
+      "label": "局部麻醉"
+    },
+    {
+      "id": "none",
+      "label": "不需要麻醉"
+    }
+  ],
+  "devices": [
+    {
+      "id": "iv",
+      "label": "留置针"
+    },
+    {
+      "id": "catheter",
+      "label": "导尿管"
+    },
+    {
+      "id": "drain",
+      "label": "引流管"
+    }
+  ],
+  "presets": [
+    {
+      "slug": "append-豆豆",
+      "name": "豆豆",
+      "age": 8,
+      "procedure": "appendectomy",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 4,
+      "devices": [
+        "iv"
+      ]
+    },
+    {
+      "slug": "tonsil-果果",
+      "name": "果果",
+      "age": 6,
+      "procedure": "tonsillectomy",
+      "anesthesia": "general",
+      "fasting": 8,
+      "liquid": 2,
+      "stay": 3,
+      "devices": [
+        "iv"
+      ]
+    },
+    {
+      "slug": "shot-苗苗",
+      "name": "苗苗",
+      "age": 5,
+      "procedure": "iv-infusion",
+      "anesthesia": "none",
+      "fasting": null,
+      "liquid": null,
+      "stay": 2,
+      "devices": [
+        "iv"
+      ]
+    },
+    {
+      "slug": "draft-只说了阑尾炎",
+      "name": "小满",
+      "age": 4,
+      "procedure": "appendectomy",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": null,
+      "devices": []
+    },
+    {
+      "slug": "hernia-小满",
+      "name": "小满",
+      "age": 4,
+      "procedure": "hernia",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 2,
+      "devices": [
+        "iv"
+      ]
+    }
+  ]
+}
