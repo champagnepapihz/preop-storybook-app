@@ -163,12 +163,30 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
 
   const pages = sk.pages
     .map((p) => {
-      const lack = (p.requires || []).filter((k) => !caseObj.facts[k]);
+      // requires 支持两种写法：
+      //   "device"                      —— 只要有这个字段
+      //   { fact: 'device', has_id:'iv'} —— 字段存在且取值是 iv
+      // 后者还区分两种情况：没有这个字段 = 未确认（可走"如果……"），
+      //                    有字段但不是 iv = 已确认不留（这一页根本不该出现）。
+      const conflict = [];
+      const lack = (p.requires || []).filter((r) => {
+        if (typeof r === 'string') return !caseObj.facts[r];
+        const f = caseObj.facts[r.fact];
+        if (!f) return true;                       // 未确认
+        if (r.has_id && !(f.ids || []).includes(r.has_id)) { conflict.push(r); return false; }
+        return false;
+      });
+
+      if (conflict.length) {
+        skipped.push({ id: p.id, reason: `已确认不适用: ${conflict.map((c) => c.fact).join(',')}` });
+        return null;
+      }
+
       const draft = lack.length > 0;
 
       // 缺事实时优先用条件句版本，其次跳过
       if (draft && !p.conditional) {
-        skipped.push({ id: p.id, reason: `缺少事实: ${lack.join(',')}` });
+        skipped.push({ id: p.id, reason: `缺少事实: ${lack.map((r) => (typeof r === 'string' ? r : r.fact)).join(',')}` });
         return null;
       }
 

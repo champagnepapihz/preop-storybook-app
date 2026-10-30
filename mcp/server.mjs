@@ -11,7 +11,7 @@
  *   { "command": "node", "args": ["<绝对路径>/mcp/server.mjs"] }
  *
  * 工具：
- *   list_catalog      科室/病种/术式树 + 麻醉/装置枚举（调用方先查可选值）
+ *   list_catalog      科室/病种/术式树 + 麻醉/留置针枚举（调用方先查可选值）
  *   build_preop_book  受控参数 → 绘本 JSON（含缺失项、建议提问、版本）
  */
 import { createInterface } from 'node:readline';
@@ -37,13 +37,14 @@ for (const f of readdirSync(skDir).filter((x) => x.endsWith('.json') && x !== 'i
 
 const PROCEDURE_IDS = flattenProcedures(catalog).map((p) => p.id);
 const ANESTHESIA_IDS = (catalog.anesthesia || []).map((a) => a.id);
-const DEVICE_IDS = (catalog.devices || []).map((d) => d.id);
+// 'none' = 已确认不留留置针（与未确认不同，前者算已确认）
+const DEVICE_IDS = [...(catalog.devices || []).map((d) => d.id), 'none'];
 
 const TOOLS = [
   {
     name: 'list_catalog',
     description:
-      '返回受控词表：科室/病种/术式（含是否有专属故事）+ 麻醉方式 + 装置枚举。任何生成前先调它拿可选值。',
+      '返回受控词表：科室/病种/术式（含是否有专属故事）+ 麻醉方式 + 留置针枚举。任何生成前先调它拿可选值。',
     inputSchema: { type: 'object', properties: {} },
   },
   {
@@ -61,7 +62,7 @@ const TOOLS = [
         fasting_hours: { type: 'integer', minimum: 0, maximum: 24, description: '术前禁食小时数：确认过才传' },
         liquid_hours: { type: 'integer', minimum: 0, maximum: 24, description: '术前禁水小时数：确认过才传' },
         stay_days: { type: 'integer', minimum: 0, maximum: 30 },
-        devices: { type: 'array', items: { type: 'string', enum: DEVICE_IDS } },
+        devices: { type: 'array', items: { type: 'string', enum: DEVICE_IDS }, description: '确定会留留置针传 ["iv"]；确定不留传 ["none"]；未确认则不传' },
       },
       required: ['procedure_id'],
       additionalProperties: false,

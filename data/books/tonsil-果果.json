@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV1WVDN",
+  "book_id": "CASE-MVV25CLE",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV1WVDN",
+    "case_id": "CASE-MVV25CLE",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -282,46 +282,6 @@
       "badge": null
     },
     {
-      "id": "needle",
-      "layout": "image_right",
-      "stand": "micro",
-      "draft": false,
-      "condition": null,
-      "title": "第三件事：手上有一只小蝴蝶",
-      "text": "护士会在手上放一只小蝴蝶——那是留置针。它会有一点痒，像被蚊子轻轻亲了一下，数三下就过去了。之后打针、喝水都从这只小蝴蝶走，不用再扎第二次。",
-      "image": {
-        "id": "scene_butterfly_hand",
-        "src": "assets/scenes/scene_butterfly_hand.jpg",
-        "alt": "手背小蝴蝶",
-        "kind": "scene",
-        "scale": 1
-      },
-      "props": [
-        {
-          "id": "nurse__wave",
-          "src": "assets/characters/nurse__wave.webp",
-          "alt": "护士·挥手",
-          "kind": "character",
-          "scale": 1.42
-        },
-        {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
-          "kind": "character",
-          "scale": 1
-        }
-      ],
-      "fact": {
-        "key": "device",
-        "label": "手上装置",
-        "value": "留置针",
-        "evidence": "留置针",
-        "source": "notice"
-      },
-      "badge": null
-    },
-    {
       "id": "battle",
       "layout": "full",
       "stand": null,
@@ -416,14 +376,29 @@
         "name": "火山怪不闹了",
         "engrave": "果果"
       }
+    },
+    {
+      "id": "notes",
+      "layout": "notes",
+      "title": "写给果果的一句话",
+      "text": "这一页空着。等这本书读完，你可以在这里写一句话，或者贴一张照片。",
+      "image": null,
+      "props": [],
+      "fact": null,
+      "badge": null
     }
   ],
-  "skipped": [],
+  "skipped": [
+    {
+      "id": "needle",
+      "reason": "已确认不适用: device"
+    }
+  ],
   "stats": {
     "page_count": 9,
-    "fact_pages": 4,
+    "fact_pages": 3,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:12:07.259Z"
+    "built_at": "2026-10-30T14:18:42.819Z"
   },
   "manifest_version": "0.3.0",
   "slug": "tonsil-果果"

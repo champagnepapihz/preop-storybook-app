@@ -71,11 +71,14 @@
         "kid:stand"
       ],
       "requires": [
-        "device"
+        {
+          "fact": "device",
+          "has_id": "iv"
+        }
       ],
       "fact": {
         "key": "device",
-        "label": "手上装置",
+        "label": "留置针",
         "display": "value_text"
       },
       "conditional": {

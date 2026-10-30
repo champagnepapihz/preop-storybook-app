@@ -86,7 +86,7 @@ function renderIdle(hint) {
       <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有选病例</span>
       <h2 class="cl-title" style="font-size:19px;line-height:1.55">从左边选一个病种开始</h2>
       <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">
-        科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和装置。<br />填了什么就出现什么，没填的不会出现在书里。
+        科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和留置针。<br />填了什么就出现什么，没填的不会出现在书里。
       </p>
       <p class="page__text" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">
         想先看一眼成品？点「换个病例」。
@@ -136,7 +136,10 @@ function buildPicker() {
   stay.innerHTML = opt('', '未确认');
   for (let i = 0; i <= 10; i++) stay.innerHTML += opt(String(i), `${i} 天`);
 
-  $('#f-device').innerHTML = opt('', '未选') + c.devices.map((d) => opt(d.id, d.label)).join('');
+  // 留置针：确认"有"和确认"没有"都算确认，只有"未确认"才进缺口
+  $('#f-device').innerHTML = opt('', '未确认')
+    + opt('iv', '会留一只')
+    + opt('none', '不留');
 
   fillGroups(false);
 }
@@ -383,7 +386,7 @@ function renderStatus(caseObj, book, report) {
 
   const el2 = $('#report');
   if (report.ok) {
-    el2.innerHTML = `<strong>校验通过</strong> · ${report.checked_pages} 面 · 事实逐项来自你的确认，注意事项来自词表`;
+    el2.innerHTML = `<strong>校验通过</strong> · ${report.checked_pages + 1} 面 · 事实逐项来自你的确认，注意事项来自词表`;
   } else {
     const bad = report.issues.filter((i) => i.level === 'error');
     el2.innerHTML = `<span style="color:#b5573c">校验未通过 ${bad.length} 项</span>：${escapeHTML(bad[0].message)}`;
@@ -391,7 +394,7 @@ function renderStatus(caseObj, book, report) {
 }
 
 function missingName(key) {
-  return ({ procedure: '术式', fasting: '禁食时长', anesthesia: '麻醉方式', device: '手上装置', stay: '住院时长' })[key] || key;
+  return ({ procedure: '术式', fasting: '禁食时长', anesthesia: '麻醉方式', device: '留置针', stay: '住院时长' })[key] || key;
 }
 
 function renderError(err) {

@@ -94,17 +94,29 @@ export function composeCase(input) {
     };
   }
 
-  // —— 装置 ——
-  const chosen = (input.devices || [])
+  // —— 留置针（"有 / 没有"两种都算确认过；只有"未确认"才进 missing）——
+  const devIds = input.devices || [];
+  const noDevice = devIds.includes('none');
+  const chosen = devIds
     .map((id) => (catalog.devices || []).find((d) => d.id === id))
     .filter(Boolean);
-  if (chosen.length) {
+  if (noDevice) {
     facts.device = {
       key: 'device',
-      label: '手上装置',
+      label: '留置针',
+      short: '不留',
+      value_text: '不留留置针',
+      ids: [],                       // 空 ids → 小蝴蝶那页不会插入
+      evidence: null,
+      source: 'catalog',
+    };
+  } else if (chosen.length) {
+    facts.device = {
+      key: 'device',
+      label: '留置针',
       short: chosen[0].label,
       value_text: chosen.map((d) => d.label).join('、'),
-      ids: chosen.map((d) => d.id),   // 通用模块页按 id 判断该不该插（如 iv → 留置针页）
+      ids: chosen.map((d) => d.id),   // 通用模块页按 id 判断该不该插（iv → 小蝴蝶页）
       evidence: null,
       source: 'catalog',
     };

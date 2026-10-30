@@ -207,14 +207,6 @@
     {
       "id": "iv",
       "label": "留置针"
-    },
-    {
-      "id": "catheter",
-      "label": "导尿管"
-    },
-    {
-      "id": "drain",
-      "label": "引流管"
     }
   ],
   "presets": [
