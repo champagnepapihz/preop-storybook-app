@@ -42,3 +42,6 @@ rawpic/
 
 # 角色图归一化备份
 assets/_characters_backup/
+
+# 本地工具用的无头浏览器配置（素材归一化 / 裁切）
+.trim-profile/
