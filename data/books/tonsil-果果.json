@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV2I6ZY",
+  "book_id": "CASE-MVV2OY1P",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV2I6ZY",
+    "case_id": "CASE-MVV2OY1P",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -145,7 +145,7 @@
           "src": "assets/characters/villain_volcano__wow.webp",
           "alt": "火山怪·wow",
           "kind": "character",
-          "scale": 1.2
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -172,7 +172,7 @@
           "src": "assets/characters/villain_volcano__angry.webp",
           "alt": "火山怪·angry",
           "kind": "character",
-          "scale": 1.2
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -309,7 +309,7 @@
           "src": "assets/characters/villain_volcano__angry.webp",
           "alt": "火山怪·angry",
           "kind": "character",
-          "scale": 1.2
+          "scale": 0.9
         }
       ],
       "fact": null,
@@ -398,7 +398,7 @@
     "page_count": 9,
     "fact_pages": 3,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:28:42.094Z"
+    "built_at": "2026-10-30T14:33:57.085Z"
   },
   "manifest_version": "0.3.0",
   "slug": "tonsil-果果"

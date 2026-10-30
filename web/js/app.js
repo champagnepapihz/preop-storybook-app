@@ -439,8 +439,8 @@ function pageHTML(page, book) {
         <div class="page__cover-cast">${(page.props || []).map((p) => imgTag(p)).join('')}</div>
         <div class="page__cover-ribbon">${escapeHTML(ribbon)}</div>
         <div class="page__cover-plate">
-          <span class="page__cover-kicker">${escapeHTML(kicker)}</span>
           <h2 class="page__cover-title">${escapeHTML(title)}</h2>
+          <span class="page__cover-kicker">${escapeHTML(kicker)}</span>
           <p class="page__cover-sub">${escapeHTML(sub)}</p>
         </div>
       </div>

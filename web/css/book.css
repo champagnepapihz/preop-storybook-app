@@ -245,7 +245,7 @@
 .page__cover-kicker {
   display: inline-block;
   padding: 4px 12px;
-  margin-bottom: 10px;
+  margin: 4px 0 8px;
   font-size: 10px;
   letter-spacing: .22em;
   border-radius: 999px;
@@ -283,7 +283,7 @@
 }
 
 .page__cover-cast img {
-  height: calc(var(--ph, 560px) * .3 * var(--s, 1));
+  height: calc(var(--ph, 560px) * .36 * var(--s, 1));
   width: auto;
   max-width: none;
   object-fit: contain;

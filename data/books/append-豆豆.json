@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV2I6ZH",
+  "book_id": "CASE-MVV2OY19",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV2I6ZH",
+    "case_id": "CASE-MVV2OY19",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -145,7 +145,7 @@
           "src": "assets/characters/villain_pebble__happy.webp",
           "alt": "小尾巴怪·happy",
           "kind": "character",
-          "scale": 0.9
+          "scale": 0.78
         }
       ],
       "fact": null,
@@ -172,7 +172,7 @@
           "src": "assets/characters/villain_pebble__angry.webp",
           "alt": "小尾巴怪·angry",
           "kind": "character",
-          "scale": 0.9
+          "scale": 0.78
         }
       ],
       "fact": null,
@@ -309,7 +309,7 @@
           "src": "assets/characters/villain_pebble__angry.webp",
           "alt": "小尾巴怪·angry",
           "kind": "character",
-          "scale": 0.9
+          "scale": 0.78
         }
       ],
       "fact": null,
@@ -398,7 +398,7 @@
     "page_count": 9,
     "fact_pages": 3,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:28:42.079Z"
+    "built_at": "2026-10-30T14:33:57.071Z"
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"

@@ -59,6 +59,14 @@ for (const [key, sk] of Object.entries(skeletons)) {
   }
 }
 
+// —— 设计语言硬约束：反派不得高于患儿（怪兽比孩子大，故事就变成威胁）
+for (const [role, meta] of Object.entries(roles)) {
+  if (role.startsWith('villain_') && Number(meta.scale) > 1) {
+    console.error(`✗ VILLAIN_TOO_BIG  ${role} 的体型系数 ${meta.scale} > 1.00（患儿基准），不符合"小怪兽"设定`);
+    process.exitCode = 1;
+  }
+}
+
 if (process.exitCode === 1) {
   console.error('素材引用 / 体型比例校验未通过，构建中止。');
   process.exit(1);

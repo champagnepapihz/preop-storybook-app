@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV2I6ZT",
+  "book_id": "CASE-MVV2OY1L",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV2I6ZT",
+    "case_id": "CASE-MVV2OY1L",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -115,7 +115,7 @@
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
           "kind": "character",
-          "scale": 0.72
+          "scale": 0.6
         }
       ],
       "fact": null,
@@ -142,7 +142,7 @@
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
           "kind": "character",
-          "scale": 0.72
+          "scale": 0.6
         }
       ],
       "fact": null,
@@ -217,7 +217,7 @@
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
           "kind": "character",
-          "scale": 0.72
+          "scale": 0.6
         }
       ],
       "fact": null,
@@ -318,7 +318,7 @@
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
           "kind": "character",
-          "scale": 0.72
+          "scale": 0.6
         }
       ],
       "fact": null,
@@ -367,7 +367,7 @@
     "page_count": 9,
     "fact_pages": 1,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:28:42.090Z"
+    "built_at": "2026-10-30T14:33:57.081Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"
