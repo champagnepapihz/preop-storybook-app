@@ -321,15 +321,26 @@ function colophonHTML(book) {
   const rows = Object.values(book.case.facts || {})
     .map((f) => {
       const ev = Array.isArray(f.evidence) ? f.evidence.join(' / ') : f.evidence;
-      return `<li><b>${escapeHTML(f.label)}</b> · ${escapeHTML(f.value_text || f.short)}<br><span style="opacity:.7">原文：${escapeHTML(ev || '—')}</span></li>`;
+      return `<li class="cl-item">
+        <span class="cl-label">${escapeHTML(f.label)}</span>
+        <span class="cl-dots" aria-hidden="true"></span>
+        <span class="cl-value">${escapeHTML(f.value_text || f.short)}</span>
+        <span class="cl-ev">原文：${escapeHTML(ev || '—')}</span>
+      </li>`;
     })
     .join('');
 
-  return `<div class="page page--colophon" data-density="soft">
+  const sparse = Object.keys(book.case.facts || {}).length <= 2;
+
+  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}" data-density="soft">
     <div class="page__inner">
-      <h3 class="page__title" style="text-align:center">家长陪护说明</h3>
-      <ul class="colophon-list">${rows}</ul>
-      <p class="page__text" style="text-align:center;margin-top:10px;font-size:11px">陪护请对照上表落实术前准备；住院期间孩子如有不适，或您有任何疑问，请及时告知医护人员。</p>
+      <div class="cl-head">
+        <span class="cl-kicker">术前准备 · 陪护</span>
+        <h3 class="cl-title">家长陪护说明</h3>
+        <span class="cl-flourish" aria-hidden="true"></span>
+      </div>
+      <ul class="cl-list">${rows}</ul>
+      <p class="cl-note">陪护请对照上表落实术前准备；住院期间孩子如有不适，或您有任何疑问，请及时告知医护人员。</p>
     </div>
   </div>`;
 }

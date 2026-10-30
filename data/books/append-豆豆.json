@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUVMOKN",
+  "book_id": "CASE-MVUVTW1F",
   "skeleton": {
     "key": "appendectomy",
     "label": "腹腔镜阑尾切除术"
@@ -22,7 +22,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUVMOKN",
+    "case_id": "CASE-MVUVTW1F",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -409,7 +409,7 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 4,
-    "built_at": "2026-10-30T11:16:14.184Z"
+    "built_at": "2026-10-30T11:21:50.452Z"
   },
   "manifest_version": "0.2.0",
   "slug": "append-豆豆"
