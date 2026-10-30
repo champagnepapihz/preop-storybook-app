@@ -75,7 +75,7 @@
       "layout": "image_left",
       "title": "第二件事：坐一朵会睡觉的云",
       "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
-      "asset": "scene_ward_bed_close",
+      "asset": "scene_cloud_anesthesia",
       "props": [
         "kid:sleep"
       ],
@@ -100,14 +100,16 @@
             "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让喉咙那一小块先睡着，动的时候不疼，但人是清醒的。",
             "props": [
               "kid:hug"
-            ]
+            ],
+            "stand": "seated"
           },
           "local": {
             "title": "第二件事：让喉咙先睡着",
             "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让喉咙那一小块先睡着，动的时候不疼，但人是清醒的。",
             "props": [
               "kid:hug"
-            ]
+            ],
+            "stand": "seated"
           },
           "none": {
             "skip": true

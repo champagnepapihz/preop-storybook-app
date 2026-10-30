@@ -732,3 +732,15 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 **顺带**：`requiredFields` 里「静脉输液」原来要求填麻醉方式 —— 输液不需要麻醉，已经去掉。
 
 **验证**：五档麻醉在真实页面里逐一生成，标题与正文均正确，面数恒为 10。
+
+---
+
+## 31. 修（Kestrel）：讲云的那一页，图换回云床
+
+**问题**：麻醉页标题写「一朵会睡觉的云」，配图却是病房床头特写（`scene_ward_bed_close`）。文字讲云、画面是床，图文不一致。
+
+- `appendectomy` / `tonsillectomy` 的 `cloud` 页 `asset` 改回 `scene_cloud_anesthesia`（云朵床漂浮在星空里，床上是空的，正好放睡姿立牌）。
+- 全麻版：睡姿立牌按 `stand: "bed"` 落在云床上，头枕枕头、身体在毯子上，位置基本对齐。
+- 局麻 / 椎管内版新增 `stand: "seated"` 版式：坐姿立牌（`kid:hug` 抱云朵）按画面中部定位（宽 27%、上留 27%），坐进云床中央，而不是站在画面底部。
+
+**验证**：全麻 → 孩子躺在云床上；局麻 → 孩子坐在云床上抱着小云朵，正文"你是醒着的"与画面一致。

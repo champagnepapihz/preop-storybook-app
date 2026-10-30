@@ -75,7 +75,7 @@
       "layout": "image_left",
       "title": "第二件事：一朵会睡觉的云",
       "text": "{{fact.anesthesia.short}}，就是坐上这朵云。{{child.name}}从一数到三，数到二的时候可能就睡着了。醒来的时候，事情已经办完了。",
-      "asset": "scene_ward_bed_close",
+      "asset": "scene_cloud_anesthesia",
       "props": [
         "kid:sleep"
       ],
@@ -100,14 +100,16 @@
             "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的，可以说话，也可以听。医生只让要动的那一小块地方先睡着，摸上去没有感觉，但人是清醒的。",
             "props": [
               "kid:hug"
-            ]
+            ],
+            "stand": "seated"
           },
           "local": {
             "title": "第二件事：让一小块地方先睡着",
             "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的，可以说话，也可以听。医生只让要动的那一小块地方先睡着，摸上去没有感觉，但人是清醒的。",
             "props": [
               "kid:hug"
-            ]
+            ],
+            "stand": "seated"
           },
           "none": {
             "skip": true

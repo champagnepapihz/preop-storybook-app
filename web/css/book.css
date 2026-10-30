@@ -133,6 +133,21 @@
    所以缩到 .5 并压到下角，读作「画面边角上的讲述者」，不参与与场景的大小比较。 */
 .page__props--micro { --k: .5; padding: 0 14px 4px; }
 
+/* 坐在场景里（云床、病床）：不贴地，按画面中部定位 */
+.page__props--seated {
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.page__props--seated img {
+  height: auto;
+  width: 27%;
+  max-width: 27%;
+  margin-top: 27%;
+  transform: none;
+}
+
 /* 全幅页：立牌并排站在文字卡上方，脚被卡片自然遮住 */
 .page--full .page__props { bottom: 26%; --k: .8; }
 
