@@ -426,16 +426,22 @@ function propsHTML(props, stand) {
 
 function pageHTML(page, book) {
   if (page.layout === 'cover') {
+    // 清单书没有骨架，封面文案由页面自带；故事书沿用骨架的 cover
+    const cv = page.cover || {};
+    const kicker = cv.kicker || book.skeleton.label;
+    const title = cv.title || book.cover.title;
+    const sub = cv.subtitle || book.cover.subtitle;
+    const ribbon = cv.ribbon || '术前 · 故事';
     return `<div class="page page--cover cover--${book.skeleton.key}" data-density="hard">
       <div class="page__inner">
         <div class="page__cover-art">${imgTag(page.image)}</div>
         <div class="page__cover-veil"></div>
         <div class="page__cover-cast">${(page.props || []).map((p) => imgTag(p)).join('')}</div>
-        <div class="page__cover-ribbon">术前 · 故事</div>
+        <div class="page__cover-ribbon">${escapeHTML(ribbon)}</div>
         <div class="page__cover-plate">
-          <span class="page__cover-kicker">${escapeHTML(book.skeleton.label)}</span>
-          <h2 class="page__cover-title">${escapeHTML(book.cover.title)}</h2>
-          <p class="page__cover-sub">${escapeHTML(book.cover.subtitle)}</p>
+          <span class="page__cover-kicker">${escapeHTML(kicker)}</span>
+          <h2 class="page__cover-title">${escapeHTML(title)}</h2>
+          <p class="page__cover-sub">${escapeHTML(sub)}</p>
         </div>
       </div>
     </div>`;

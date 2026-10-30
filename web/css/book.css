@@ -292,7 +292,25 @@
 }
 
 /* 各反派实心脚离底不同（pebble 绒脚发虚）：C 位按本下沉对齐基线，多余绒边藏进标题后 */
-.page__cover-cast img:nth-child(3) { transform: scaleX(-1); } /* 右位反派面向中间 */
+.page__cover-cast img:nth-child(3) { transform: scaleX(-1); } /* 三人组里最右的反派镜像，面向中间
+   （两人组不镜像：小恐龙是"捂脸偷看"侧身素材，翻过来会变成背影） */
+
+/* 清单书的 kicker 是术式全名，比骨架类目长：字号收一档、底色加深一档 */
+.cover--generic .page__cover-kicker {
+  font-size: 9px;
+  letter-spacing: .08em;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, .42);
+  color: #fff3dd;
+}
+
+/* 清单书封面只有两个立牌：分开站在两侧，中间让出标题牌顶部的小字 */
+.cover--generic .page__cover-cast {
+  bottom: 138px;
+  justify-content: space-around;
+  padding: 0 26px;
+}
 
 .cover--appendectomy .page__cover-cast img:nth-child(2) { transform: translateY(19px); }
 .cover--injection .page__cover-cast img:nth-child(2) { transform: translateY(7px); }

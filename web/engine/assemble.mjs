@@ -108,11 +108,17 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     const clPages = [
       {
         id: 'checklist-cover',
-        layout: 'checklist',
-        title: `${caseObj.procedure?.label || '待确认术式'}`,
-        text: '这本还没有故事。故事要等医生把术式、麻醉和时间都确认了才能写 —— 在那之前，先把要问的事情列清楚。',
-        image: null,
+        layout: 'cover',
+        title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
+        text: '',
+        image: asset('scene_cover'),
         props: ['kid:stand', 'villain_dino__peek'].map(resolveProp).map(asset),
+        cover: {
+          kicker: caseObj.procedure?.label || '待确认术式',
+          title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
+          subtitle: '还没有专属故事 —— 先列出要确认的事实和要问的问题。',
+          ribbon: '术前 · 清单',
+        },
         fact: null,
         badge: null,
       },
