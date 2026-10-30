@@ -12,7 +12,7 @@ const state = {
   presetIdx: 0,
   flip: null,
   book: null,
-  phObserver: null,
+  pageHeight: 0,
 };
 
 /* ---------------- 数据加载 ---------------- */
@@ -49,6 +49,9 @@ async function boot() {
     if (e.key === 'ArrowLeft') goPrev();
     if (e.key === 'ArrowRight') goNext();
   });
+
+  // 窗口尺寸变了，页面被 PageFlip 重算，立牌基准跟着更新（防抖，翻页时不参与）
+  window.addEventListener('resize', schedulePageHeightSync);
 
   // ?case=N 直接打开第 N 份演示病例（0 起）
   const wantCase = Number(new URLSearchParams(location.search).get('case'));
@@ -469,6 +472,18 @@ function colophonHTML(book) {
   </div>`;
 }
 
+let phResizeTimer = 0;
+function schedulePageHeightSync() {
+  clearTimeout(phResizeTimer);
+  phResizeTimer = setTimeout(() => {
+    const host = document.getElementById('book');
+    const el = host?.querySelector('.page');
+    const h = Math.round(el?.clientHeight || 0);
+    if (h > 0) document.documentElement.style.setProperty('--ph', `${h}px`);
+    state.pageHeight = h;
+  }, 260);
+}
+
 function renderBook(book) {
   setFlipDetached(false); // 换病例时若正处翻页先把搬走的节点送回去避免孤儿
   if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
@@ -517,19 +532,26 @@ function renderBook(book) {
   });
   flip.loadFromHTML(pages);
 
-  // 立牌尺寸以「整页高度」为单位：把实际页高写进 --ph，比例才不会受图片区高度影响
+  // 立牌尺寸以「整页高度」为单位：把实际页高写进 --ph，比例才不会受图片区高度影响。
+  //
+  // 只在两件事发生时重算：换书、窗口尺寸变化。绝不在翻页过程中重算 ——
+  // PageFlip 翻页时会对页面做 detach / 重排，页高瞬时抖动一次，
+  // 若跟着重算，所有立牌会按新值缩放，看起来就是「翻页时人物抽动一下」。
+  // 变量写在 :root —— 翻页时 PageFlip 会把页面元素临时搬到 .reader 下，
+  // 若变量挂在 #book 上，搬出去的瞬间就继承不到，立牌回落到 560px 默认值，
+  // 于是「翻页时人物抽动一下」。挂在根节点上，搬到哪儿都还是同一个基准。
   const syncPageHeight = () => {
     const el = host.querySelector('.page');
-    const h = el?.clientHeight || 0;
-    if (h > 0) host.style.setProperty('--ph', `${h}px`);
+    const h = Math.round(el?.clientHeight || 0);   // 取整：clientHeight 可能是 509.015625，避免亚像素抖动
+    if (h > 0 && h !== state.pageHeight) {
+      state.pageHeight = h;
+      document.documentElement.style.setProperty('--ph', `${h}px`);
+    }
   };
+  state.pageHeight = 0;
   syncPageHeight();
-  if (state.phObserver) state.phObserver.disconnect();
-  const firstPage = host.querySelector('.page');
-  if (firstPage) {
-    state.phObserver = new ResizeObserver(syncPageHeight);
-    state.phObserver.observe(firstPage);
-  }
+  requestAnimationFrame(syncPageHeight);   // PageFlip 定尺寸可能晚一帧
+  setTimeout(syncPageHeight, 120);
 
   state.flip = flip;
   flip.on('flip', (e) => {
