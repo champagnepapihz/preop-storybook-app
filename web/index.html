@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>术前绘本 · 把术前须知变成孩子的故事</title>
+<meta name="description" content="一张术前须知，一本属于这个孩子的布艺绘本。疾病角色化、治疗故事化，每个孩子拿到的故事都不一样。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/fabric.css" />
+<link rel="stylesheet" href="css/book.css" />
+<link rel="preload" as="image" href="assets/ui/stage.webp" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f6e6c8'/%3E%3Cpath d='M32 10l6.5 14.3 15.5 1.9-11.5 10.7 3 15.4L32 44.9 18.5 52.3l3-15.4L10 26.2l15.5-1.9z' fill='%23e0b25f'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="theater" aria-hidden="true">
+    <div class="theater__veil"></div>
+  </div>
+
+  <main class="stage">
+    <header class="marquee">
+      <span class="marquee__ticket">术前 24 小时</span>
+      <h1 class="marquee__title">小勇士的手术故事</h1>
+      <p class="marquee__sub">把术前须知，缝成一本孩子自己的布艺绘本</p>
+    </header>
+
+    <section class="workbench">
+      <aside class="panel felt">
+        <h2 class="panel__h">① 贴一张术前须知</h2>
+        <p class="panel__hint">脱敏或合成病例。文本直接粘，图片 OCR 接口已预留。</p>
+        <textarea id="notice" spellcheck="false" aria-label="术前须知文本"></textarea>
+        <div class="panel__row">
+          <button class="btn btn--primary" id="gen">缝一本绘本</button>
+          <button class="btn btn--ghost" id="sample">换个病例</button>
+        </div>
+
+        <h2 class="panel__h">② 解析出的事实</h2>
+        <ul class="facts" id="facts"></ul>
+        <p class="report" id="report"></p>
+      </aside>
+
+      <section class="reader">
+        <div class="book-glow" aria-hidden="true"></div>
+        <div class="book" id="book"></div>
+        <div class="reader__bar">
+          <button class="btn btn--tiny" id="prev" aria-label="上一页">‹</button>
+          <span class="reader__page" id="pageinfo">封面</span>
+          <button class="btn btn--tiny" id="next" aria-label="下一页">›</button>
+        </div>
+      </section>
+    </section>
+
+    <footer class="foot">
+      <span>故事是虚构的，事实是真实的 —— 每一条医学事实都能溯源到原文。</span>
+    </footer>
+  </main>
+
+  <script src="vendor/page-flip.browser.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "preop-storybook",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "术前绘本 —— 把术前须知变成孩子的故事（布艺剧场版）",
+  "scripts": {
+    "placeholders": "node tooling/placeholders.mjs",
+    "build": "node tooling/build.mjs",
+    "dev": "node tooling/serve.mjs",
+    "cases": "node tooling/make-cases.mjs",
+    "mcp": "node mcp/server.mjs"
+  },
+  "dependencies": {
+    "page-flip": "2.0.7"
+  }
+}

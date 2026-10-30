@@ -1,0 +1,411 @@
+﻿# 交接文档：翻页抽动修复 + 全分辨率适配
+
+> 项目：`C:\Users\35975\Desktop\hacks\wmu-hack-workbuddy`
+> 交接时间：2026-10-30
+> 交接原因：上一代理（Qoder）执行较慢，用户将手动把本文件转交给其他代理继续。
+> 目标：1) 彻底消除点击翻页时整页“抽动/缩放”；2) 保证常见分辨率下版式美观、无横向溢出。
+
+---
+
+## 0. 当前状态 TL;DR
+
+- **翻页抽动根因已找到并修复（源码）**：PageFlip 的翻页影子/硬页在动画期间会伸出书框，撑大 `document.scrollHeight`，浏览器竖向滚动条出现/消失 → 内容宽度变化 → 看起来像整页缩放抽动。
+- 修复方式：`.book { overflow: hidden; }` 裁掉影子溢出 + 桌面端 `scrollbar-gutter: stable` 稳定槽位。已验证：翻页全程 `scrollHeight / clientWidth` 不变。
+- **短屏适配已写进源码，但 `dist/` 还没重新构建**（最后一次 `npm run build` 被用户中断）。**先构建再验收！**
+- 源码中已做：短视口书宽按 `100vh` 收紧、941–1120 收窄左栏、≤940 单列且绘本排在面板前面（手机首屏就能看到整本书和翻页条）。
+- 待办：重新构建 → 跑验收脚本 → 看截图 → 确认无回归 → 交付。若发现小问题按第 6 节“允许的微调”处理。
+
+---
+
+## 1. 项目速览
+
+- 纯静态站：`web/` 是源码；`npm run build` 生成 `dist/`；`npm run dev` 启动本地预览（**服务的是 `dist/`，不是 `web/`**）。
+- 预览地址：http://localhost:5173 （当前已在运行）。
+- 页面结构：左侧控制台（术前须知 + 解析事实）+ 右侧 StPageFlip 布艺绘本书。
+- 关键脚本：`web/vendor/page-flip.browser.js`（构建时从 `node_modules` 拷入 dist）。
+- 2 个示例病例：豆豆（阑尾）、果果（扁桃体）；每次构建都会跑事实保真校验，当前通过。
+
+### 常用命令
+
+```bash
+cd C:/Users/35975/Desktop/hacks/wmu-hack-workbuddy
+npm run build      # web/ -> dist/（会顺带校验两本绘本）
+npm run dev        # http://localhost:5173，服务 dist/
+```
+
+### 视觉/素材约束（不要违反）
+
+- 网站背景是**唯一一张 AIGC 舞台图** `web/assets/ui/stage.webp`（1792×1024）。项目刻意节省生图成本，**不要再生成新背景或重做素材**。
+- 素材母版在 `assets/_src/`（.gitignore），不要在交付里引用。
+- UI 文案保持简体中文。
+
+---
+
+## 2. 抽动问题的根因与证据
+
+### 根因
+
+StPageFlip 在翻页时会创建 `.stf__outerShadow` / `.stf__innerShadow` / `.stf__hardShadow` 等绝对定位元素，动画中它们的旋转包围盒会向书下方伸出很远。书宿主 `.book` 没有裁剪时：
+
+- 翻页约 800ms 内 `document.scrollHeight` 从 1000 涨到 1218；
+- 浏览器竖向滚动条出现 → 视口可用宽度少约 15px；
+- 栅格重新分配（左栏/右栏/书宽都变）→ 视觉上像“整页缩放抽动”。
+
+用户手动确认了现象描述：“可翻动的页面会把浏览器上下滑动条调出来，导致屏幕产生缩放，看起来就像抽动。”
+
+### 已落地修复
+
+1. `web/css/fabric.css` 的 `.book` 增加 `overflow: hidden`，裁掉所有翻页影子溢出（约第 389–396 行）：
+
+```css
+.book {
+  position: relative;
+  width: min(1000px, 100%);
+  overflow: hidden; /* 裁掉翻页影子溢出，避免翻页时整页出现/消失滚动条 */
+  filter:
+    drop-shadow(0 4px 10px rgba(92, 58, 34, .16))
+    drop-shadow(0 26px 44px rgba(92, 58, 34, .24));
+}
+```
+
+2. 桌面端给滚动条预留固定槽位（**只在 ≥941px 生效**，避免手机被白吃 15px 宽），`fabric.css` 第 41–46 行：
+
+```css
+@media (min-width: 941px) {
+  html { scrollbar-gutter: stable; }
+}
+```
+
+3. `.theater` 背景加 `width: 100vw`，盖住滚动条槽位，避免桌面右侧出现一条 15px 米色空白（`fabric.css` 第 57–65 行）。
+
+4. 翻页影子裁切对画面无影响：中帧截图对比裁/不裁一致；书自身的投影来自 `.book` 的 `filter: drop-shadow`，不受影响。
+
+### 复现/验证方法
+
+用 Playwright 在翻页前启动 rAF 采样，点击 `#next` 后逐帧记录：
+
+```js
+{ scrollHeight: document.documentElement.scrollHeight,
+  clientWidth: document.documentElement.clientWidth,
+  innerWidth }
+```
+
+修复前：`1000 → 1218`，且 PerformanceObserver 能抓到 layout-shift。
+修复后：1440×900、1440×1000、1920×1080、1366×768、1280×800 等尺寸全程恒定，无 horizontal overflow。
+
+> 注意：本机 Chromium 是 overlay 滚动条，`clientWidth === innerWidth`。要模拟经典滚动条宽度可加启动参数 `--disable-features=OverlayScrollbar`。
+> 但因为 `.book` 已裁掉溢出，翻页本身不再改变 scrollHeight；`scrollbar-gutter` 只是保险。
+
+---
+
+## 3. 本次响应式改动（已写入 web/，尚未进 dist）
+
+### 3.1 短视口按高度收紧书宽
+
+`fabric.css` 第 437–440 行：
+
+```css
+/* 短视口：按高度收紧书宽，标题 + 书 + 翻页条都能留在首屏内，不触发滚动条 */
+@media (min-width: 660px) and (min-height: 600px) and (max-height: 960px) {
+  .book { max-width: min(100%, calc((100vh - 326px) * 1.536)) !important; }
+}
+```
+
+公式来源：
+
+- 书是双页展开，书宽 = 页宽 × 2，书高 = 页宽 × 560/430 = 书宽 × 0.651。
+- 书上方栈高 + 翻页条 + 底部留白 ≈ 326px（标题 94 + marquee 约 122 + reader padding 18 + gap 10 + bar 56 + 底部 26）。
+- 要让 `barBottom ≤ 100vh`，书高 ≤ `100vh - 326`，所以书宽 ≤ `(100vh - 326) × 1.536`。
+
+**必须保留 `!important`**：PageFlip 初始化会给宿主写内联 `width: 100%; max-width: 920px;`，普通 CSS 优先级覆盖不了。若不想用 `!important`，可改成外层 `.book-frame` 限宽（需要同步改 HTML/JS，不推荐现在做）。
+
+### 3.2 941–1120px 收窄左侧控制台
+
+`fabric.css` 第 442–445 行：
+
+```css
+@media (min-width: 941px) and (max-width: 1120px) {
+  .workbench { grid-template-columns: minmax(232px, 260px) minmax(0, 1fr); gap: 16px; }
+}
+```
+
+原因：PageFlip 在宿主宽度 < `2 × minWidth(=300)`，即 < 600px 时会切到 portrait（单页竖排）。1024px 宽时若左栏仍为 344px，右栏只有约 580px → portrait 580×755，翻页条被挤到首屏外。左栏收窄到 260px 后右栏约 663px → 恢复双页展开，书 663×432，翻页条约在 730px。
+
+### 3.3 ≤940px 单列、绘本优先
+
+`fabric.css` 第 447–453 行：
+
+```css
+@media (max-width: 940px) {
+  .workbench { grid-template-columns: 1fr; }
+  .panel { position: static; }
+  .stage { padding-top: 96px; }
+  .reader { order: -1; }
+}
+```
+
+原因：之前手机上首屏只有输入面板，绘本要滚过整块面板才看得到。现在首屏是“标题 + 完整绘本 + 翻页条”，面板随后。实测 390×844 与 768×1024 都能完整放下绘本和翻页条（390 宽时 portrait 单页）。
+
+### 3.4 其他小修
+
+- `.book-glow` 改为 `left: 50%; transform: translateX(-50%)`，书变窄时光晕仍居中（`fabric.css` 第 376–387 行）。
+
+---
+
+## 4. 当前 dist 与源码的差异（重要！）
+
+`dist/` 最后一次成功构建是在以下 3 处修改**之前**：
+
+1. `scrollbar-gutter` 从全局改为仅 `≥941px`（全局版会让手机 390px 视口的内容宽度只剩 375px，实测书从 358→343）。
+2. `.theater` 加 `width: 100vw`（覆盖滚动条槽位的米色条）。
+3. `.book` 的短屏限宽从 `width: ...`（无效，被内联样式覆盖）改成 `max-width: ... !important`（生效）。
+
+所以现在打开 http://localhost:5173 看到的仍是旧布局：1366×768 书仍为 782×509、翻页条 809（超出首屏）。
+
+**接手后第一步必须先 `npm run build`。**
+
+---
+
+## 5. 验收步骤（可直接照做）
+
+### 5.1 构建 + 基础指标
+
+```bash
+cd C:/Users/35975/Desktop/hacks/wmu-hack-workbuddy
+npm run build
+node .shots/check.mjs
+```
+
+`.shots/check.mjs` 会遍历下列视口，打印方向/书尺寸/翻页条底边/scrollHeight/滚动条宽度/横向溢出，并在 `.shots/fit_<W>x<H>.png` 截图：
+
+`1920×1080, 1440×900, 1536×864, 1366×768, 1280×800, 1280×720, 1024×768, 940×768, 768×1024, 390×844, 360×780`
+
+**构建后的预期（允许 ±3px）**：
+
+| 视口 | 方向 | 书尺寸 | 翻页条底边 | 说明 |
+|---|---|---|---|---|
+| 1920×1080 | landscape | 782×509 | ~916 | 不受限宽影响 |
+| 1440×900 | landscape | 782×509 | ~820 | 首屏完整 |
+| 1536×864 | landscape | 782×509 | ~809 | 首屏完整；页面可能因左栏略高仍有滚动条 |
+| 1366×768 | landscape | **约 679×442** | **~742** | 限宽生效，翻页条必须完整可见 |
+| 1280×800 | landscape | **约 728×474** | **~774** | 限宽生效 |
+| 1280×720 | landscape | **约 605×394** | **~694** | 限宽生效 |
+| 1024×768 | landscape | 663×432 | ~730 | 左栏 260 宽；不再 portrait |
+| 940×768 | landscape | 679×442 | ~740 | 单列，书在上、面板在下 |
+| 768×1024 | landscape | 701×456 | ~781 | 单列；首屏完整 |
+| 390×844 | portrait | 约 358×466 | ~751 | 单列；首屏完整 |
+| 360×780 | portrait | 约 328×427 | ~700 | 首屏完整 |
+
+所有尺寸都必须 `hOver=false`（无横向溢出）。纵向滚动允许：短屏左栏内容（事实清单）本身高于视口，页面可纵向滚动是正常的；关键是**翻页不得改变 scrollHeight**。
+
+### 5.2 翻页防抽动回归
+
+```bash
+node .shots/probe4.mjs   # 有头 Chromium，1440×1000，点击 #next 前后逐帧采样
+```
+
+再手动跑一次 1366×768（把 `probe2.mjs` 的 viewport 改成 1366×768 即可）：
+- 翻页前后 `scrollHeight` 保持 879；`clientWidth` 不变；
+- 不应出现新的 layout-shift entry；
+- 若模拟经典滚动条（`--disable-features=OverlayScrollbar`），`clientWidth` 在翻页前后也必须恒定（`scrollbar-gutter: stable` 应保证这一点）。
+
+### 5.3 视觉验收
+
+至少检查这些截图/页面：
+
+1. `fit_1366x768.png`：标题 + 书 + 翻页条完整；左栏底部可被裁切（正常）。
+2. `fit_1024x768.png`：书是双页展开（不是大竖版封面）；翻页条完整。
+3. `fit_390x844.png`、`fit_768x1024.png`：首屏是绘本不是输入面板；书和翻页条完整。
+4. 桌面右侧边缘：不能出现 15px 米色竖条（`.theater` 100vw 是否生效）。
+5. 点击 `#next` 翻到第 2–5 页，检查跨页文字/立牌无裁切、无溢出；重点看豆豆“战斗”全幅页与徽章页。
+6. 点击 `#sample` 换病例：书必须重新出现且可翻页（渲染逻辑不要改坏，见第 7 节）。
+
+### 5.4 控制台/网络
+
+```bash
+node .shots/errors.mjs   # 若无此脚本，用 Playwright 监听 console/pageerror/requestfailed 自建
+```
+
+要求：无 console error、无 pageerror、无 failed response（Google Fonts 被墙时的字体请求失败可忽略，但页面必须正常显示中文字体回退）。
+
+---
+
+## 6. 允许的微调（若验收发现小问题）
+
+- **941–1120px 书内文字偏小**：双页每页约 300–380px（设计基准 430px，缩放 0.70–0.88）。若认为不可读，可把该区间的左栏再收窄到 240px，或把 `PageFlip` 的 `minWidth` 从 300 降到 280（需确认 portrait 切换阈值后同步调整）。不要在没截图对比的情况下大改。
+- **短屏桌面仍有纵向滚动条**：因为左栏 `.panel` 固定高约 641px，加上标题后 768px 高不够。若想首屏完全无滚动条，可只对 `(max-height: 860px)` 压缩左栏（hint 字号/间距/事实卡 padding）。属于可选优化，改前先截图。
+- **手机小高度（如 390×667）**：portrait 书高 466 + 标题 ≈ 750 > 667，需要滚动，属正常；不要为了塞进首屏把书缩得过小。
+- **横屏手机（如 844×390）**：高度 < 600，限宽规则不生效，书会较大并需要滚动，可接受。
+
+---
+
+## 7. 不要改坏的东西 / 已知坑
+
+1. **`renderBook()` 的销毁重建逻辑**（`web/js/app.js:249-294`）
+   `PageFlip.destroy()` 会把宿主 `#book` 从 DOM 里摘掉；代码必须重新创建 `.book` 并插到 `.reader__bar` 之前。这是换病例时书消失 bug 的修复，不要回退。
+2. **PageFlip 初始化参数**（`web/js/app.js:266-280`）
+   `width:430/height:560`、`size:'stretch'`、`minWidth:300`、`maxWidth:460`、`minHeight:390`、`maxHeight:599`、`usePortrait:true`。`maxWidth` 会变成宿主内联 `max-width:920px`，这也是短屏限宽必须 `!important` 的原因。
+3. **`.book { overflow: hidden }`**：不要删。它是抽动修复的核心。
+4. **立牌构图**（`web/css/book.css:77-107`）
+   `object-position: center bottom`、`page--full` 的 `bottom:26%`、双立牌 `max-width:46%/38%`、第二只 `scaleX(-1)`。这些是之前逐页验收修好的，不要为了适配随手改。
+5. **背景图不要重新生成**：`web/assets/ui/stage.webp` 已定稿；`docs/prompts.md` 里记录了生成 prompt，但交付阶段不需要再跑。
+6. **`.shots/` 是 gitignore 的 QA 脚本目录**，Playwright 路径是硬编码的：
+   - Chromium：`C:/Users/35975/AppData/Local/ms-playwright/chromium-1248/chrome-win64/chrome.exe`
+   - Playwright 模块：`C:/Users/35975/AppData/Roaming/npm/node_modules/@playwright/cli/node_modules/playwright`（用 `createRequire` 引入）
+   如果换机器/版本，改这两个路径。
+7. **dev server 的 `Cache-Control: no-store`**，但服务的是 dist；CSS 改动后不 build 就不会生效。
+8. 不要 `git reset/checkout`：工作区里有大量前序未提交的成果（背景替换、立牌、书页、构建产物）。提交前先 `git status`，且只有用户明确要求才提交。
+
+---
+
+## 8. 关键文件与位置
+
+| 文件 | 作用 | 关键行 |
+|---|---|---|
+| `web/css/fabric.css` | 页面布局、背景、响应式 | 滚动条槽位 41–46；背景 57–65；书容器 389–396；光晕 376–387；短屏限宽 437–440；941–1120 左栏 442–445；单列绘本优先 447–453 |
+| `web/css/book.css` | 书页、立牌、封面、尾页样式 | 书页基准 6–20；立牌 77–107；封面 173–247；全幅页 249–271 |
+| `web/js/app.js` | 渲染/翻页/换病例 | 翻页按钮 47–48；`renderBook` 249–294；PageFlip 配置 266–280 |
+| `web/index.html` | 页面骨架 | 面板/阅读区 28–52；vendor 脚本 59 |
+| `web/assets/ui/stage.webp` | 舞台背景（唯一 AIGC 背景） | — |
+| `tooling/serve.mjs` | dev server（服务 dist） | 第 1–6 行注释 |
+| `tooling/build.mjs` | 构建 + 事实校验 | — |
+| `.shots/check.mjs` | 全尺寸指标 + 截图 | 视口列表 |
+| `.shots/probe2.mjs` / `probe4.mjs` | 翻页滚动条/scrollHeight 采样 | — |
+| `.shots/panel.mjs` / `widths.mjs` / `gutter.mjs` | 左栏高度、宽度、gutter 诊断 | — |
+
+---
+
+## 9. 完成标准（Definition of Done）
+
+- [ ] `npm run build` 成功，2 本绘本事实校验通过。
+- [ ] 第 5.1 节所有尺寸 `hOver=false`；1366×768 / 1280×800 / 1280×720 / 1024×768 的翻页条完整可见（表格预期 ±3px）。
+- [ ] 翻页全程 `scrollHeight` 与 `clientWidth` 恒定（含 1366×768 和模拟经典滚动条）。
+- [ ] 桌面右侧无 15px 空白条；手机不再被 gutter 白吃 15px。
+- [ ] ≤940px 首屏为“标题 + 完整绘本 + 翻页条”，面板在下方。
+- [ ] 换病例、前后翻页、键盘左右键、`?page=N` 均正常。
+- [ ] 无 console/page error、无 failed response（字体请求除外）。
+- [ ] 至少目检：1366×768、1024×768、768×1024、390×844 四张首屏 + 一张跨页内容页。
+- [ ] 最终 `dist/` 与 `web/` 同步（在交付前再跑一次 build）。
+
+---
+
+## 10. 下一步（按顺序）
+
+1. `npm run build`
+2. `node .shots/check.mjs`，对照第 5.1 节表格核对，看 `.shots/fit_*.png`
+3. 发现偏差 → 按第 6 节微调 CSS → 回第 1 步
+4. `node .shots/probe4.mjs` + 1366×768 采样，确认翻页零抖动
+5. 目检桌面右侧边缘与移动端首屏
+6. 最后再 `npm run build`，交付；把本文件删除或留档由用户决定
+
+---
+
+## 11. 追加（2026-10-30）：封面居中 + 先挪书后翻页
+
+用户反馈：封面单页在书容器右半边，视觉偏右。已改成两段式：
+
+- **封面/封底居中**：`showCover` 下封面是右半单页、封底（colophon）是左半单页。`landscape` 时给 `.reader` 加 `reader--cover` / `reader--back` class，`.book` 用 `translateX(∓25%)`（正好半页宽）把可见单页挪到阅读区正中。`transform` 不触发布局，防抽动修复不受影响。`portrait`（手机单页全宽）不处理。
+- **先挪后翻**：`web/js/app.js` 的 `goNext` / `goPrev` 收敛了按钮 + 键盘入口。从封面往后翻先挪书、停稳 850ms（`.book` 过渡 .8s + 50ms 余量）再 `flipNext()`；连点由 `seqBusy` 守卫只翻一页。落在封面/封底是翻完再往中挪（由 `flip` 事件收尾），直接拖拽翻页不走排序、就地同步（`changeState` 只做移除不做添加，`read` 兜住被取消的手动折页）。
+- 文件：`web/css/fabric.css`（`.book` 过渡 + 两个位姿 class）、`web/js/app.js`（`syncPose` / `goNext` / `goPrev`，`state.flip` 先赋值再初始同步）。
+- 验证：封面偏移 -1px、尾页 0px；翻页+滑书全程 `scrollH/clientW` 恒定；11 视口回归与 §5.1 一致；手机端无位移；无 console/page error。
+
+---
+
+## 12. Appended (2026-10-30): flip leaf no longer boxed in
+
+User complaint: mid-flip the turning page was hard-cut at the book box, looking trapped.
+Root cause: `.book { overflow:hidden }` (the anti-jitter clip from section 2) cuts the leaf
+that swings outside the box. Tried `overflow:clip + overflow-clip-margin` - measured that
+Chromium counts the margin area toward document scroll, so jitter returned. Reverted.
+
+Final mechanism - temporary detach during flip (`web/js/app.js` setFlipDetached +
+`web/css/fabric.css` .flip-detached): on flipping/user_fold/fold_corner, all direct children
+of `.stf__block` (pages + 4 PageFlip shadow divs) are moved to `.reader` with
+`position:fixed !important; left/top 0 + margin var(--blkL)/var(--blkT)` (block viewport
+origin, refreshed each flip). Paint is pixel-identical (verified mid-flip screenshots), but
+fixed boxes never grow document scrollHeight. Restored to `.stf__block` (original order,
+dead temp clones dropped via isConnected) on `read` / `flip` landing. renderBook() restores
+first so a mid-flip sample switch leaves no orphans. `.book` itself is now overflow:visible.
+
+- Verified: inner/cover/back flips all single-state scroll (900/1440 etc.), 11-viewport check
+  identical to section 5.1, mobile portrait unaffected, panel/controls clickable, no errors.
+- Also fixed: sample switch now resets #pageinfo to cover (was stale until next flip).
+- Note: section 7 item 3 (`overflow:hidden` do-not-remove) is superseded by this mechanism -
+  scroll stays flat by construction (probe-verified), keep it that way on future edits.
+- Untested: drag-flip paths share the same changeState hook but were not exercised with a
+  real pointer drag; button/keyboard/corner-click paths verified.
+
+---
+
+## 13. Appended (2026-10-30): even pages / occlusion / prop sizes / cover guard / glide rhythm
+
+Story now 9 content pages + cover + colophon = 10 faces (even). Spreads [0],[1,2]..[7,8],[9]:
+colophon lands single-left as back cover (parent notice), centered by existing reader--back pose.
+Added page: injection.json promise (discharge promise: water/handwash/mask, grounded in raw notice,
+fact-free). No other books touched (both already even).
+
+Occlusion fix (drip full page, long caption buried the prop): new opt-in `"stand": "high"` on the
+skeleton page -> assemble.mjs passthrough -> app.js pageHTML adds `page--stand-high` -> book.css
+`.page--stand-high .page__props { top:19%; height:38%; centered }`: prop stands upper-middle,
+feet kiss caption top. Measured: prop 22-56%, caption top 56%. Only drip uses it.
+
+Prop size match: `.page__props img:nth-child(2)` height 68%->92%, max-width 38%->46%
+(full variant too, mirror kept). Both stands width-bind to equal height. Verified on invite
+spread (doctor+nurse equal) and wake spread.
+
+Cover guard (manual flip = button feel): `#book .cover-guard` (absolute inset 0, z50, only
+displayed under .reader--cover) swallows mousedown (button 0) / tap (touch <10px, <400ms,
+scroll passes through via touch-action:pan-y + passive listeners) and runs goNext() sequencing.
+Guard hides with the pose class; interior drags stay direct PageFlip. Verified: mousedown on
+cover -> still cover at 500ms, 2/10 by 2000ms, guard display none after; interior drag 2/10->4/10.
+
+Glide rhythm retune (click-MOVE-stop-FLIP): .book transition ease -> cubic-bezier(.2,.7,.3,1)
+(fast attack, firm stop) + POSE_GLIDE_MS 850->1000 (200ms full stop). Measured: tx -195->0
+over 50-800ms, still 800-1000, flip lands ~1760. Sofa placement for drip prop measured against
+scene_drip_rain geometry (seat ~55.6% page height): prop 22-56% centered over armchair.
+
+Regression: build 3 books pass (9 content pages each), 11 viewports match 5.1 baseline,
+5 desktop flip probes single-state, no console/pageerror/failed, mobile portrait flat.
+
+---
+
+## 14. Appended: cover group photo
+
+Cover was an empty curtain stage (cover branch ignored page.props). Now renders
+`page__cover-cast`: 3-piece cast standing center-stage above the title plate
+(book.css: absolute, bottom 198px, h148px, equal heights, drop shadow). Cast per book
+(villain center): doudou [doctor__wave, villain_pebble__happy, nurse__wave],
+guoguo [doctor__wave, villain_volcano__wow, nurse__wave] (no __happy pose exists for
+volcano - vol4 sheet only has angry/smug/wow/sad), miaomiao [doctor__wave,
+villain_corona__happy, nurse__wave]. assemble.mjs already passes cover props through;
+only pageHTML cover branch + 3 skeletons changed. Verified all 3 covers render 3/3.
+
+Cover grounding fix: title plate is now a solid felt card (was floating white text),
+cast sits in-flow directly atop it with -10px tuck (feet behind card = standing).
+Title/sub recolored dark for card legibility. All 3 covers verified standing, no float.
+
+Cover revert per user: title back to floating white text (z3, over legs), cast absolute
+bottom 129px = feet on floor line 77%. Text-over-legs accepted.
+
+Cover feet grounding: measured solid-pixel bottom gaps (pebble 24px vs doctor/nurse 4-5px,
+corona 12px, render px) - fluffy feet end in feathering. Added `cover--<skeleton.key>` class on
+cover page + per-book C-slot nudge (appendectomy +19px, injection +7px, volcano +1px skipped).
+Faint hem slides behind title plate (z3 over cast z2), solid feet land on common baseline.
+
+Colophon -> parent notice: title changed to parent notice, personalized lead
+(child + procedure), same fact-evidence table, usage guidance (read together night
+before, badge page on the way). Dropped the skeleton-brand footer to fit. All 3 backs
+verified no-overflow.
+
+Colophon tone fix per user: not usage tips but professional companion instructions.
+Title parent notice -> companion instructions; closing = follow table for prep, report
+discomfort/questions to staff promptly. No new numbers, no diagnoses. Verified fit on 4-fact book.
+
+Colophon trimmed per user (red-X on the intro paragraph): dropped the personalized lead,
+kept title + fact-evidence table + companion closing only.
+
+Colophon cards removed per user: fact rows are now plain text with hairline separators
+(no white rounded boxes). Closing sentence kept.
+
+Fonts unified inside the book: .page now sets font-family var(--font-round), so body
+text/evidence/colophon/badge all match headings; flip bar label too. Panel console untouched.

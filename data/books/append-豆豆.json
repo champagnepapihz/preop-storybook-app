@@ -1,0 +1,416 @@
+{
+  "book_id": "CASE-MVUVJ4KB",
+  "skeleton": {
+    "key": "appendectomy",
+    "label": "腹腔镜阑尾切除术"
+  },
+  "cover": {
+    "title": "《豆豆和肚子里的小尾巴怪》",
+    "subtitle": "一个关于三条小通道、一朵云和一觉睡醒的故事"
+  },
+  "cast": {
+    "villain": {
+      "id": "villain_pebble",
+      "name": "小尾巴怪",
+      "home": "肚子右下角的小口袋里",
+      "line": "它住在豆豆肚子右下角的小口袋里，鼓鼓的、胀胀的，一走快就拽着肚子往下沉。"
+    },
+    "hero": {
+      "id": "doctor",
+      "name": "白大褂医生",
+      "line": "白大褂医生带着三个小圆镜子，能从肚子上开三条很小很小的通道。"
+    }
+  },
+  "case": {
+    "case_id": "CASE-MVUVJ4KB",
+    "procedure": {
+      "key": "appendectomy",
+      "label": "腹腔镜阑尾切除术"
+    },
+    "child": {
+      "name": "豆豆",
+      "age": 8,
+      "name_source": "notice"
+    },
+    "facts": {
+      "fasting": {
+        "key": "fasting",
+        "label": "术前禁食",
+        "short": "6小时",
+        "short_liquid": "2小时",
+        "value_text": "禁食6小时、禁水2小时",
+        "evidence": [
+          "禁食时间 6 小时",
+          "禁水 2 小时"
+        ]
+      },
+      "anesthesia": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "short": "全身麻醉",
+        "value_text": "全身麻醉",
+        "evidence": "全身麻醉"
+      },
+      "device": {
+        "key": "device",
+        "label": "手上装置",
+        "short": "留置针",
+        "value_text": "留置针",
+        "evidence": "留置针"
+      },
+      "stay": {
+        "key": "stay",
+        "label": "住院时长",
+        "short": "住院4天",
+        "value_text": "住院4天",
+        "evidence": "住院天数：4天"
+      }
+    },
+    "missing": [],
+    "raw": "姓名：豆豆　　性别：男　　年龄：8岁\n手术名称：腹腔镜阑尾切除术\n麻醉方式：全身麻醉\n术前禁食时间 6 小时，禁水 2 小时\n术前准备：留置针穿刺；脐部及下腹备皮；术前排空小便\n住院天数：4天\n术后注意：早期下床活动，观察伤口敷料有无渗液\n"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "stand": null,
+      "title": "豆豆和肚子里的小尾巴怪",
+      "text": "这是豆豆的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
+      "image": {
+        "id": "scene_cover",
+        "src": "assets/scenes/scene_cover.jpg",
+        "alt": "封面 · 舞台",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f6e7cc",
+          "accent": "#e2b98a"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_pebble__happy",
+          "src": "assets/characters/villain_pebble__happy.webp",
+          "alt": "小尾巴怪 · 开心",
+          "kind": "character",
+          "tags": {
+            "palette": "#e0d0bc",
+            "accent": "#a98a6d"
+          }
+        },
+        {
+          "id": "nurse__wave",
+          "src": "assets/characters/nurse__wave.webp",
+          "alt": "云朵护士 · 挥手",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "stand": null,
+      "title": "小尾巴怪生气了",
+      "text": "它住在豆豆肚子右下角的小口袋里，鼓鼓的、胀胀的，一走快就拽着肚子往下沉。它一生气，肚子就一抽一抽地疼，豆豆连笑都要先想一想。",
+      "image": {
+        "id": "scene_belly_pocket",
+        "src": "assets/scenes/scene_belly_pocket.jpg",
+        "alt": "肚子右下角 · 小口袋",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f4d9cf",
+          "accent": "#d98f7c"
+        }
+      },
+      "props": [
+        {
+          "id": "villain_pebble__angry",
+          "src": "assets/characters/villain_pebble__angry.webp",
+          "alt": "小尾巴怪 · 生气",
+          "kind": "character",
+          "tags": {
+            "palette": "#e0d0bc",
+            "accent": "#a98a6d"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "stand": null,
+      "title": "白大褂医生的三个小圆镜",
+      "text": "白大褂医生带着三个小圆镜子，能从肚子上开三条很小很小的通道。他说：我从这三条小通道进去，把小尾巴怪请出来，你的肚子上只会留下三个小小的印子。",
+      "image": {
+        "id": "scene_ward_talk",
+        "src": "assets/scenes/scene_ward_talk.jpg",
+        "alt": "病房 · 医生蹲下来",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e8f0e6",
+          "accent": "#9ecfbd"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "fasting",
+      "layout": "image_right",
+      "stand": null,
+      "title": "第一件事：肚子要空空的",
+      "text": "医生说要6小时不吃东西、2小时不喝水。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。饿的时候可以想一想，等事情办完，第一口粥会有多香。",
+      "image": {
+        "id": "scene_fasting_moon",
+        "src": "assets/scenes/scene_fasting_moon.jpg",
+        "alt": "夜里 · 空肚子与月亮",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e5e8f2",
+          "accent": "#9aa7cd"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        }
+      ],
+      "fact": {
+        "key": "fasting",
+        "label": "术前禁食",
+        "value": "禁食6小时、禁水2小时",
+        "evidence": [
+          "禁食时间 6 小时",
+          "禁水 2 小时"
+        ]
+      },
+      "badge": null
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "stand": null,
+      "title": "第二件事：一朵会睡觉的云",
+      "text": "全身麻醉，就是坐上这朵云。豆豆从一数到三，数到二的时候可能就睡着了。醒来的时候，事情已经办完了。",
+      "image": {
+        "id": "scene_cloud_anesthesia",
+        "src": "assets/scenes/scene_cloud_anesthesia.jpg",
+        "alt": "云朵 · 数到三",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e8eef6",
+          "accent": "#a9c3de"
+        }
+      },
+      "props": [
+        {
+          "id": "nurse__present",
+          "src": "assets/characters/nurse__present.webp",
+          "alt": "云朵护士 · 献上",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "value": "全身麻醉",
+        "evidence": "全身麻醉"
+      },
+      "badge": null
+    },
+    {
+      "id": "needle",
+      "layout": "image_right",
+      "stand": null,
+      "title": "第三件事：手上停一只小蝴蝶",
+      "text": "留置针就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
+      "image": {
+        "id": "scene_butterfly_hand",
+        "src": "assets/scenes/scene_butterfly_hand.jpg",
+        "alt": "手背 · 小蝴蝶留置针",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f3ece2",
+          "accent": "#d3b79b"
+        }
+      },
+      "props": [
+        {
+          "id": "nurse__hug",
+          "src": "assets/characters/nurse__hug.webp",
+          "alt": "云朵护士 · 抱抱",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": {
+        "key": "device",
+        "label": "手上装置",
+        "value": "留置针",
+        "evidence": "留置针"
+      },
+      "badge": null
+    },
+    {
+      "id": "battle",
+      "layout": "full",
+      "stand": null,
+      "title": "医院门口，医生拦住了它",
+      "text": "进手术室前，白大褂医生站在医院门口，对着小尾巴怪伸出一只手：豆豆要去做一件勇敢的事，你别再闹了。",
+      "image": {
+        "id": "scene_hospital_front",
+        "src": "assets/scenes/scene_hospital_front.jpg",
+        "alt": "医院门前 · 大战",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e3f1e2",
+          "accent": "#8fc79c"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_pebble__wow",
+          "src": "assets/characters/villain_pebble__wow.webp",
+          "alt": "小尾巴怪 · 惊讶",
+          "kind": "character",
+          "tags": {
+            "palette": "#e0d0bc",
+            "accent": "#a98a6d"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "stand": null,
+      "title": "醒来，肚子轻了",
+      "text": "豆豆睁开眼睛，肚子上盖着一块软软的纱布，小尾巴怪已经搬走了。医生说：住院4天，就能回家吃第一口粥。",
+      "image": {
+        "id": "scene_wake_up",
+        "src": "assets/scenes/scene_wake_up.jpg",
+        "alt": "醒来 · 纱布与窗光",
+        "kind": "scene",
+        "tags": {
+          "palette": "#fdf1e0",
+          "accent": "#e8c79a"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__cheer",
+          "src": "assets/characters/doctor__cheer.webp",
+          "alt": "白大褂医生 · 打气",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_pebble__sad",
+          "src": "assets/characters/villain_pebble__sad.webp",
+          "alt": "小尾巴怪 · 难过",
+          "kind": "character",
+          "tags": {
+            "palette": "#e0d0bc",
+            "accent": "#a98a6d"
+          }
+        }
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "value": "住院4天",
+        "evidence": "住院天数：4天"
+      },
+      "badge": null
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "stand": null,
+      "title": "小勇士徽章",
+      "text": "豆豆把肚子里的那只小尾巴怪请了出去。这枚徽章，是那天早上你自己走进那道门的证明。",
+      "image": {
+        "id": "badge_star",
+        "src": "assets/badges/badge_star.webp",
+        "alt": "小勇士徽章",
+        "kind": "badge",
+        "tags": {
+          "palette": "#f6d98f",
+          "accent": "#c99b3f"
+        }
+      },
+      "props": [],
+      "fact": null,
+      "badge": {
+        "name": "小尾巴怪送行者",
+        "engrave": "豆豆"
+      }
+    }
+  ],
+  "skipped": [],
+  "stats": {
+    "page_count": 9,
+    "fact_pages": 4,
+    "built_at": "2026-10-30T11:13:28.284Z"
+  },
+  "manifest_version": "0.2.0",
+  "slug": "append-豆豆"
+}

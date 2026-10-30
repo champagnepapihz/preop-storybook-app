@@ -1,0 +1,392 @@
+/* ============================================================
+   书页：毡布质感 + 缝线内框 + 布偶站位
+   页尺寸由 PageFlip 初始化参数决定（430 × 560 基准）
+   ============================================================ */
+
+.page {
+  position: relative;
+  width: 430px;
+  height: 560px;
+  padding: 18px;
+  overflow: hidden;
+  font-family: var(--font-round); /* 绘本内字体统一：全圆体，旁白/数字/标题一致 */
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(120% 80% at 20% 0%, #fffefa 0%, rgba(255, 254, 250, 0) 55%),
+    var(--grain);
+  background-size: auto, 180px 180px;
+  box-shadow: inset 0 0 0 1px rgba(150, 112, 74, .12), inset 0 0 46px rgba(168, 126, 82, .10);
+  color: var(--ink-solid);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, .85);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.page__inner {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* ---------- 图片 ---------- */
+
+.page__img {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f7e9d2, #eddcbf);
+  box-shadow:
+    0 8px 18px rgba(90, 60, 36, .18),
+    inset 0 0 0 1px rgba(255, 255, 255, .7);
+}
+
+.page__img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page__img--h {
+  height: 232px;
+  flex: 0 0 auto;
+  margin-bottom: 16px;
+}
+
+/* 文在上、图在下的页：图片吃掉剩余空间 */
+.page--imgleft .page__img--h {
+  margin: 14px 0 0;
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 150px;
+}
+
+.page--imgleft .page__fact { margin-top: 12px; }
+
+/* 布偶站位：角色立牌压在场景上 */
+.page__props {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 74%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 10px 6px;
+  pointer-events: none;
+}
+
+.page__props img {
+  height: 92%;
+  width: auto;
+  max-width: 54%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 10px 10px rgba(60, 34, 18, .3));
+}
+
+.page__props img:nth-child(2) { height: 92%; max-width: 46%; }
+
+/* 全幅页：双立牌并排站在文字卡上方，脚被卡片自然遮住 */
+.page--full .page__props { bottom: 26%; }
+
+.page--full .page__props img { max-width: 46%; }
+
+.page--full .page__props img:nth-child(2) {
+  max-width: 46%;
+  transform: scaleX(-1); /* 反派转身面向医生 */
+}
+
+/* 长文案全幅页：立牌站到上半区，不被高字卡埋掉（脚允许轻微压住卡片上沿） */
+.page--stand-high .page__props { bottom: auto; top: 19%; height: 38%; justify-content: flex-start; padding-left: 20%; }
+
+/* ---------- 文字 ---------- */
+
+.page__title {
+  font-family: var(--font-round);
+  font-size: 21px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+  color: #43301f;
+  letter-spacing: .02em;
+}
+
+.page__text {
+  font-size: 13.5px;
+  line-height: 1.95;
+  margin: 0;
+  color: #5a4636;
+  text-align: justify;
+}
+
+.page__text--tight { font-size: 13px; }
+
+/* ---------- 事实便签 ---------- */
+
+.page__fact {
+  margin-top: auto;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background:
+    var(--grain),
+    linear-gradient(180deg, #d7ecdf, #b6d9c6);
+  background-size: 180px 180px, auto;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .8),
+    0 6px 12px rgba(60, 40, 24, .16);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.page__fact::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 9px;
+  border: 1.5px dashed rgba(47, 107, 83, .35);
+  pointer-events: none;
+}
+
+.page__fact-label {
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: #2f6b53;
+  white-space: nowrap;
+}
+
+.page__fact-value {
+  font-family: var(--font-round);
+  font-size: 14px;
+  color: #1d4a39;
+}
+
+/* ---------- 封面 ---------- */
+
+.page--cover {
+  padding: 0;
+  background: #f7e7c9;
+}
+
+.page--cover::after { border-color: rgba(255, 255, 255, .7); inset: 12px; }
+
+.page--cover .page__inner { padding: 0; }
+
+.page__cover-art {
+  position: absolute;
+  inset: 0;
+}
+
+.page__cover-art img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.page__cover-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(60, 30, 18, .38) 0%, transparent 32%),
+    linear-gradient(0deg, rgba(60, 30, 18, .55) 0%, transparent 46%);
+}
+
+.page__cover-plate {
+  position: absolute;
+  left: 22px; right: 22px; bottom: 52px;
+  z-index: 3;
+  text-align: center;
+  color: #fff6e6;
+}
+
+.page__cover-kicker {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  letter-spacing: .22em;
+  border-radius: 999px;
+  border: 1.5px dashed rgba(255, 240, 214, .6);
+  background: rgba(0, 0, 0, .22);
+}
+
+.page__cover-title {
+  font-family: var(--font-round);
+  font-size: 23px;
+  line-height: 1.42;
+  margin: 0 0 8px;
+  letter-spacing: .01em;
+  text-shadow: 0 2px 0 rgba(70, 30, 20, .5), 0 10px 22px rgba(0, 0, 0, .45);
+}
+
+.page__cover-sub {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: rgba(255, 244, 228, .88);
+  letter-spacing: .04em;
+}
+
+.page__cover-cast {
+  position: absolute;
+  left: 20px; right: 20px;
+  bottom: 129px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.page__cover-cast img {
+  height: 148px;
+  width: auto;
+  max-width: 31%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));
+}
+
+/* 各反派实心脚离底不同（pebble 绒脚发虚）：C 位按本下沉对齐基线，多余绒边藏进标题后 */
+.cover--appendectomy .page__cover-cast img:nth-child(2) { transform: translateY(19px); }
+.cover--injection .page__cover-cast img:nth-child(2) { transform: translateY(7px); }
+
+.page__cover-ribbon {
+  position: absolute;
+  top: 20px; left: 20px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-align: center;
+  font-family: var(--font-round);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  color: #5a2416;
+  background: linear-gradient(180deg, #ffe0ae, #eeb877);
+  box-shadow: 0 6px 14px rgba(60, 26, 14, .28), inset 0 0 0 1.5px rgba(255, 255, 255, .55);
+}
+
+/* ---------- 全幅页 ---------- */
+
+.page--full { padding: 0; }
+
+.page--full .page__img {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  height: 100%;
+}
+
+.page__caption {
+  position: absolute;
+  left: 20px; right: 20px; bottom: 22px;
+  z-index: 3;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background:
+    var(--grain),
+    linear-gradient(180deg, rgba(255, 249, 236, .96), rgba(246, 232, 208, .96));
+  background-size: 180px 180px, auto;
+  box-shadow: 0 12px 26px rgba(40, 20, 10, .34), inset 0 2px 0 rgba(255, 255, 255, .85);
+}
+
+.page__caption::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 13px;
+  border: 1.5px dashed rgba(150, 112, 74, .3);
+  pointer-events: none;
+}
+
+/* ---------- 徽章页 ---------- */
+
+.page--badge .page__inner {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+/* 裸放素材：不画圆盘、不加描边，让徽章自己立住 */
+.badge-art {
+  width: min(292px, 80%);
+  margin-bottom: 0;
+}
+
+.badge-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 22px rgba(96, 64, 22, .26));
+}
+
+.badge-name {
+  font-family: var(--font-round);
+  font-size: 19px;
+  line-height: 1.3;
+  color: #9a7433;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  margin: -4px 0 6px;
+}
+
+.badge-engrave {
+  font-family: var(--font-round);
+  font-size: 25px;
+  line-height: 1.25;
+  color: #6f4d1c;
+  letter-spacing: .2em;
+  text-indent: .2em;
+  margin: 0 0 8px;
+}
+
+.badge-text {
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #5a4636;
+  max-width: 88%;
+}
+
+/* ---------- 尾页说明 ---------- */
+
+.page--colophon .page__inner {
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 0 4px;
+}
+
+.page--colophon .page__title { font-size: 16px; margin-bottom: 2px; }
+
+.colophon-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  text-align: left;
+  width: 100%;
+}
+
+.colophon-list li {
+  font-size: 10.5px;
+  line-height: 1.5;
+  padding: 7px 2px;
+  border-bottom: 1px solid rgba(150, 112, 74, .25);
+  color: #5a4636;
+}
+
+.colophon-list li:last-child { border-bottom: none; }
+
+.colophon-list b { color: #2f6b53; font-weight: 600; }

@@ -1,0 +1,416 @@
+{
+  "book_id": "CASE-MVUVJ4KQ",
+  "skeleton": {
+    "key": "tonsillectomy",
+    "label": "扁桃体切除术"
+  },
+  "cover": {
+    "title": "《果果和喉咙里的火山怪》",
+    "subtitle": "一个关于睡觉、云朵和一颗勇敢的心的故事"
+  },
+  "cast": {
+    "villain": {
+      "id": "villain_volcano",
+      "name": "火山怪",
+      "home": "喉咙的山洞里",
+      "line": "它住在果果喉咙的山洞里，脾气热烘烘的，一闹起来喉咙就疼。"
+    },
+    "hero": {
+      "id": "doctor",
+      "name": "白大褂医生",
+      "line": "白大褂医生不打人，他只会轻轻地跟火山怪讲道理。"
+    }
+  },
+  "case": {
+    "case_id": "CASE-MVUVJ4KQ",
+    "procedure": {
+      "key": "tonsillectomy",
+      "label": "扁桃体切除术"
+    },
+    "child": {
+      "name": "果果",
+      "age": 6,
+      "name_source": "notice"
+    },
+    "facts": {
+      "fasting": {
+        "key": "fasting",
+        "label": "术前禁食",
+        "short": "8小时",
+        "short_liquid": "2小时",
+        "value_text": "禁食8小时、禁水2小时",
+        "evidence": [
+          "禁食：禁食8小时",
+          "禁水2小时"
+        ]
+      },
+      "anesthesia": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "short": "全身麻醉",
+        "value_text": "全身麻醉",
+        "evidence": "全身麻醉"
+      },
+      "device": {
+        "key": "device",
+        "label": "手上装置",
+        "short": "留置针",
+        "value_text": "留置针",
+        "evidence": "留置针"
+      },
+      "stay": {
+        "key": "stay",
+        "label": "住院时长",
+        "short": "住院3天",
+        "value_text": "住院3天",
+        "evidence": "住院时间：住院3天"
+      }
+    },
+    "missing": [],
+    "raw": "姓名：果果　　性别：女　　年龄：6岁\n拟行手术：扁桃体切除术（低温等离子）\n麻醉方式：全身麻醉\n术前禁食：禁食8小时，禁水2小时\n手术前一日：22:00 后禁食固体食物，术前 2 小时停止饮水\n术前准备：手背留置针建立静脉通路；更换病号服；取下饰物\n住院时间：住院3天，术后第2天复查\n术后注意：术后当天进温凉流质，避免剧烈哭闹与奔跑\n"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "stand": null,
+      "title": "果果和喉咙里的火山怪",
+      "text": "这是果果的故事。故事里有一位小勇士，还有一只住在喉咙里的火山怪。",
+      "image": {
+        "id": "scene_cover",
+        "src": "assets/scenes/scene_cover.jpg",
+        "alt": "封面 · 舞台",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f6e7cc",
+          "accent": "#e2b98a"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_volcano__wow",
+          "src": "assets/characters/villain_volcano__wow.webp",
+          "alt": "火山怪 · 惊讶",
+          "kind": "character",
+          "tags": {
+            "palette": "#f2c9a0",
+            "accent": "#c96f4a"
+          }
+        },
+        {
+          "id": "nurse__wave",
+          "src": "assets/characters/nurse__wave.webp",
+          "alt": "云朵护士 · 挥手",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "stand": null,
+      "title": "火山怪住进了山洞",
+      "text": "它住在果果喉咙的山洞里，脾气热烘烘的，一闹起来喉咙就疼。它有时候喷出小小的火苗，让果果连咽口水都皱着眉头。",
+      "image": {
+        "id": "scene_throat_cave",
+        "src": "assets/scenes/scene_throat_cave.jpg",
+        "alt": "喉咙山洞 · 火山怪的家",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f4d9cf",
+          "accent": "#d98f7c"
+        }
+      },
+      "props": [
+        {
+          "id": "villain_volcano__angry",
+          "src": "assets/characters/villain_volcano__angry.webp",
+          "alt": "火山怪 · 生气",
+          "kind": "character",
+          "tags": {
+            "palette": "#f2c9a0",
+            "accent": "#c96f4a"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "stand": null,
+      "title": "白大褂医生来了",
+      "text": "白大褂医生不打人，他只会轻轻地跟火山怪讲道理。他说：我可以帮你把火山怪请出去，但你得跟我做三件事。果果点点头，握紧了拳头。",
+      "image": {
+        "id": "scene_ward_talk",
+        "src": "assets/scenes/scene_ward_talk.jpg",
+        "alt": "病房 · 医生蹲下来",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e8f0e6",
+          "accent": "#9ecfbd"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "fasting",
+      "layout": "image_right",
+      "stand": null,
+      "title": "第一件事：先让肚子空一会儿",
+      "text": "医生说，火山怪的力气来自果果肚子里的食物。所以手术前要8小时不吃东西、2小时不喝水。肚子空空的不是惩罚，是在帮火山怪变小一点。",
+      "image": {
+        "id": "scene_fasting_moon",
+        "src": "assets/scenes/scene_fasting_moon.jpg",
+        "alt": "夜里 · 空肚子与月亮",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e5e8f2",
+          "accent": "#9aa7cd"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        }
+      ],
+      "fact": {
+        "key": "fasting",
+        "label": "术前禁食",
+        "value": "禁食8小时、禁水2小时",
+        "evidence": [
+          "禁食：禁食8小时",
+          "禁水2小时"
+        ]
+      },
+      "badge": null
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "stand": null,
+      "title": "第二件事：坐一朵会睡觉的云",
+      "text": "麻醉医生会送来一朵软软的云。果果坐上全身麻醉，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
+      "image": {
+        "id": "scene_cloud_anesthesia",
+        "src": "assets/scenes/scene_cloud_anesthesia.jpg",
+        "alt": "云朵 · 数到三",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e8eef6",
+          "accent": "#a9c3de"
+        }
+      },
+      "props": [
+        {
+          "id": "nurse__present",
+          "src": "assets/characters/nurse__present.webp",
+          "alt": "云朵护士 · 献上",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "value": "全身麻醉",
+        "evidence": "全身麻醉"
+      },
+      "badge": null
+    },
+    {
+      "id": "needle",
+      "layout": "image_right",
+      "stand": null,
+      "title": "第三件事：手上有一只小蝴蝶",
+      "text": "护士会在手上放一只小蝴蝶——那是留置针。它会有一点痒，像被蚊子轻轻亲了一下，数三下就过去了。之后打针、喝水都从这只小蝴蝶走，不用再扎第二次。",
+      "image": {
+        "id": "scene_butterfly_hand",
+        "src": "assets/scenes/scene_butterfly_hand.jpg",
+        "alt": "手背 · 小蝴蝶留置针",
+        "kind": "scene",
+        "tags": {
+          "palette": "#f3ece2",
+          "accent": "#d3b79b"
+        }
+      },
+      "props": [
+        {
+          "id": "nurse__hug",
+          "src": "assets/characters/nurse__hug.webp",
+          "alt": "云朵护士 · 抱抱",
+          "kind": "character",
+          "tags": {
+            "palette": "#eef3f8",
+            "accent": "#a9c3de"
+          }
+        }
+      ],
+      "fact": {
+        "key": "device",
+        "label": "手上装置",
+        "value": "留置针",
+        "evidence": "留置针"
+      },
+      "badge": null
+    },
+    {
+      "id": "battle",
+      "layout": "full",
+      "stand": null,
+      "title": "医院门口的那场较量",
+      "text": "第二天早上，白大褂医生站在医院门口，对着火山怪张开手：果果还在睡，这场较量，交给我。",
+      "image": {
+        "id": "scene_hospital_front",
+        "src": "assets/scenes/scene_hospital_front.jpg",
+        "alt": "医院门前 · 大战",
+        "kind": "scene",
+        "tags": {
+          "palette": "#e3f1e2",
+          "accent": "#8fc79c"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__wave",
+          "src": "assets/characters/doctor__wave.webp",
+          "alt": "白大褂医生 · 伸手",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_volcano__wow",
+          "src": "assets/characters/villain_volcano__wow.webp",
+          "alt": "火山怪 · 惊讶",
+          "kind": "character",
+          "tags": {
+            "palette": "#f2c9a0",
+            "accent": "#c96f4a"
+          }
+        }
+      ],
+      "fact": null,
+      "badge": null
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "stand": null,
+      "title": "醒了，喉咙凉丝丝的",
+      "text": "果果睁开眼睛的时候，火山怪已经搬走了。喉咙里凉丝丝的，像刚喝过一口温水。医生说：住院3天，我们就能回家。",
+      "image": {
+        "id": "scene_wake_up",
+        "src": "assets/scenes/scene_wake_up.jpg",
+        "alt": "醒来 · 纱布与窗光",
+        "kind": "scene",
+        "tags": {
+          "palette": "#fdf1e0",
+          "accent": "#e8c79a"
+        }
+      },
+      "props": [
+        {
+          "id": "doctor__cheer",
+          "src": "assets/characters/doctor__cheer.webp",
+          "alt": "白大褂医生 · 打气",
+          "kind": "character",
+          "tags": {
+            "palette": "#fbf6ee",
+            "accent": "#8fb7a8"
+          }
+        },
+        {
+          "id": "villain_volcano__sad",
+          "src": "assets/characters/villain_volcano__sad.webp",
+          "alt": "火山怪 · 难过",
+          "kind": "character",
+          "tags": {
+            "palette": "#f2c9a0",
+            "accent": "#c96f4a"
+          }
+        }
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "value": "住院3天",
+        "evidence": "住院时间：住院3天"
+      },
+      "badge": null
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "stand": null,
+      "title": "小勇士徽章",
+      "text": "果果战胜了喉咙里的火山怪。这枚徽章，是那天晚上你自己走出来的证明。",
+      "image": {
+        "id": "badge_star",
+        "src": "assets/badges/badge_star.webp",
+        "alt": "小勇士徽章",
+        "kind": "badge",
+        "tags": {
+          "palette": "#f6d98f",
+          "accent": "#c99b3f"
+        }
+      },
+      "props": [],
+      "fact": null,
+      "badge": {
+        "name": "火山怪驯服者",
+        "engrave": "果果"
+      }
+    }
+  ],
+  "skipped": [],
+  "stats": {
+    "page_count": 9,
+    "fact_pages": 4,
+    "built_at": "2026-10-30T11:13:28.299Z"
+  },
+  "manifest_version": "0.2.0",
+  "slug": "tonsil-果果"
+}

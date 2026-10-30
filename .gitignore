@@ -26,9 +26,16 @@ venv/
 *.mp4
 *.mov
 recordings/
+assets/_src/
 
 # 系统垃圾
 .DS_Store
 Thumbs.db
 tmp_*
 *.log
+
+# 截图（本地验证用）
+.shots/
+rawpic/
+.cutout-profile/
+.cutout-profile-test/

@@ -1,0 +1,482 @@
+{
+  "version": "0.2.0",
+  "note": "id 是对外契约。真实 AIGC 成品用同名文件覆盖 assets/{kind}s/ 即可。",
+  "assets": {
+    "scene_cover": {
+      "src": "assets/scenes/scene_cover.jpg",
+      "alt": "封面 · 舞台",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f6e7cc",
+        "accent": "#e2b98a"
+      },
+      "size": [
+        1024,
+        1280
+      ]
+    },
+    "scene_throat_cave": {
+      "src": "assets/scenes/scene_throat_cave.jpg",
+      "alt": "喉咙山洞 · 火山怪的家",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f4d9cf",
+        "accent": "#d98f7c"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_belly_pocket": {
+      "src": "assets/scenes/scene_belly_pocket.jpg",
+      "alt": "肚子右下角 · 小口袋",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f4d9cf",
+        "accent": "#d98f7c"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_ward_talk": {
+      "src": "assets/scenes/scene_ward_talk.jpg",
+      "alt": "病房 · 医生蹲下来",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e8f0e6",
+        "accent": "#9ecfbd"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_fasting_moon": {
+      "src": "assets/scenes/scene_fasting_moon.jpg",
+      "alt": "夜里 · 空肚子与月亮",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e5e8f2",
+        "accent": "#9aa7cd"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_cloud_anesthesia": {
+      "src": "assets/scenes/scene_cloud_anesthesia.jpg",
+      "alt": "云朵 · 数到三",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e8eef6",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_butterfly_hand": {
+      "src": "assets/scenes/scene_butterfly_hand.jpg",
+      "alt": "手背 · 小蝴蝶留置针",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f3ece2",
+        "accent": "#d3b79b"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_hospital_front": {
+      "src": "assets/scenes/scene_hospital_front.jpg",
+      "alt": "医院门前 · 大战",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e3f1e2",
+        "accent": "#8fc79c"
+      },
+      "size": [
+        1440,
+        960
+      ]
+    },
+    "scene_wake_up": {
+      "src": "assets/scenes/scene_wake_up.jpg",
+      "alt": "醒来 · 纱布与窗光",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#fdf1e0",
+        "accent": "#e8c79a"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_fever_night": {
+      "src": "assets/scenes/scene_fever_night.jpg",
+      "alt": "发烧的夜 · 小床与温水",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e7e3f2",
+        "accent": "#9a8fc4"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "scene_drip_rain": {
+      "src": "assets/scenes/scene_drip_rain.jpg",
+      "alt": "输液角 · 凉凉小雨",
+      "kind": "scene",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e8f0e6",
+        "accent": "#9ecfbd"
+      },
+      "size": [
+        1280,
+        853
+      ]
+    },
+    "villain_volcano": {
+      "src": "assets/characters/villain_volcano.webp",
+      "alt": "火山怪",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f2c9a0",
+        "accent": "#c96f4a"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_pebble": {
+      "src": "assets/characters/villain_pebble.webp",
+      "alt": "小尾巴怪",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e0d0bc",
+        "accent": "#a98a6d"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "doctor": {
+      "src": "assets/characters/doctor.webp",
+      "alt": "白大褂医生",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#fbf6ee",
+        "accent": "#8fb7a8"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "doctor__wave": {
+      "src": "assets/characters/doctor__wave.webp",
+      "alt": "白大褂医生 · 伸手",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#fbf6ee",
+        "accent": "#8fb7a8"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "doctor__cheer": {
+      "src": "assets/characters/doctor__cheer.webp",
+      "alt": "白大褂医生 · 打气",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#fbf6ee",
+        "accent": "#8fb7a8"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "nurse__hug": {
+      "src": "assets/characters/nurse__hug.webp",
+      "alt": "云朵护士 · 抱抱",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#eef3f8",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "nurse__wave": {
+      "src": "assets/characters/nurse__wave.webp",
+      "alt": "云朵护士 · 挥手",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#eef3f8",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "nurse__present": {
+      "src": "assets/characters/nurse__present.webp",
+      "alt": "云朵护士 · 献上",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#eef3f8",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "nurse__cuddle": {
+      "src": "assets/characters/nurse__cuddle.webp",
+      "alt": "云朵护士 · 轻抱",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#eef3f8",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_pebble__angry": {
+      "src": "assets/characters/villain_pebble__angry.webp",
+      "alt": "小尾巴怪 · 生气",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e0d0bc",
+        "accent": "#a98a6d"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_pebble__wow": {
+      "src": "assets/characters/villain_pebble__wow.webp",
+      "alt": "小尾巴怪 · 惊讶",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e0d0bc",
+        "accent": "#a98a6d"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_pebble__sad": {
+      "src": "assets/characters/villain_pebble__sad.webp",
+      "alt": "小尾巴怪 · 难过",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e0d0bc",
+        "accent": "#a98a6d"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_pebble__happy": {
+      "src": "assets/characters/villain_pebble__happy.webp",
+      "alt": "小尾巴怪 · 开心",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#e0d0bc",
+        "accent": "#a98a6d"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_volcano__angry": {
+      "src": "assets/characters/villain_volcano__angry.webp",
+      "alt": "火山怪 · 生气",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f2c9a0",
+        "accent": "#c96f4a"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_volcano__smug": {
+      "src": "assets/characters/villain_volcano__smug.webp",
+      "alt": "火山怪 · 得意",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f2c9a0",
+        "accent": "#c96f4a"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_volcano__wow": {
+      "src": "assets/characters/villain_volcano__wow.webp",
+      "alt": "火山怪 · 惊讶",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f2c9a0",
+        "accent": "#c96f4a"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_volcano__sad": {
+      "src": "assets/characters/villain_volcano__sad.webp",
+      "alt": "火山怪 · 难过",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f2c9a0",
+        "accent": "#c96f4a"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_corona__happy": {
+      "src": "assets/characters/villain_corona__happy.webp",
+      "alt": "冠冠怪 · 开心",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#d9c6ec",
+        "accent": "#7d5ba6"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_corona__smug": {
+      "src": "assets/characters/villain_corona__smug.webp",
+      "alt": "冠冠怪 · 得意",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#d9c6ec",
+        "accent": "#7d5ba6"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_corona__wow": {
+      "src": "assets/characters/villain_corona__wow.webp",
+      "alt": "冠冠怪 · 惊讶",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#d9c6ec",
+        "accent": "#7d5ba6"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "villain_corona__sad": {
+      "src": "assets/characters/villain_corona__sad.webp",
+      "alt": "冠冠怪 · 难过",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#d9c6ec",
+        "accent": "#7d5ba6"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "nurse_cloud": {
+      "src": "assets/characters/nurse_cloud.webp",
+      "alt": "云朵护士",
+      "kind": "character",
+      "placeholder": false,
+      "tags": {
+        "palette": "#eef3f8",
+        "accent": "#a9c3de"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    },
+    "badge_star": {
+      "src": "assets/badges/badge_star.webp",
+      "alt": "小勇士徽章",
+      "kind": "badge",
+      "placeholder": false,
+      "tags": {
+        "palette": "#f6d98f",
+        "accent": "#c99b3f"
+      },
+      "size": [
+        840,
+        1040
+      ]
+    }
+  }
+}
