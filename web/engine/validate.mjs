@@ -108,6 +108,17 @@ export function validateBook(book) {
     }
   }
 
+  // 2.8 —— 面数必须是偶数（封底单独一面）
+  const faces = (book.pages?.length || 0) + 1; // +1 = 封底
+  if (faces % 2 !== 0) {
+    issues.push({
+      level: 'error',
+      page: 'layout',
+      code: 'ODD_FACE_COUNT',
+      message: `总面数为 ${faces}（奇数），封底会被并进跨页`,
+    });
+  }
+
   // 3 —— 缺页提示（降级而非报错，但要可见）
   for (const s of book.skipped || []) {
     issues.push({

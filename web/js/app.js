@@ -347,6 +347,16 @@ function pageHTML(page, book) {
     </div>`;
   }
 
+  if (page.layout === 'notes') {
+    return `<div class="page page--notes" data-density="soft">
+      <div class="page__inner">
+        <h3 class="page__title" style="text-align:center">${escapeHTML(page.title)}</h3>
+        <p class="page__text" style="text-align:center;font-size:11px;color:#8a7460;margin-top:6px">${escapeHTML(page.text)}</p>
+        <div class="notes-lines" aria-hidden="true"></div>
+      </div>
+    </div>`;
+  }
+
   if (page.layout === 'full') {
     const standCls = page.stand === 'high' ? ' page--stand-high' : '';
     return `<div class="page page--full${standCls}" data-density="soft">

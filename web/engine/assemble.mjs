@@ -130,6 +130,22 @@ export function assembleBook(caseObj, manifest, skeletons) {
     })
     .filter(Boolean);
 
+  // —— 面数奇偶：封底必须单独占一面（左侧单页）。
+  // PageFlip 的跨页是 [1,2][3,4]…，总面数为奇数时封底会被拼进跨页。
+  // 所以这里补一张"写一句话"的留白页，把总数凑成偶数。
+  if ((pages.length + 1) % 2 !== 0) {
+    pages.push({
+      id: 'notes',
+      layout: 'notes',
+      title: `写给${caseObj.child?.name || '孩子'}的一句话`,
+      text: '这一页空着。等这本书读完，你可以在这里写一句话，或者贴一张照片。',
+      image: null,
+      props: [],
+      fact: null,
+      badge: null,
+    });
+  }
+
   return {
     book_id: caseObj.case_id,
     mode: 'story',
