@@ -123,6 +123,7 @@ function applyPreset(i) {
   selectProcedure(p.procedure);
   $('#f-name').value = p.name || '';
   $('#f-age').value = p.age ?? '';
+  $('#f-gender').value = p.gender || '';
   $('#f-anes').value = p.anesthesia || '';
   $('#f-fast').value = p.fasting == null ? '' : String(p.fasting);
   $('#f-liquid').value = p.liquid == null ? '' : String(p.liquid);
@@ -141,6 +142,7 @@ function readForm() {
   return {
     procedureId: $('#f-proc').value,
     childName: $('#f-name').value.trim(),
+    gender: $('#f-gender').value || null,
     age: num($('#f-age').value),
     anesthesiaId: $('#f-anes').value || null,
     fastingHours: num($('#f-fast').value),
@@ -342,6 +344,7 @@ function pageHTML(page, book) {
         <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有故事</span>
         <h2 class="cl-title" style="font-size:20px;line-height:1.5">${escapeHTML(page.title)}</h2>
         <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">${escapeHTML(page.text)}</p>
+        <div class="page__checklist-cast">${(page.props || []).map((p) => imgTag(p)).join('')}</div>
         <p class="page__text cl-questions__lead" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">翻到下一页：要确认的事实、要问医生的问题。</p>
       </div>
     </div>`;

@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUY6Q02",
+  "book_id": "CASE-MVUYLG7E",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUY6Q02",
+    "case_id": "CASE-MVUYLG7E",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -121,43 +121,27 @@
       "image": {
         "id": "scene_cover",
         "src": "assets/scenes/scene_cover.jpg",
-        "alt": "封面 · 舞台",
-        "kind": "scene",
-        "tags": {
-          "palette": "#f6e7cc",
-          "accent": "#e2b98a"
-        }
+        "alt": "封面舞台",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "doctor__wave",
-          "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "id": "mom__hug",
+          "src": "assets/characters/mom__hug.png",
+          "alt": "妈妈·抱抱",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
         },
         {
           "id": "villain_volcano__wow",
           "src": "assets/characters/villain_volcano__wow.webp",
-          "alt": "火山怪 · 惊讶",
-          "kind": "character",
-          "tags": {
-            "palette": "#f2c9a0",
-            "accent": "#c96f4a"
-          }
-        },
-        {
-          "id": "nurse__wave",
-          "src": "assets/characters/nurse__wave.webp",
-          "alt": "云朵护士 · 挥手",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
+          "alt": "火山怪·wow",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -174,23 +158,15 @@
       "image": {
         "id": "scene_throat_cave",
         "src": "assets/scenes/scene_throat_cave.jpg",
-        "alt": "喉咙山洞 · 火山怪的家",
-        "kind": "scene",
-        "tags": {
-          "palette": "#f4d9cf",
-          "accent": "#d98f7c"
-        }
+        "alt": "喉咙山洞",
+        "kind": "scene"
       },
       "props": [
         {
           "id": "villain_volcano__angry",
           "src": "assets/characters/villain_volcano__angry.webp",
-          "alt": "火山怪 · 生气",
-          "kind": "character",
-          "tags": {
-            "palette": "#f2c9a0",
-            "accent": "#c96f4a"
-          }
+          "alt": "火山怪·angry",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -207,23 +183,21 @@
       "image": {
         "id": "scene_ward_talk",
         "src": "assets/scenes/scene_ward_talk.jpg",
-        "alt": "病房 · 医生蹲下来",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e8f0e6",
-          "accent": "#9ecfbd"
-        }
+        "alt": "病房谈话",
+        "kind": "scene"
       },
       "props": [
         {
           "id": "doctor__wave",
           "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "alt": "白大褂医生·挥手",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -240,23 +214,15 @@
       "image": {
         "id": "scene_fasting_moon",
         "src": "assets/scenes/scene_fasting_moon.jpg",
-        "alt": "夜里 · 空肚子与月亮",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e5e8f2",
-          "accent": "#9aa7cd"
-        }
+        "alt": "夜里空肚子",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "doctor__wave",
-          "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
         }
       ],
       "fact": {
@@ -280,27 +246,12 @@
       "title": "第二件事：坐一朵会睡觉的云",
       "text": "麻醉医生会送来一朵软软的云。果果坐上全身麻醉，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
       "image": {
-        "id": "scene_cloud_anesthesia",
-        "src": "assets/scenes/scene_cloud_anesthesia.jpg",
-        "alt": "云朵 · 数到三",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e8eef6",
-          "accent": "#a9c3de"
-        }
+        "id": "scene_ward_bed_close",
+        "src": "assets/scenes/scene_ward_bed_close.jpg",
+        "alt": "病房床头特写",
+        "kind": "scene"
       },
-      "props": [
-        {
-          "id": "nurse__present",
-          "src": "assets/characters/nurse__present.webp",
-          "alt": "云朵护士 · 献上",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
-        }
-      ],
+      "props": [],
       "fact": {
         "key": "anesthesia",
         "label": "麻醉方式",
@@ -321,25 +272,10 @@
       "image": {
         "id": "scene_butterfly_hand",
         "src": "assets/scenes/scene_butterfly_hand.jpg",
-        "alt": "手背 · 小蝴蝶留置针",
-        "kind": "scene",
-        "tags": {
-          "palette": "#f3ece2",
-          "accent": "#d3b79b"
-        }
+        "alt": "手背小蝴蝶",
+        "kind": "scene"
       },
-      "props": [
-        {
-          "id": "nurse__hug",
-          "src": "assets/characters/nurse__hug.webp",
-          "alt": "云朵护士 · 抱抱",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
-        }
-      ],
+      "props": [],
       "fact": {
         "key": "device",
         "label": "手上装置",
@@ -360,33 +296,21 @@
       "image": {
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
-        "alt": "医院门前 · 大战",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e3f1e2",
-          "accent": "#8fc79c"
-        }
+        "alt": "医院门前",
+        "kind": "scene"
       },
       "props": [
         {
           "id": "doctor__wave",
           "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "alt": "白大褂医生·挥手",
+          "kind": "character"
         },
         {
-          "id": "villain_volcano__wow",
-          "src": "assets/characters/villain_volcano__wow.webp",
-          "alt": "火山怪 · 惊讶",
-          "kind": "character",
-          "tags": {
-            "palette": "#f2c9a0",
-            "accent": "#c96f4a"
-          }
+          "id": "villain_volcano__angry",
+          "src": "assets/characters/villain_volcano__angry.webp",
+          "alt": "火山怪·angry",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -403,33 +327,21 @@
       "image": {
         "id": "scene_wake_up",
         "src": "assets/scenes/scene_wake_up.jpg",
-        "alt": "醒来 · 纱布与窗光",
-        "kind": "scene",
-        "tags": {
-          "palette": "#fdf1e0",
-          "accent": "#e8c79a"
-        }
+        "alt": "醒来",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "doctor__cheer",
-          "src": "assets/characters/doctor__cheer.webp",
-          "alt": "白大褂医生 · 打气",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "id": "kid_boy__cheer",
+          "src": "assets/characters/kid_boy__cheer.png",
+          "alt": "小患者·男孩·欢呼",
+          "kind": "character"
         },
         {
-          "id": "villain_volcano__sad",
-          "src": "assets/characters/villain_volcano__sad.webp",
-          "alt": "火山怪 · 难过",
-          "kind": "character",
-          "tags": {
-            "palette": "#f2c9a0",
-            "accent": "#c96f4a"
-          }
+          "id": "mom__hug",
+          "src": "assets/characters/mom__hug.png",
+          "alt": "妈妈·抱抱",
+          "kind": "character"
         }
       ],
       "fact": {
@@ -453,11 +365,7 @@
         "id": "badge_star",
         "src": "assets/badges/badge_star.webp",
         "alt": "小勇士徽章",
-        "kind": "badge",
-        "tags": {
-          "palette": "#f6d98f",
-          "accent": "#c99b3f"
-        }
+        "kind": "badge"
       },
       "props": [],
       "fact": null,
@@ -472,8 +380,8 @@
     "page_count": 9,
     "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:27:48.386Z"
+    "built_at": "2026-10-30T12:39:15.531Z"
   },
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.3.0",
   "slug": "tonsil-果果"
 }

@@ -5,8 +5,8 @@
  *
  * 用法：node tooling/placeholders.mjs
  */
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
-import { join, dirname, extname } from 'node:path';
+import { mkdirSync, writeFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, dirname, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -231,41 +231,72 @@ for (const [rel, svg] of files) {
   writeFileSync(p, svg, 'utf8');
 }
 
-// manifest：素材库的唯一真相，装配层按 id 取图
-// 真实素材到位后（同名 png/jpg/webp），自动优先使用，无需改任何代码
+// manifest：扫目录生成 —— 以后往 assets/{scenes,characters,badges}/ 丢文件即自动登记
+const LABELS = {
+  // 场景
+  scene_cover: '封面舞台', scene_throat_cave: '喉咙山洞', scene_belly_pocket: '肚子小口袋',
+  scene_ward_talk: '病房谈话', scene_fasting_moon: '夜里空肚子', scene_cloud_anesthesia: '云朵麻醉',
+  scene_butterfly_hand: '手背小蝴蝶', scene_hospital_front: '医院门前', scene_wake_up: '醒来',
+  scene_fever_night: '发热之夜', scene_drip_rain: '输液雨夜', scene_ward_bed_close: '病房床头特写',
+  // 旧角色
+  villain_volcano: '火山怪', villain_pebble: '小尾巴怪', villain_corona: '冠冠怪',
+  villain_dino: '紫色小恐龙', doctor: '白大褂医生', nurse: '护士', nurse_cloud: '云朵护士',
+  badge_star: '小勇士徽章',
+  // 新角色
+  kid_boy: '小患者·男孩', kid_girl: '小患者·女孩',
+  mom: '妈妈', dad: '爸爸', friend: '病房朋友',
+};
+const POSE_LABEL = {
+  stand: '站', sit: '坐', hug: '抱抱', wave: '挥手', cheer: '欢呼', sleep: '睡着',
+  thumb: '点赞', bed: '病床', bear: '抱熊', back: '背影', shy: '害羞', peek: '偷看',
+};
+function labelOf(id) {
+  const [base, pose] = id.split('__');
+  const b = LABELS[base] || base;
+  return pose ? `${b}·${POSE_LABEL[pose] || pose}` : b;
+}
+
+const PRIORITY = ['.png', '.webp', '.jpg', '.jpeg', '.svg'];
 const manifest = {
-  version: '0.2.0',
-  note: 'id 是对外契约。真实 AIGC 成品用同名文件覆盖 assets/{kind}s/ 即可。',
+  version: '0.3.0',
+  note: 'id 即文件名（不含扩展名）。丢文件进 assets/{scenes,characters,badges}/ 即自动登记，无需改代码。',
   assets: {},
 };
 
-const RASTER = ['.png', '.jpg', '.jpeg', '.webp'];
-function resolveSrc(kindDir, id, svgRel) {
-  for (const ext of RASTER) {
-    const rel = `assets/${kindDir}/${id}${ext}`;
-    if (existsSync(join(ROOT, rel))) return { src: rel, isPlaceholder: false };
+// 单个 id 的候选文件（同 id 多种扩展名时按 PRIORITY 取其一）
+const found = new Map();
+for (const [dir, kind] of [['scenes', 'scene'], ['characters', 'character'], ['badges', 'badge']]) {
+  const abs = join(ROOT, 'assets', dir);
+  if (!existsSync(abs)) continue;
+  for (const f of readdirSync(abs)) {
+    const ext = extname(f).toLowerCase();
+    if (!PRIORITY.includes(ext)) continue;
+    const id = basename(f, extname(f));
+    const rank = PRIORITY.indexOf(ext);
+    const cur = found.get(id);
+    if (!cur || rank < cur.rank) found.set(id, { rel: `assets/${dir}/${f}`, kind, rank, real: ext !== '.svg' });
   }
-  return { src: svgRel, isPlaceholder: true };
 }
 
-function dims(rel, fallback) {
-  const size = rel.endsWith('.svg') ? null : imageSize(join(ROOT, rel));
-  return size || fallback;
+for (const [id, meta] of found) {
+  manifest.assets[id] = {
+    src: meta.rel,
+    alt: labelOf(id),
+    kind: meta.kind,
+    placeholder: !meta.real,
+  };
 }
 
-for (const [id, label, bg, accent] of SCENES) {
-  const { src, isPlaceholder } = resolveSrc('scenes', id, `assets/_placeholder/${id}.svg`);
-  manifest.assets[id] = { src, alt: label, kind: 'scene', placeholder: isPlaceholder, tags: { palette: bg, accent }, size: dims(src, [640, 460]) };
+// 占位兜底：词表里有、但目录里没有文件的 id，指向 _placeholder 里的 SVG
+for (const [id, , ,] of [...SCENES, ...CHARACTERS, ...BADGES]) {
+  if (manifest.assets[id]) continue;
+  const rel = `assets/_placeholder/${id}.svg`;
+  if (!existsSync(join(ROOT, rel))) continue;
+  manifest.assets[id] = { src: rel, alt: labelOf(id), kind: 'placeholder', placeholder: true };
 }
-for (const [id, label, bg, accent] of CHARACTERS) {
-  const { src, isPlaceholder } = resolveSrc('characters', id, `assets/_placeholder/${id}.svg`);
-  manifest.assets[id] = { src, alt: label, kind: 'character', placeholder: isPlaceholder, tags: { palette: bg, accent }, size: dims(src, [420, 520]) };
-}
-for (const [id, label, bg, accent] of BADGES) {
-  const { src, isPlaceholder } = resolveSrc('badges', id, `assets/_placeholder/${id}.svg`);
-  manifest.assets[id] = { src, alt: label, kind: 'badge', placeholder: isPlaceholder, tags: { palette: bg, accent }, size: dims(src, [400, 400]) };
-}
+
 writeFileSync(join(ROOT, 'assets/manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
 
-const real = Object.values(manifest.assets).filter((a) => !a.placeholder).length;
-console.log(`素材清单：${Object.keys(manifest.assets).length} 项（真实素材 ${real}，占位 ${Object.keys(manifest.assets).length - real}）`);
+const ids = Object.keys(manifest.assets);
+const real = ids.filter((k) => !manifest.assets[k].placeholder).length;
+console.log(`素材清单：${ids.length} 项（真实素材 ${real}，占位 ${ids.length - real}）`);

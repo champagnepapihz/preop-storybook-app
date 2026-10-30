@@ -44,6 +44,12 @@ export function assembleBook(caseObj, manifest, skeletons) {
     return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags };
   };
 
+  // 主角立牌由性别决定：kid:stand → kid_boy__stand / kid_girl__stand
+  const kidBase = caseObj.child?.gender === 'f' ? 'kid_girl' : 'kid_boy';
+  const resolveProp = (id) => (typeof id === 'string' && id.startsWith('kid:')
+    ? `${kidBase}__${id.slice(4)}`
+    : id);
+
   const sk = pickSkeleton(caseObj, skeletons);
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
 
@@ -70,7 +76,7 @@ export function assembleBook(caseObj, manifest, skeletons) {
           title: `${caseObj.procedure?.label || '待确认术式'}`,
           text: '这本还没有故事。故事要等医生把术式、麻醉和时间都确认了才能写 —— 在那之前，先把要问的事情列清楚。',
           image: null,
-          props: [],
+          props: ['kid:stand', 'villain_dino__peek'].map(resolveProp).map(asset),
           fact: null,
           badge: null,
         },
@@ -121,7 +127,7 @@ export function assembleBook(caseObj, manifest, skeletons) {
         title: resolve(src.title, ctx, `${p.id}.title`),
         text: resolve(src.text, ctx, `${p.id}.text`),
         image: asset(src.asset || p.asset),
-        props: (src.props || p.props || []).map(asset),
+        props: (src.props || p.props || []).map(resolveProp).map(asset),
         fact,
         badge: src.badge
           ? { name: resolve(src.badge.name, ctx, `${p.id}.badge`), engrave: resolve(src.badge.engrave, ctx, `${p.id}.badge`) }

@@ -240,7 +240,7 @@
 .page__cover-cast {
   position: absolute;
   left: 20px; right: 20px;
-  bottom: 129px;
+  bottom: 152px;
   z-index: 2;
   display: flex;
   align-items: flex-end;
@@ -250,9 +250,9 @@
 }
 
 .page__cover-cast img {
-  height: 148px;
+  height: 176px;
   width: auto;
-  max-width: 31%;
+  max-width: 33%;
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));
@@ -374,6 +374,24 @@
 }
 
 /* ---------- 清单书封面 ---------- */
+
+.page__checklist-cast {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  flex: 0 0 auto;
+}
+
+.page__checklist-cast img {
+  height: 150px;
+  width: auto;
+  max-width: 40%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .28));
+}
 
 .page--checklist .page__inner {
   justify-content: center;

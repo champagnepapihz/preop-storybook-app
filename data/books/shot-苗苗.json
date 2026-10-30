@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUY6PZT",
+  "book_id": "CASE-MVUYLG7B",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUY6PZT",
+    "case_id": "CASE-MVUYLG7B",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -91,43 +91,27 @@
       "image": {
         "id": "scene_cover",
         "src": "assets/scenes/scene_cover.jpg",
-        "alt": "封面 · 舞台",
-        "kind": "scene",
-        "tags": {
-          "palette": "#f6e7cc",
-          "accent": "#e2b98a"
-        }
+        "alt": "封面舞台",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "doctor__wave",
-          "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "id": "mom__hug",
+          "src": "assets/characters/mom__hug.png",
+          "alt": "妈妈·抱抱",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
-          "alt": "冠冠怪 · 开心",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
-        },
-        {
-          "id": "nurse__wave",
-          "src": "assets/characters/nurse__wave.webp",
-          "alt": "云朵护士 · 挥手",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
+          "alt": "冠冠怪·happy",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -144,23 +128,14 @@
       "image": {
         "id": "scene_fever_night",
         "src": "assets/scenes/scene_fever_night.jpg",
-        "alt": "发烧的夜 · 小床与温水",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e7e3f2",
-          "accent": "#9a8fc4"
-        }
+        "alt": "发热之夜",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "villain_corona__smug",
-          "src": "assets/characters/villain_corona__smug.webp",
-          "alt": "冠冠怪 · 得意",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
+          "id": "villain_corona__angry",
+          "src": null,
+          "alt": "villain_corona__angry"
         }
       ],
       "fact": null,
@@ -177,33 +152,21 @@
       "image": {
         "id": "scene_ward_talk",
         "src": "assets/scenes/scene_ward_talk.jpg",
-        "alt": "病房 · 医生蹲下来",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e8f0e6",
-          "accent": "#9ecfbd"
-        }
+        "alt": "病房谈话",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "doctor__wave",
-          "src": "assets/characters/doctor__wave.webp",
-          "alt": "白大褂医生 · 伸手",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
-        },
-        {
           "id": "nurse__wave",
           "src": "assets/characters/nurse__wave.webp",
-          "alt": "云朵护士 · 挥手",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
+          "alt": "护士·挥手",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -220,33 +183,21 @@
       "image": {
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
-        "alt": "医院门前 · 大战",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e3f1e2",
-          "accent": "#8fc79c"
-        }
+        "alt": "医院门前",
+        "kind": "scene"
       },
       "props": [
         {
           "id": "nurse__present",
           "src": "assets/characters/nurse__present.webp",
-          "alt": "云朵护士 · 献上",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
+          "alt": "护士·present",
+          "kind": "character"
         },
         {
           "id": "villain_corona__smug",
           "src": "assets/characters/villain_corona__smug.webp",
-          "alt": "冠冠怪 · 得意",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
+          "alt": "冠冠怪·smug",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -263,35 +214,10 @@
       "image": {
         "id": "scene_butterfly_hand",
         "src": "assets/scenes/scene_butterfly_hand.jpg",
-        "alt": "手背 · 小蝴蝶留置针",
-        "kind": "scene",
-        "tags": {
-          "palette": "#f3ece2",
-          "accent": "#d3b79b"
-        }
+        "alt": "手背小蝴蝶",
+        "kind": "scene"
       },
-      "props": [
-        {
-          "id": "nurse__hug",
-          "src": "assets/characters/nurse__hug.webp",
-          "alt": "云朵护士 · 抱抱",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
-        },
-        {
-          "id": "villain_corona__wow",
-          "src": "assets/characters/villain_corona__wow.webp",
-          "alt": "冠冠怪 · 惊讶",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
-        }
-      ],
+      "props": [],
       "fact": {
         "key": "device",
         "label": "手上装置",
@@ -312,23 +238,21 @@
       "image": {
         "id": "scene_drip_rain",
         "src": "assets/scenes/scene_drip_rain.jpg",
-        "alt": "输液角 · 凉凉小雨",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e8f0e6",
-          "accent": "#9ecfbd"
-        }
+        "alt": "输液雨夜",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "villain_corona__sad",
-          "src": "assets/characters/villain_corona__sad.webp",
-          "alt": "冠冠怪 · 难过",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
+          "id": "kid_boy__sleep",
+          "src": "assets/characters/kid_boy__sleep.png",
+          "alt": "小患者·男孩·睡着",
+          "kind": "character"
+        },
+        {
+          "id": "mom__hug",
+          "src": "assets/characters/mom__hug.png",
+          "alt": "妈妈·抱抱",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -345,33 +269,21 @@
       "image": {
         "id": "scene_wake_up",
         "src": "assets/scenes/scene_wake_up.jpg",
-        "alt": "醒来 · 纱布与窗光",
-        "kind": "scene",
-        "tags": {
-          "palette": "#fdf1e0",
-          "accent": "#e8c79a"
-        }
+        "alt": "醒来",
+        "kind": "scene"
       },
       "props": [
         {
-          "id": "nurse__cuddle",
-          "src": "assets/characters/nurse__cuddle.webp",
-          "alt": "云朵护士 · 轻抱",
-          "kind": "character",
-          "tags": {
-            "palette": "#eef3f8",
-            "accent": "#a9c3de"
-          }
+          "id": "kid_boy__cheer",
+          "src": "assets/characters/kid_boy__cheer.png",
+          "alt": "小患者·男孩·欢呼",
+          "kind": "character"
         },
         {
-          "id": "villain_corona__happy",
-          "src": "assets/characters/villain_corona__happy.webp",
-          "alt": "冠冠怪 · 开心",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
+          "id": "mom__hug",
+          "src": "assets/characters/mom__hug.png",
+          "alt": "妈妈·抱抱",
+          "kind": "character"
         }
       ],
       "fact": {
@@ -394,33 +306,21 @@
       "image": {
         "id": "scene_hospital_front",
         "src": "assets/scenes/scene_hospital_front.jpg",
-        "alt": "医院门前 · 大战",
-        "kind": "scene",
-        "tags": {
-          "palette": "#e3f1e2",
-          "accent": "#8fc79c"
-        }
+        "alt": "医院门前",
+        "kind": "scene"
       },
       "props": [
         {
           "id": "doctor__cheer",
           "src": "assets/characters/doctor__cheer.webp",
-          "alt": "白大褂医生 · 打气",
-          "kind": "character",
-          "tags": {
-            "palette": "#fbf6ee",
-            "accent": "#8fb7a8"
-          }
+          "alt": "白大褂医生·欢呼",
+          "kind": "character"
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
-          "alt": "冠冠怪 · 开心",
-          "kind": "character",
-          "tags": {
-            "palette": "#d9c6ec",
-            "accent": "#7d5ba6"
-          }
+          "alt": "冠冠怪·happy",
+          "kind": "character"
         }
       ],
       "fact": null,
@@ -438,11 +338,7 @@
         "id": "badge_star",
         "src": "assets/badges/badge_star.webp",
         "alt": "小勇士徽章",
-        "kind": "badge",
-        "tags": {
-          "palette": "#f6d98f",
-          "accent": "#c99b3f"
-        }
+        "kind": "badge"
       },
       "props": [],
       "fact": null,
@@ -457,8 +353,8 @@
     "page_count": 9,
     "fact_pages": 2,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:27:48.377Z"
+    "built_at": "2026-10-30T12:39:15.527Z"
   },
-  "manifest_version": "0.2.0",
+  "manifest_version": "0.3.0",
   "slug": "shot-苗苗"
 }

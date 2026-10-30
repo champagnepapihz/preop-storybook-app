@@ -22,9 +22,9 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
       "asset": "scene_cover",
       "props": [
-        "doctor__wave",
-        "villain_pebble__happy",
-        "nurse__wave"
+        "mom__hug",
+        "kid:stand",
+        "villain_pebble__happy"
       ]
     },
     {
@@ -44,7 +44,8 @@
       "text": "{{hero.line}}他说：我从这三条小通道进去，把小尾巴怪请出来，你的肚子上只会留下三个小小的印子。",
       "asset": "scene_ward_talk",
       "props": [
-        "doctor__wave"
+        "doctor__wave",
+        "kid:stand"
       ]
     },
     {
@@ -54,7 +55,7 @@
       "text": "医生说要{{fact.fasting.short}}不吃东西、{{fact.fasting.short_liquid}}不喝水。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。饿的时候可以想一想，等事情办完，第一口粥会有多香。",
       "asset": "scene_fasting_moon",
       "props": [
-        "doctor__wave"
+        "kid:stand"
       ],
       "requires": [
         "fasting"
@@ -74,10 +75,8 @@
       "layout": "image_left",
       "title": "第二件事：一朵会睡觉的云",
       "text": "{{fact.anesthesia.short}}，就是坐上这朵云。{{child.name}}从一数到三，数到二的时候可能就睡着了。醒来的时候，事情已经办完了。",
-      "asset": "scene_cloud_anesthesia",
-      "props": [
-        "nurse__present"
-      ],
+      "asset": "scene_ward_bed_close",
+      "props": [],
       "requires": [
         "anesthesia"
       ],
@@ -97,9 +96,7 @@
       "title": "第三件事：手上停一只小蝴蝶",
       "text": "{{fact.device.short}}就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
       "asset": "scene_butterfly_hand",
-      "props": [
-        "nurse__hug"
-      ],
+      "props": [],
       "requires": [
         "device"
       ],
@@ -121,7 +118,7 @@
       "asset": "scene_hospital_front",
       "props": [
         "doctor__wave",
-        "villain_pebble__wow"
+        "villain_pebble__angry"
       ]
     },
     {
@@ -131,8 +128,8 @@
       "text": "{{child.name}}睁开眼睛，肚子上盖着一块软软的纱布，小尾巴怪已经搬走了。医生说：{{fact.stay.short}}，就能回家吃第一口粥。",
       "asset": "scene_wake_up",
       "props": [
-        "doctor__cheer",
-        "villain_pebble__sad"
+        "kid:cheer",
+        "mom__hug"
       ],
       "requires": [
         "stay"

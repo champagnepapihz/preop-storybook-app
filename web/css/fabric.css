@@ -418,6 +418,12 @@ textarea:focus {
 }
 
 .field-row .field { grid-template-columns: 40px minmax(0, 1fr); }
+
+/* 姓名/性别/年龄：三列，标签竖排 */
+.field-row--three { grid-template-columns: 1.3fr 0.85fr 0.85fr; }
+.field--stack { grid-template-columns: 1fr; gap: 3px; }
+.field--stack > span { font-size: 10px; }
+.field-row--three .field { grid-template-columns: 1fr; gap: 3px; }
 .field--narrow { grid-template-columns: 40px minmax(0, 1fr); }
 
 /* 版本状态条 */

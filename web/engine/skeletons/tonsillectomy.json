@@ -22,9 +22,9 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只住在喉咙里的火山怪。",
       "asset": "scene_cover",
       "props": [
-        "doctor__wave",
-        "villain_volcano__wow",
-        "nurse__wave"
+        "mom__hug",
+        "kid:stand",
+        "villain_volcano__wow"
       ]
     },
     {
@@ -44,7 +44,8 @@
       "text": "{{hero.line}}他说：我可以帮你把火山怪请出去，但你得跟我做三件事。{{child.name}}点点头，握紧了拳头。",
       "asset": "scene_ward_talk",
       "props": [
-        "doctor__wave"
+        "doctor__wave",
+        "kid:stand"
       ]
     },
     {
@@ -54,7 +55,7 @@
       "text": "医生说，火山怪的力气来自{{child.name}}肚子里的食物。所以手术前要{{fact.fasting.short}}不吃东西、{{fact.fasting.short_liquid}}不喝水。肚子空空的不是惩罚，是在帮火山怪变小一点。",
       "asset": "scene_fasting_moon",
       "props": [
-        "doctor__wave"
+        "kid:stand"
       ],
       "requires": [
         "fasting"
@@ -74,10 +75,8 @@
       "layout": "image_left",
       "title": "第二件事：坐一朵会睡觉的云",
       "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
-      "asset": "scene_cloud_anesthesia",
-      "props": [
-        "nurse__present"
-      ],
+      "asset": "scene_ward_bed_close",
+      "props": [],
       "requires": [
         "anesthesia"
       ],
@@ -97,9 +96,7 @@
       "title": "第三件事：手上有一只小蝴蝶",
       "text": "护士会在手上放一只小蝴蝶——那是{{fact.device.short}}。它会有一点痒，像被蚊子轻轻亲了一下，数三下就过去了。之后打针、喝水都从这只小蝴蝶走，不用再扎第二次。",
       "asset": "scene_butterfly_hand",
-      "props": [
-        "nurse__hug"
-      ],
+      "props": [],
       "requires": [
         "device"
       ],
@@ -121,7 +118,7 @@
       "asset": "scene_hospital_front",
       "props": [
         "doctor__wave",
-        "villain_volcano__wow"
+        "villain_volcano__angry"
       ]
     },
     {
@@ -131,8 +128,8 @@
       "text": "{{child.name}}睁开眼睛的时候，火山怪已经搬走了。喉咙里凉丝丝的，像刚喝过一口温水。医生说：{{fact.stay.short}}，我们就能回家。",
       "asset": "scene_wake_up",
       "props": [
-        "doctor__cheer",
-        "villain_volcano__sad"
+        "kid:cheer",
+        "mom__hug"
       ],
       "requires": [
         "stay"

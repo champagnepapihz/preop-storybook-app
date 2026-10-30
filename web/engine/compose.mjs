@@ -141,6 +141,7 @@ export function composeCase(input) {
     child: {
       name: (input.childName || '').trim() || '小勇士',
       age: Number.isFinite(input.age) ? input.age : null,
+      gender: input.gender === 'f' || input.gender === 'm' ? input.gender : null,
       name_source: (input.childName || '').trim() ? 'input' : 'fallback',
     },
     facts,

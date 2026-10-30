@@ -460,3 +460,17 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 **三态判定**：`missing.length === 0` → confirmed；否则 draft；术式无骨架 → checklist。B（家长自述）只能产出 draft，confirmed 必须来自受控选择。
 
 **验证**：5 份演示病例（`?case=0..4`）全部渲染、0 坏图、无 console error、无横向溢出；1366×768 面板完整可见。
+
+---
+
+## 18. 追加（Kestrel）：接入家庭/主角角色，manifest 改为扫目录
+
+- `tooling/placeholders.mjs`：manifest 不再写死清单，改为扫描 `assets/{scenes,characters,badges}/`，id 即文件名（同 id 多扩展名按 png > webp > jpg > svg 取一）。当前 59 项全部为真实素材。
+- 新角色接入骨架：`mom` / `dad` / `kid_boy` / `kid_girl` / `friend` / `villain_dino`。
+- **主角按性别展开**：骨架里写 `kid:stand` / `kid:sleep` / `kid:cheer`，装配层按 `child.gender` 展开成 `kid_boy__*` 或 `kid_girl__*`。前端加了「性别」选择（姓名/性别/年龄三列）。
+- 三本骨架 props 重排：封面 = 家长 + 孩子 + 反派；遇见 = 反派生气；邀请 = 医生 + 孩子；禁食 = 孩子；麻醉 = 孩子睡着 + 护士（场景换成 `scene_ward_bed_close`）；留置针 = 护士 + 孩子；对峙 = 医生 + 反派；醒来 = 孩子欢呼 + 妈妈抱抱。
+- **特写场景撤掉全身立牌**：`scene_butterfly_hand`、`scene_ward_bed_close` 是微距构图，全身人偶站上去比例失真，这两页 props 置空（页面靠场景本身叙事）。
+- 清单书封面加 `kid:stand` + `villain_dino__peek`（"还不知道是什么怪兽"的视觉隐喻）。
+- 封面三人组：height 148 → 176，bottom 129 → 152（脚踩在标题牌上沿，不再被牌面吞掉）。
+
+未用上的素材：`dad__*`、`friend__*`、`villain_dino__back/shy/sleep`。要用 dad 需要再加一个"家长性别"选择 + `parent:*` 展开规则。

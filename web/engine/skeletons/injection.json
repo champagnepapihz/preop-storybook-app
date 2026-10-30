@@ -22,9 +22,9 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只头顶小皇冠、毛茸茸的小访客。",
       "asset": "scene_cover",
       "props": [
-        "doctor__wave",
-        "villain_corona__happy",
-        "nurse__wave"
+        "mom__hug",
+        "kid:stand",
+        "villain_corona__happy"
       ]
     },
     {
@@ -34,7 +34,7 @@
       "text": "{{villain.line}}晚上它把小山洞当成自己的家，白天也没有一点要走的意思。",
       "asset": "scene_fever_night",
       "props": [
-        "villain_corona__smug"
+        "villain_corona__angry"
       ]
     },
     {
@@ -44,8 +44,8 @@
       "text": "{{hero.line}}医生说：我们客客气气地请冠冠怪搬走，办法就是打一针、输一点凉凉的药水。护士在旁边挥挥手：别怕，我会一直陪着你。",
       "asset": "scene_ward_talk",
       "props": [
-        "doctor__wave",
-        "nurse__wave"
+        "nurse__wave",
+        "kid:stand"
       ]
     },
     {
@@ -65,10 +65,7 @@
       "title": "手上停一只小蝴蝶",
       "text": "护士先抱抱{{child.name}}，再在手背上放一只小蝴蝶——那是{{fact.device.short}}。它亲上去的时候有一点点痒，像被蚊子轻轻亲了一下，数到三就贴好了。之后所有的针都从这只小蝴蝶走，不用再受第二次惊。冠冠怪瞪圆了眼睛：原来打针一下子就过去了。",
       "asset": "scene_butterfly_hand",
-      "props": [
-        "nurse__hug",
-        "villain_corona__wow"
-      ],
+      "props": [],
       "requires": [
         "device"
       ],
@@ -89,7 +86,8 @@
       "text": "小蝴蝶后面接上一根细细的管子，药水一滴一滴走进去，像身体里下了一场又轻又凉的小雨。小雨一落下来，身体就有了帮手：烧慢慢退下去，力气一点一点回到{{child.name}}的腿上。冠冠怪在洞里待不住了，开始收拾自己的小行李。",
       "asset": "scene_drip_rain",
       "props": [
-        "villain_corona__sad"
+        "kid:sleep",
+        "mom__hug"
       ],
       "stand": "high"
     },
@@ -100,8 +98,8 @@
       "text": "{{child.name}}靠在枕头上，护士把小被子往上拉了拉。窗外那个紫色的背影抱起行李，有点不好意思地挥挥手，飘走了。医生说：{{fact.stay.short}}，我们就能回家，回家记得多喝温水。",
       "asset": "scene_wake_up",
       "props": [
-        "nurse__cuddle",
-        "villain_corona__happy"
+        "kid:cheer",
+        "mom__hug"
       ],
       "requires": [
         "stay"
