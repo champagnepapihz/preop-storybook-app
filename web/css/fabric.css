@@ -443,6 +443,7 @@ textarea:focus {
 .reader__bar {
   display: flex;
   align-items: center;
+  margin-top: 6px;   /* 和书之间留一口气，别贴太紧 */
   gap: 12px;
   padding: 8px 14px;
   border-radius: 999px;
@@ -482,7 +483,7 @@ textarea:focus {
 
 /* 短视口：按高度收紧书宽，标题 + 书 + 翻页条都能留在首屏内，不触发滚动条 */
 @media (min-width: 660px) and (min-height: 600px) and (max-height: 960px) {
-  .book { max-width: min(100%, calc((100vh - 326px) * 1.536)) !important; }
+  .book { max-width: min(100%, calc((100vh - 332px) * 1.536)) !important; }
 }
 
 /* 941–1120：收窄控制台，让右侧仍能双页展开（低于 600px 会切成单页竖排） */

@@ -434,3 +434,11 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - `npm run build`：3 本全过事实保真校验。
 - 1440×900 iframe 内实测：无横向溢出（scrollW 1425 < clientW 1440）、三本各 10 面、21–24 张图 0 坏图、无 console/pageerror。
 - 未改动：翻页防抽动机制、封面/封底位姿、立牌构图、stage.webp 背景。
+
+---
+
+## 16. 微调（Kestrel）：翻页条下移 6px
+
+- `.reader__bar` 加 `margin-top: 6px`（书与条之间从"贴着"变成"留一口气"，用户要求只动一点点）。
+- 同步把短屏限宽公式里的常量 `326px → 332px`（`.book { max-width: min(100%, calc((100vh - 332px) * 1.536)) }`），
+  否则短屏会因为这 6px 把翻页条挤出首屏。1366×768 实测条底边 757 < 768，仍在首屏内。
