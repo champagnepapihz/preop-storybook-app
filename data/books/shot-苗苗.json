@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV4XBLT",
+  "book_id": "CASE-MVV5STVI",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV4XBLT",
+    "case_id": "CASE-MVV5STVI",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -389,7 +389,7 @@
     "page_count": 9,
     "fact_pages": 1,
     "draft_pages": 0,
-    "built_at": "2026-10-30T15:36:27.137Z"
+    "built_at": "2026-10-30T16:00:57.151Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

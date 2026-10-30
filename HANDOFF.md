@@ -813,3 +813,13 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - 打印媒体下 `#print-root` 复位为 `static / opacity 1 / --ph: 560px`。
 
 **验证**：`#print-root` 里 23 张图 `naturalWidth` 全部 > 0（含 `scene_cover.jpg:1024`）；把副本临时显示出来，封面完整呈现幕布、聚光、地板与三个角色。
+
+**第二轮排查（仍然白底）**：不是解码时机，是**重建**。
+
+`printBook()` 原来每次都调 `buildPrintSheets()`，等于把 `#print-root` 的 DOM 整个换掉——图片元素是新的，`src` 虽然命中缓存，但 `window.print()` 不会等它重新绑定到图片资源，打印出来就是白底。`--print-to-pdf` 那条命令不点按钮、不重建，所以一直是有图的（PDF 里 94 个 /Image 对象），掩盖了这个问题。
+
+改法：**不重建**。`renderBook` 时已经烘好一份、图片早已解码；`printBook` 只在副本缺失或 `dataset.bookId` 与当前书不一致时才重建。
+
+**第三轮**：`img.decode()` 对已 complete 的图在部分 Chromium 上返回永不 resolve 的 promise —— 点按钮会卡在"正在准备…"。改成只等 `!complete || !naturalWidth` 的那几张，并用 `Promise.race` 兜 1.2s 超时。
+
+**验证**：stub 掉 `window.print()` 后点按钮 —— `printed=true`、副本节点未被替换（`sameNodes=true`）、23 张图 `naturalWidth` 全 > 0、按钮文案正常恢复。

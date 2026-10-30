@@ -619,6 +619,7 @@ function buildPrintSheets(book) {
   }
   // 懒加载的图不进视口就不会解码，打印出来是空白 —— 打印副本一律 eager
   root.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+  root.dataset.bookId = book.book_id || '';
 }
 
 async function printBook() {
@@ -630,13 +631,22 @@ async function printBook() {
   const label = btn.textContent;
   btn.textContent = '正在准备…';
 
-  // 打印前重新烘一遍，保证与屏幕上的当前状态一致
-  buildPrintSheets(state.book);
+  // 关键：不要无条件重建。renderBook 时已经烘好一份，图片早就解码完了；
+  // 再重建一次等于让图片重新加载，而 window.print() 不会等 —— 打出来就是白底封面。
+  const root = document.getElementById('print-root');
+  const stale = !root.querySelector('.print-sheet') || root.dataset.bookId !== (state.book.book_id || '');
+  if (stale) buildPrintSheets(state.book);
 
-  // 等所有图解码完再唤打印 —— 否则打出来是白底、只有文字
-  await Promise.all(
-    [...document.querySelectorAll('#print-root img')].map((img) => img.decode().catch(() => {}))
-  );
+  // 兜底：只等还没加载完的图。不要对已 complete 的图调 decode() ——
+  // 在部分 Chromium 上它返回的 promise 会一直 pending，打印就永远等下去。
+  const pending = [...root.querySelectorAll('img')].filter((i) => !i.complete || !i.naturalWidth);
+  if (pending.length) {
+    await Promise.race([
+      Promise.all(pending.map((i) => new Promise((res) => { i.onload = i.onerror = res; }))),
+      new Promise((res) => setTimeout(res, 1200)),
+    ]);
+  }
+  await new Promise((r) => setTimeout(r, 80));
   btn.textContent = label;
 
   // 打印 / 存 PDF 时，文件名取书里的名字（浏览器用 document.title 命名）
