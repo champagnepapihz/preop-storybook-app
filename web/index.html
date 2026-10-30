@@ -58,6 +58,7 @@
         <div class="panel__row panel__row--sub">
           <button class="btn btn--ghost" id="new">新建病例</button>
           <button class="btn btn--ghost" id="sample">换个病例</button>
+          <button class="btn btn--ghost" id="print">打印 / PDF</button>
         </div>
 
         <div class="status" id="status"></div>
@@ -80,6 +81,8 @@
       <span>故事是虚构的，事实是真实的 —— 每一条医学事实都能溯源到原文。</span>
     </footer>
   </main>
+
+  <div id="print-root" aria-hidden="true"></div>
 
   <script src="vendor/page-flip.browser.js"></script>
   <script type="module" src="js/app.js"></script>

@@ -763,3 +763,43 @@
     rgba(150, 112, 74, .22) 86%,
     rgba(150, 112, 74, 0));
 }
+
+/* ============================================================
+   打印 / 存为 PDF
+   屏幕上看到的是 PageFlip 的绝对定位那本；打印用 #print-root 里
+   顺序排列的静态副本，一页一张 A4（竖版），内容等比放大。
+   ============================================================ */
+
+#print-root { display: none; }
+
+@media print {
+  /* 页面尺寸精确等于书页（430×560 CSS px ≈ 114×148mm）：
+     一页一张、图像 1:1 不重采样，PDF 体积小、字仍然矢量。
+     打印时在系统对话框选"适合纸张"即可铺满 A4。 */
+  @page { size: 430px 560px; margin: 0; }
+
+  html, body { background: #fff !important; }
+
+  /* 屏幕上的一切都不要，只留打印副本 */
+  body > *:not(#print-root) { display: none !important; }
+  #print-root { display: block !important; --ph: 560px; }
+
+  .print-sheet {
+    width: 430px;
+    height: 560px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .print-sheet:last-child { break-after: auto; page-break-after: auto; }
+
+  .print-sheet > .page {
+    box-shadow: none !important;
+    background-clip: padding-box;
+  }
+
+  * { animation: none !important; transition: none !important; }
+}

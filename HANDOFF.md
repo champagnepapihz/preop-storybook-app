@@ -780,3 +780,20 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - `syncPageHeight` 补 `[120, 400, 900]` 三次重试 —— PageFlip 窄屏定尺寸更晚，值未变时不触发重排。
 - 空态文案「从左边选一个病种开始」→「先选一个病种」（手机上控制台在书下方，不是左边）。
 - meta description 还停在"一张术前须知"，改为"医护选一个病种"。
+
+---
+
+## 34. 加（Kestrel）：打印 / 导出 PDF
+
+**为什么不是"截图导出"**：家长要的是能带走、能印出来的东西，位图会糊。走浏览器打印管线，文字仍是矢量。
+
+**做法**：
+
+- `renderBook` 时同步烘一份 `#print-root`：用同一套 `pageHTML` / `colophonHTML` 重新生成**顺序排列**的静态页面副本（屏幕上那本是 PageFlip 的绝对定位 + transform，直接打印会重影）。
+- 面板新增「打印 / PDF」按钮 → `buildPrintSheets()` 重烘 → `window.print()`；浏览器打印对话框里选"另存为 PDF"即可。
+- 打印副本里的图强制 `loading="eager"` —— 懒加载的图不进视口不会解码，打印出来是空白页。
+- 打印时 `#print-root` 的 `--ph` 覆盖为 560px（屏幕上是 509，立牌会偏小）。
+- 页面尺寸 `@page { size: 430px 560px }`：一页一张、图像 1:1 不重采样。实测 10 页 PDF **10.7MB**（先试过 A4 + 1.66 倍放大，同样 10 页要 **34.9MB**）。
+- 打印窗口的默认文件名取书名（临时改 `document.title`，打印结束再恢复）。
+
+**验证**：`--print-to-pdf` 输出 10 页（9 正文 + 封底）；把 `#print-root` 临时显示出来逐页检查，封面 / 内页排版与屏幕一致。

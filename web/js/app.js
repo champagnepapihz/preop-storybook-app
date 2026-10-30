@@ -47,6 +47,7 @@ async function boot() {
   $('#gen').addEventListener('click', () => generate());
   $('#sample').addEventListener('click', () => applyDemo(1));
   $('#new').addEventListener('click', () => startNewCase());
+  $('#print').addEventListener('click', printBook);
   $('#prev').addEventListener('click', () => goPrev());
   $('#next').addEventListener('click', () => goNext());
   document.addEventListener('keydown', (e) => {
@@ -595,6 +596,50 @@ function schedulePageHeightSync() {
   }, 260);
 }
 
+/**
+ * 打印视图：把当前书按顺序排成一叠静态页面。
+ *
+ * 为什么不用屏幕上的那本：PageFlip 的页面是绝对定位 + transform 摆放的，
+ * 直接打印会重影/裁切。这里用同一套 pageHTML 重新生成一份顺序 DOM，
+ * 只给打印用，平时隐藏。
+ */
+function buildPrintSheets(book) {
+  const root = document.getElementById('print-root');
+  if (!root) return;
+  root.innerHTML = '';
+  const sheets = [
+    ...book.pages.map((p) => pageHTML(p, book)),
+    colophonHTML(book),
+  ];
+  for (const html of sheets) {
+    const sheet = document.createElement('div');
+    sheet.className = 'print-sheet';
+    sheet.innerHTML = html;
+    root.appendChild(sheet);
+  }
+  // 懒加载的图不进视口就不会解码，打印出来是空白 —— 打印副本一律 eager
+  root.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+}
+
+function printBook() {
+  if (!state.book) {
+    renderIdle('还没有书可以打印 —— 先生成一本。');
+    return;
+  }
+  // 打印前重新烘一遍，保证与屏幕上的当前状态一致
+  buildPrintSheets(state.book);
+
+  // 打印 / 存 PDF 时，文件名取书里的名字（浏览器用 document.title 命名）
+  const prev = document.title;
+  const name = (state.book.cover?.title || '').replace(/[《》]/g, '') || '术前绘本';
+  document.title = name;
+  try {
+    window.print();
+  } finally {
+    setTimeout(() => { document.title = prev; }, 800);
+  }
+}
+
 function renderBook(book) {
   setFlipDetached(false); // 换病例时若正处翻页先把搬走的节点送回去避免孤儿
   if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
@@ -666,6 +711,8 @@ function renderBook(book) {
   [120, 400, 900].forEach((t) => setTimeout(syncPageHeight, t));
 
   state.flip = flip;
+  buildPrintSheets(book);
+
   flip.on('flip', (e) => {
     const i = e.data;
     const total = book.pages.length + 1;
