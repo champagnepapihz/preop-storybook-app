@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUZ556J",
+  "book_id": "CASE-MVUZAMAI",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUZ556J",
+    "case_id": "CASE-MVUZAMAI",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -400,7 +400,7 @@
     "page_count": 9,
     "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:54:34.363Z"
+    "built_at": "2026-10-30T12:58:49.819Z"
   },
   "manifest_version": "0.3.0",
   "slug": "tonsil-果果"

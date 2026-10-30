@@ -24,6 +24,26 @@ for (const f of readdirSync(skDir).filter((x) => x.endsWith('.json') && x !== 'i
   skeletons[sk.key] = sk;
 }
 
+// —— 素材引用校验：骨架里写到的 id 必须在 manifest 里，否则页面会静默空白 ——
+const referenced = new Map();
+for (const [key, sk] of Object.entries(skeletons)) {
+  for (const pg of sk.pages || []) {
+    const ids = [pg.asset, ...(pg.props || [])].filter(Boolean);
+    for (const id of ids) {
+      if (id.startsWith('kid:')) continue;               // kid:* 运行时展开
+      if (!manifest.assets[id]) {
+        console.error(`✗ MISSING_ASSET  骨架 ${key} 第 ${pg.id} 页引用了不存在的素材：${id}`);
+        process.exitCode = 1;
+      }
+      referenced.set(id, (referenced.get(id) || 0) + 1);
+    }
+  }
+}
+if (process.exitCode === 1) {
+  console.error('素材引用校验未通过，构建中止。');
+  process.exit(1);
+}
+
 const files = readdirSync(rawDir).filter((f) => f.endsWith('.txt'));
 let failed = 0;
 const index = [];

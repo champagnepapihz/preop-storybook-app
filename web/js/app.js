@@ -318,7 +318,7 @@ function imgTag(asset, cls = '') {
 
 function propsHTML(props, stand) {
   if (!props?.length) return '';
-  const cls = stand ? ` page__props--${stand}` : '';
+  const cls = `${stand ? ` page__props--${stand}` : ''} page__props--n${props.length}`;
   return `<div class="page__props${cls}">${props.map((p) => imgTag(p)).join('')}</div>`;
 }
 

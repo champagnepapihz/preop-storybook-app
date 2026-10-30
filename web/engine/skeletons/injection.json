@@ -34,7 +34,7 @@
       "text": "{{villain.line}}晚上它把小山洞当成自己的家，白天也没有一点要走的意思。",
       "asset": "scene_fever_night",
       "props": [
-        "villain_corona__angry"
+        "villain_corona__smug"
       ]
     },
     {
@@ -44,8 +44,9 @@
       "text": "{{hero.line}}医生说：我们客客气气地请冠冠怪搬走，办法就是打一针、输一点凉凉的药水。护士在旁边挥挥手：别怕，我会一直陪着你。",
       "asset": "scene_ward_talk",
       "props": [
-        "nurse__wave",
-        "kid:stand"
+        "doctor__wave",
+        "kid:stand",
+        "nurse__wave"
       ]
     },
     {
