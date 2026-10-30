@@ -560,10 +560,15 @@ function colophonHTML(book) {
       </div>`
     : '';
 
+  // 版面压力按「行数」算：事实行（无事实时算占位那一行）+ 提问行 + 注意事项条目
+  const total = Math.max(facts.length, 1)
+    + qs.length
+    + cauGroups.reduce((n, g) => n + g.items.length, 0);
   const sparse = facts.length <= 2 && cauGroups.length <= 1;
-  const dense = facts.length + cauGroups.reduce((n, g) => n + g.items.length, 0) > 6;
+  const dense = total > 6;
+  const xdense = total > 10;   // 条目特别多时再压一档，避免页脚被挤出去
 
-  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}${dense ? ' is-dense' : ''}" data-density="soft">
+  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}${dense ? ' is-dense' : ''}${xdense ? ' is-xdense' : ''}" data-density="soft">
     <div class="page__inner">
       <div class="cl-head">
         <span class="cl-kicker">术前准备 · 陪护</span>

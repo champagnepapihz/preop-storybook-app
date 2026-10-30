@@ -596,11 +596,25 @@
 }
 
 /* 事实多 + 注意事项多的一本，整体再收一口气，保证不越出书页 */
-.page--colophon.is-dense .cl-item { padding: 11px 2px 9px; }
-.page--colophon.is-dense .cl-label { font-size: 11.5px; }
-.page--colophon.is-dense .cl-value { font-size: 12px; }
-.page--colophon.is-dense .cl-ev { font-size: 9px; margin-top: 5px; }
-.page--colophon.is-dense .cl-note { font-size: 10px; padding-top: 12px; }
+.page--colophon.is-dense .cl-head { margin-bottom: 2px; }
+.page--colophon.is-dense .cl-title { font-size: 19px; }
+.page--colophon.is-dense .cl-list { margin-top: 12px; }
+.page--colophon.is-dense .cl-item { padding: 9px 2px 7px; }
+.page--colophon.is-dense .cl-label { font-size: 11px; }
+.page--colophon.is-dense .cl-value { font-size: 11.5px; }
+.page--colophon.is-dense .cl-ev { font-size: 8.5px; margin-top: 4px; line-height: 1.5; }
+.page--colophon.is-dense .cl-cautions { margin-top: 10px; padding-top: 9px; }
+.page--colophon.is-dense .cl-cau-head { margin-bottom: 6px; font-size: 9.5px; }
+.page--colophon.is-dense .cl-cau-row { margin-bottom: 5px; }
+.page--colophon.is-dense .cl-cau-items { gap: 2px; }
+.page--colophon.is-dense .cl-cau-items li { font-size: 10px; line-height: 1.45; }
+.page--colophon.is-dense .cl-note { font-size: 9.5px; line-height: 1.65; padding: 10px 2px 0; }
+
+/* 极端情况：事实 + 注意事项超过 10 条，再压一档 */
+.page--colophon.is-xdense .cl-item { padding: 7px 2px 6px; }
+.page--colophon.is-xdense .cl-cau-items li { font-size: 9.5px; line-height: 1.4; }
+.page--colophon.is-xdense .cl-cau-row { margin-bottom: 4px; }
+.page--colophon.is-xdense .cl-note { font-size: 9px; line-height: 1.55; padding-top: 8px; }
 
 /* 事实只有两三条时，别把行铺满整页，整块内容居中更稳 */
 .page--colophon.is-sparse .page__inner { justify-content: center; }
