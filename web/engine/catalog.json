@@ -108,27 +108,6 @@
               }
             }
           ]
-        },
-        {
-          "id": "circumcision",
-          "label": "包茎 / 包皮",
-          "procedures": [
-            {
-              "id": "circumcision",
-              "label": "包皮环切术",
-              "skeleton": null,
-              "cautions": {
-                "术前准备": [
-                  "局部清洁",
-                  "更换病号服"
-                ],
-                "术后注意": [
-                  "保持伤口干燥",
-                  "观察有无渗血"
-                ]
-              }
-            }
-          ]
         }
       ]
     },
