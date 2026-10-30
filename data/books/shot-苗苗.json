@@ -1,10 +1,10 @@
 {
-  "book_id": "CASE-MVV0ZWHU",
+  "book_id": "CASE-MVV13PPL",
   "mode": "story",
   "version": "draft",
   "skeleton": {
     "key": "injection",
-    "label": "静脉输液"
+    "label": "呼吸道感染"
   },
   "cover": {
     "title": "《苗苗和鼻子后面的冠冠怪》",
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV0ZWHU",
+    "case_id": "CASE-MVV13PPL",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -392,7 +392,7 @@
     "page_count": 9,
     "fact_pages": 2,
     "draft_pages": 0,
-    "built_at": "2026-10-30T13:46:29.059Z"
+    "built_at": "2026-10-30T13:49:26.889Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

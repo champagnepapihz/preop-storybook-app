@@ -9,7 +9,7 @@
       "groups": [
         {
           "id": "tonsil",
-          "label": "扁桃体 / 腺样体",
+          "label": "扁桃体肥大 / 腺样体肥大",
           "procedures": [
             {
               "id": "tonsillectomy",
@@ -51,7 +51,7 @@
       "groups": [
         {
           "id": "appendix",
-          "label": "阑尾",
+          "label": "阑尾炎",
           "procedures": [
             {
               "id": "appendectomy",
@@ -117,11 +117,11 @@
       "groups": [
         {
           "id": "infusion",
-          "label": "静脉输液",
+          "label": "呼吸道感染",
           "procedures": [
             {
               "id": "iv-infusion",
-              "label": "静脉输液治疗",
+              "label": "静脉输液",
               "skeleton": "injection",
               "cautions": {
                 "住院注意": [
@@ -135,11 +135,11 @@
         },
         {
           "id": "fever",
-          "label": "发热待查",
+          "label": "发热",
           "procedures": [
             {
               "id": "fever-watch",
-              "label": "发热待查观察",
+              "label": "对症观察",
               "skeleton": null,
               "cautions": {
                 "住院注意": [

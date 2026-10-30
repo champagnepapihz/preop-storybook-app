@@ -274,8 +274,10 @@ function renderStatus(caseObj, book, report) {
   st.className = `status status--${book.version}`;
   st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
     <span class="status__text">${book.mode === 'checklist'
-      ? '这类手术还没有专属故事，只出事实与注意事项'
-      : `${book.pages.length} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`}</span>`;
+      ? `${book.pages.length} 面 · 这类术式还没有专属故事，只出事实与注意事项`
+      : book.stats.draft_pages
+        ? `${book.pages.length} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`
+        : `${book.pages.length} 面 · 事实齐全，无“如果……”页`}</span>`;
 
   // 缺口：只列"未确认"，不猜
   const audit = $('#audit');
