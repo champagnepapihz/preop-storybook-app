@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUYLG7B",
+  "book_id": "CASE-MVUYXHWK",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUYLG7B",
+    "case_id": "CASE-MVUYXHWK",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -217,7 +217,20 @@
         "alt": "手背小蝴蝶",
         "kind": "scene"
       },
-      "props": [],
+      "props": [
+        {
+          "id": "nurse__wave",
+          "src": "assets/characters/nurse__wave.webp",
+          "alt": "护士·挥手",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
+        }
+      ],
       "fact": {
         "key": "device",
         "label": "手上装置",
@@ -230,7 +243,7 @@
     {
       "id": "drip",
       "layout": "full",
-      "stand": "high",
+      "stand": "bed",
       "draft": false,
       "condition": null,
       "title": "身体里下了一场凉凉的小雨",
@@ -246,12 +259,6 @@
           "id": "kid_boy__sleep",
           "src": "assets/characters/kid_boy__sleep.png",
           "alt": "小患者·男孩·睡着",
-          "kind": "character"
-        },
-        {
-          "id": "mom__hug",
-          "src": "assets/characters/mom__hug.png",
-          "alt": "妈妈·抱抱",
           "kind": "character"
         }
       ],
@@ -353,7 +360,7 @@
     "page_count": 9,
     "fact_pages": 2,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:39:15.527Z"
+    "built_at": "2026-10-30T12:48:37.604Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

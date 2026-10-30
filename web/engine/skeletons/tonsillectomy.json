@@ -76,7 +76,9 @@
       "title": "第二件事：坐一朵会睡觉的云",
       "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。睡着的时候一点感觉都没有，像午睡一样，只是睡得特别特别香。",
       "asset": "scene_ward_bed_close",
-      "props": [],
+      "props": [
+        "kid:sleep"
+      ],
       "requires": [
         "anesthesia"
       ],
@@ -88,7 +90,8 @@
       "conditional": {
         "title": "如果要做手术，会先坐一朵云",
         "text": "如果医生决定把它收走，会有人送来一朵会睡觉的云。坐上它，数到三就睡着了，中间什么都不知道。"
-      }
+      },
+      "stand": "bed"
     },
     {
       "id": "needle",
@@ -96,7 +99,10 @@
       "title": "第三件事：手上有一只小蝴蝶",
       "text": "护士会在手上放一只小蝴蝶——那是{{fact.device.short}}。它会有一点痒，像被蚊子轻轻亲了一下，数三下就过去了。之后打针、喝水都从这只小蝴蝶走，不用再扎第二次。",
       "asset": "scene_butterfly_hand",
-      "props": [],
+      "props": [
+        "nurse__wave",
+        "kid:stand"
+      ],
       "requires": [
         "device"
       ],

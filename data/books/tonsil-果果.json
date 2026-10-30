@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVUYLG7E",
+  "book_id": "CASE-MVUYXHWO",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVUYLG7E",
+    "case_id": "CASE-MVUYXHWO",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -240,7 +240,7 @@
     {
       "id": "cloud",
       "layout": "image_left",
-      "stand": null,
+      "stand": "bed",
       "draft": false,
       "condition": null,
       "title": "第二件事：坐一朵会睡觉的云",
@@ -251,7 +251,14 @@
         "alt": "病房床头特写",
         "kind": "scene"
       },
-      "props": [],
+      "props": [
+        {
+          "id": "kid_boy__sleep",
+          "src": "assets/characters/kid_boy__sleep.png",
+          "alt": "小患者·男孩·睡着",
+          "kind": "character"
+        }
+      ],
       "fact": {
         "key": "anesthesia",
         "label": "麻醉方式",
@@ -275,7 +282,20 @@
         "alt": "手背小蝴蝶",
         "kind": "scene"
       },
-      "props": [],
+      "props": [
+        {
+          "id": "nurse__wave",
+          "src": "assets/characters/nurse__wave.webp",
+          "alt": "护士·挥手",
+          "kind": "character"
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character"
+        }
+      ],
       "fact": {
         "key": "device",
         "label": "手上装置",
@@ -380,7 +400,7 @@
     "page_count": 9,
     "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T12:39:15.531Z"
+    "built_at": "2026-10-30T12:48:37.608Z"
   },
   "manifest_version": "0.3.0",
   "slug": "tonsil-果果"

@@ -474,3 +474,22 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - 封面三人组：height 148 → 176，bottom 129 → 152（脚踩在标题牌上沿，不再被牌面吞掉）。
 
 未用上的素材：`dad__*`、`friend__*`、`villain_dino__back/shy/sleep`。要用 dad 需要再加一个"家长性别"选择 + `parent:*` 展开规则。
+
+---
+
+## 19. 修正（Kestrel）：人物浮空 / 床上没人 / 护士消失
+
+三个症状，三个不同根因：
+
+**1. 人物浮空** —— 24 张角色图是分别生成的，每张的透明留白不同。按 `height` 摆放时"图底边"不等于"脚底"，于是有人站地上、有人浮半空。
+- 新增 `tooling/normalize.mjs`：逐张 ①去绿边（绿通道高于 R/B 的像素压回中性，绿差大的同时削 alpha）②裁到不透明包围盒（阈值 12/255，留 2% 呼吸位）。处理后图底边即脚底，`height` 才等于视觉高度。
+- 原图备份在 `assets/_characters_backup/`（已 gitignore）。
+
+**2. 床上没人** —— 上一轮我把 `cloud` 页 props 清空、场景换成空床特写，结果是空床。
+- 新增 `stand: "bed"` 版式：睡姿立牌按"床面"定位（居中、上留 12%、右移 12%、宽 56%），不按脚底贴边。
+- `appendectomy` / `tonsillectomy` 的 `cloud` 页、`injection` 的 `drip` 页改为 `kid:sleep` + `stand: "bed"`。
+
+**3. 护士消失** —— 同样是我上一轮把 `needle` 页 props 清空导致的，不是素材缺失。
+- `needle` 页恢复 `nurse__wave + kid:stand`。
+
+封面基线与橱窗一致：三人组 `bottom: 129px`（舞台地面线 77%），height 176。

@@ -65,7 +65,10 @@
       "title": "手上停一只小蝴蝶",
       "text": "护士先抱抱{{child.name}}，再在手背上放一只小蝴蝶——那是{{fact.device.short}}。它亲上去的时候有一点点痒，像被蚊子轻轻亲了一下，数到三就贴好了。之后所有的针都从这只小蝴蝶走，不用再受第二次惊。冠冠怪瞪圆了眼睛：原来打针一下子就过去了。",
       "asset": "scene_butterfly_hand",
-      "props": [],
+      "props": [
+        "nurse__wave",
+        "kid:stand"
+      ],
       "requires": [
         "device"
       ],
@@ -86,10 +89,9 @@
       "text": "小蝴蝶后面接上一根细细的管子，药水一滴一滴走进去，像身体里下了一场又轻又凉的小雨。小雨一落下来，身体就有了帮手：烧慢慢退下去，力气一点一点回到{{child.name}}的腿上。冠冠怪在洞里待不住了，开始收拾自己的小行李。",
       "asset": "scene_drip_rain",
       "props": [
-        "kid:sleep",
-        "mom__hug"
+        "kid:sleep"
       ],
-      "stand": "high"
+      "stand": "bed"
     },
     {
       "id": "wake",

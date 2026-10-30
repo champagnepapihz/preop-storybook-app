@@ -97,6 +97,25 @@
 
 .page__props img:nth-child(2) { height: 92%; max-width: 46%; }
 
+/* 床面定位：睡姿立牌摆在床上，不按脚底贴边（cloud/drip 页用 stand="bed"） */
+.page__props--bed {
+  inset: 0;
+  height: auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.page__props--bed img {
+  height: auto;
+  width: 56%;
+  max-width: 56%;
+  margin-top: 12%;
+  margin-left: 12%;
+  object-position: center top;
+  transform: none;
+}
+
 /* 全幅页：双立牌并排站在文字卡上方，脚被卡片自然遮住 */
 .page--full .page__props { bottom: 26%; }
 
@@ -240,7 +259,7 @@
 .page__cover-cast {
   position: absolute;
   left: 20px; right: 20px;
-  bottom: 152px;
+  bottom: 129px;
   z-index: 2;
   display: flex;
   align-items: flex-end;

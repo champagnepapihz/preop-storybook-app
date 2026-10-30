@@ -316,9 +316,10 @@ function imgTag(asset, cls = '') {
   return `<img class="${cls}" src="${asset.src}" alt="${escapeHTML(asset.alt || '')}" loading="lazy" />`;
 }
 
-function propsHTML(props) {
+function propsHTML(props, stand) {
   if (!props?.length) return '';
-  return `<div class="page__props">${props.map((p) => imgTag(p)).join('')}</div>`;
+  const cls = stand ? ` page__props--${stand}` : '';
+  return `<div class="page__props${cls}">${props.map((p) => imgTag(p)).join('')}</div>`;
 }
 
 function pageHTML(page, book) {
@@ -364,7 +365,7 @@ function pageHTML(page, book) {
     const standCls = page.stand === 'high' ? ' page--stand-high' : '';
     return `<div class="page page--full${standCls}" data-density="soft">
       <div class="page__inner">
-        <div class="page__img">${imgTag(page.image)}${propsHTML(page.props)}</div>
+        <div class="page__img">${imgTag(page.image)}${propsHTML(page.props, page.stand)}</div>
         <div class="page__caption">
           <h3 class="page__title">${escapeHTML(page.title)}</h3>
           <p class="page__text">${escapeHTML(page.text)}</p>
@@ -391,7 +392,7 @@ function pageHTML(page, book) {
        </div>`
     : '';
 
-  const imageHTML = `<div class="page__img page__img--h">${imgTag(page.image)}${propsHTML(page.props)}</div>`;
+  const imageHTML = `<div class="page__img page__img--h">${imgTag(page.image)}${propsHTML(page.props, page.stand)}</div>`;
 
   if (page.layout === 'image_left') {
     return `<div class="page page--imgleft" data-density="soft">
