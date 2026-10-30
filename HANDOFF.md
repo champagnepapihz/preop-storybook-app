@@ -797,3 +797,19 @@ text/evidence/colophon/badge all match headings; flip bar label too. Panel conso
 - 打印窗口的默认文件名取书名（临时改 `document.title`，打印结束再恢复）。
 
 **验证**：`--print-to-pdf` 输出 10 页（9 正文 + 封底）；把 `#print-root` 临时显示出来逐页检查，封面 / 内页排版与屏幕一致。
+
+---
+
+## 35. 修（Kestrel）：导出的 PDF 是白底封面
+
+**现象**：点「打印 / PDF」存出来的封面只有文字和角色，没有舞台背景（白底）。
+
+**根因**：`#print-root` 为了不占位用了 `display: none`。**`display:none` 容器里的 `<img>` 不解码** —— 图片元素存在、`src` 正确、`naturalWidth` 是 0。翻到打印媒体时容器才变可见，而那一刻浏览器还来不及解码，于是场景图整片空白（角色和文字是内联的 png/svg 与文本，所以还在）。
+
+**改法**：
+
+- `#print-root` 改为**屏幕外常驻**（`position: fixed; left: -20000px; opacity: 0`），一直在渲染树里，图片随页面加载就解码。
+- `printBook()` 改 async：打印前 `await` 所有图的 `img.decode()`，按钮期间显示"正在准备…"。
+- 打印媒体下 `#print-root` 复位为 `static / opacity 1 / --ph: 560px`。
+
+**验证**：`#print-root` 里 23 张图 `naturalWidth` 全部 > 0（含 `scene_cover.jpg:1024`）；把副本临时显示出来，封面完整呈现幕布、聚光、地板与三个角色。

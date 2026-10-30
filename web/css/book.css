@@ -770,7 +770,16 @@
    顺序排列的静态副本，一页一张 A4（竖版），内容等比放大。
    ============================================================ */
 
-#print-root { display: none; }
+/* 屏幕外而不是 display:none：display:none 里的 <img> 不解码，
+   打印时就只有文字、没有场景图（白底封面）。放屏幕外它照常加载。 */
+#print-root {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: 430px;
+  pointer-events: none;
+  opacity: 0;
+}
 
 @media print {
   /* 页面尺寸精确等于书页（430×560 CSS px ≈ 114×148mm）：
@@ -782,7 +791,13 @@
 
   /* 屏幕上的一切都不要，只留打印副本 */
   body > *:not(#print-root) { display: none !important; }
-  #print-root { display: block !important; --ph: 560px; }
+  #print-root {
+    position: static !important;
+    left: auto !important;
+    width: auto !important;
+    opacity: 1 !important;
+    --ph: 560px;
+  }
 
   .print-sheet {
     width: 430px;

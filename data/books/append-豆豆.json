@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV4MT9R",
+  "book_id": "CASE-MVV4XBLC",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV4MT9R",
+    "case_id": "CASE-MVV4XBLC",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -418,7 +418,7 @@
     "page_count": 9,
     "fact_pages": 3,
     "draft_pages": 0,
-    "built_at": "2026-10-30T15:28:16.817Z"
+    "built_at": "2026-10-30T15:36:27.122Z"
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"

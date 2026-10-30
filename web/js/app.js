@@ -621,13 +621,23 @@ function buildPrintSheets(book) {
   root.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
 }
 
-function printBook() {
+async function printBook() {
   if (!state.book) {
     renderIdle('还没有书可以打印 —— 先生成一本。');
     return;
   }
+  const btn = $('#print');
+  const label = btn.textContent;
+  btn.textContent = '正在准备…';
+
   // 打印前重新烘一遍，保证与屏幕上的当前状态一致
   buildPrintSheets(state.book);
+
+  // 等所有图解码完再唤打印 —— 否则打出来是白底、只有文字
+  await Promise.all(
+    [...document.querySelectorAll('#print-root img')].map((img) => img.decode().catch(() => {}))
+  );
+  btn.textContent = label;
 
   // 打印 / 存 PDF 时，文件名取书里的名字（浏览器用 document.title 命名）
   const prev = document.title;
