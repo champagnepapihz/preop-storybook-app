@@ -230,7 +230,8 @@
       "devices": [
         "iv"
       ],
-      "gender": "m"
+      "gender": "m",
+      "demo": "complete"
     },
     {
       "slug": "tonsil-果果",
@@ -244,7 +245,8 @@
       "devices": [
         "iv"
       ],
-      "gender": "f"
+      "gender": "f",
+      "demo": "complete"
     },
     {
       "slug": "shot-苗苗",
@@ -258,7 +260,8 @@
       "devices": [
         "iv"
       ],
-      "gender": "f"
+      "gender": "f",
+      "demo": "complete"
     },
     {
       "slug": "draft-只说了阑尾炎",
@@ -270,7 +273,8 @@
       "liquid": null,
       "stay": null,
       "devices": [],
-      "gender": "m"
+      "gender": "m",
+      "demo": "partial"
     },
     {
       "slug": "hernia-小满",
@@ -284,7 +288,8 @@
       "devices": [
         "iv"
       ],
-      "gender": "m"
+      "gender": "m",
+      "demo": "no-story"
     }
   ]
 }

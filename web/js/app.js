@@ -13,6 +13,7 @@ const state = {
   flip: null,
   book: null,
   modules: null,
+  demoIdx: -1,
   pageHeight: 0,
 };
 
@@ -44,10 +45,8 @@ async function boot() {
   buildPicker();
 
   $('#gen').addEventListener('click', () => generate());
-  $('#sample').addEventListener('click', () => {
-    // 空白状态下第一次点：从第一份演示病例开始，而不是跳过它
-    applyPreset(state.book ? state.presetIdx + 1 : 0);
-  });
+  $('#sample').addEventListener('click', () => applyDemo(1));
+  $('#new').addEventListener('click', () => startNewCase());
   $('#prev').addEventListener('click', () => goPrev());
   $('#next').addEventListener('click', () => goNext());
   document.addEventListener('keydown', (e) => {
@@ -181,12 +180,37 @@ function resetForm() {
   $('#f-device').value = '';
 }
 
+const demoList = () => (state.presets || []).filter((p) => p.demo === 'complete');
+
+/** 「换个病例」：只在三份完整病例之间循环，草稿 / 清单形态用 ?case=N 单独看 */
+function applyDemo(step = 1) {
+  const list = demoList();
+  if (!list.length) return;
+  const n = list.length;
+  state.demoIdx = ((state.demoIdx + step) % n + n) % n;
+  applyPresetByObject(list[state.demoIdx]);
+  state.presetIdx = state.presets.indexOf(list[state.demoIdx]);
+}
+
+/** 「新建病例」：回到什么都没确认的状态，下一次「换个病例」从第一份开始 */
+function startNewCase() {
+  resetForm();
+  state.demoIdx = -1;
+  state.presetIdx = 0;
+  renderIdle();
+}
+
 /** 演示病例：这是唯一的"预填"来源，用于演示与回归 */
 function applyPreset(i) {
   if (!state.presets.length) return;
   state.presetIdx = ((i % state.presets.length) + state.presets.length) % state.presets.length;
   const p = state.presets[state.presetIdx];
+  const idx = demoList().indexOf(p);   // 从 ?case=N 进来时，把演示游标对齐到这一本
+  if (idx >= 0) state.demoIdx = idx;
+  applyPresetByObject(p);
+}
 
+function applyPresetByObject(p) {
   selectProcedure(p.procedure);
   $('#f-name').value = p.name || '';
   $('#f-age').value = p.age ?? '';

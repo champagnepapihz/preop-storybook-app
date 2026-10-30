@@ -310,6 +310,9 @@ textarea:focus {
 
 .panel__row .btn { flex: 1; }
 
+.panel__row--sub { margin-top: 7px; }
+.panel__row--sub .btn { padding: 8px 10px; font-size: 12px; }
+
 /* ---------- 事实清单 ---------- */
 
 .facts {
