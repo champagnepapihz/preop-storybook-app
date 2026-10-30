@@ -48,10 +48,14 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     return Number((r * pz).toFixed(3));
   };
 
+  // 基线下压：圆底角色按图底对齐会显得飘，往下压一点让身体咬住地面线
+  const OFFSET = PROP.offsets || {};
+  const dyOf = (id) => Number(OFFSET[String(id).split('__')[0]] || 0);
+
   const asset = (id) => {
     const a = manifest?.assets?.[id];
-    if (!a) return { id, src: null, alt: id, scale: 1 };
-    return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags, scale: scaleOf(id) };
+    if (!a) return { id, src: null, alt: id, scale: 1, dy: 0 };
+    return { id, src: a.src, alt: a.alt || id, kind: a.kind, tags: a.tags, scale: scaleOf(id), dy: dyOf(id) };
   };
 
   // 主角立牌由性别决定：kid:stand → kid_boy__stand / kid_girl__stand

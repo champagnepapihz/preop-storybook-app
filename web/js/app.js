@@ -414,7 +414,10 @@ function el(html) {
 
 function imgTag(asset, cls = '') {
   if (!asset?.src) return '';
-  const s = asset.scale && asset.scale !== 1 ? ` style="--s:${asset.scale}"` : '';
+  const vars = [];
+  if (asset.scale && asset.scale !== 1) vars.push(`--s:${asset.scale}`);
+  if (asset.dy) vars.push(`--dy:${asset.dy}`);
+  const s = vars.length ? ` style="${vars.join(';')}"` : '';
   return `<img class="${cls}" src="${asset.src}" alt="${escapeHTML(asset.alt || '')}" loading="lazy"${s} />`;
 }
 

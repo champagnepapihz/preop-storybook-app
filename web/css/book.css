@@ -103,6 +103,7 @@
   max-width: calc(var(--ph, 560px) * .48);
   object-fit: contain;
   object-position: center bottom;
+  margin-bottom: calc(var(--ph, 560px) * var(--dy, 0) * -1);
   filter: drop-shadow(0 10px 10px rgba(60, 34, 18, .3));
 }
 
@@ -272,7 +273,7 @@
 
 .page__cover-cast {
   position: absolute;
-  left: 20px; right: 20px;
+  left: 12px; right: 12px;
   bottom: 129px;
   z-index: 2;
   display: flex;
@@ -285,7 +286,8 @@
 .page__cover-cast img {
   height: calc(var(--ph, 560px) * .36 * var(--s, 1));
   width: auto;
-  max-width: none;
+  max-width: 34%;
+  margin: 0 -6px calc(var(--ph, 560px) * var(--dy, 0) * -1);
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));

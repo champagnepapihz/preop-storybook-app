@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV2OY1L",
+  "book_id": "CASE-MVV2UIZZ",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV2OY1L",
+    "case_id": "CASE-MVV2UIZZ",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -93,7 +93,8 @@
         "src": "assets/scenes/scene_cover.jpg",
         "alt": "封面舞台",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -101,21 +102,24 @@
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
           "kind": "character",
-          "scale": 0.95
+          "scale": 0.95,
+          "dy": 0
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
           "kind": "character",
-          "scale": 1
+          "scale": 1,
+          "dy": 0
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
           "kind": "character",
-          "scale": 0.6
+          "scale": 0.6,
+          "dy": 0.02
         }
       ],
       "fact": null,
@@ -134,7 +138,8 @@
         "src": "assets/scenes/scene_fever_night.jpg",
         "alt": "发热之夜",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -142,7 +147,8 @@
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
           "kind": "character",
-          "scale": 0.6
+          "scale": 0.6,
+          "dy": 0.02
         }
       ],
       "fact": null,
@@ -161,7 +167,8 @@
         "src": "assets/scenes/scene_ward_talk.jpg",
         "alt": "病房谈话",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -169,21 +176,24 @@
           "src": "assets/characters/doctor__wave.webp",
           "alt": "白大褂医生·挥手",
           "kind": "character",
-          "scale": 1.5
+          "scale": 1.5,
+          "dy": 0
         },
         {
           "id": "kid_boy__stand",
           "src": "assets/characters/kid_boy__stand.png",
           "alt": "小患者·男孩·站",
           "kind": "character",
-          "scale": 1
+          "scale": 1,
+          "dy": 0
         },
         {
           "id": "nurse__wave",
           "src": "assets/characters/nurse__wave.webp",
           "alt": "护士·挥手",
           "kind": "character",
-          "scale": 1.42
+          "scale": 1.42,
+          "dy": 0
         }
       ],
       "fact": null,
@@ -202,7 +212,8 @@
         "src": "assets/scenes/scene_hospital_front.jpg",
         "alt": "医院门前",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -210,14 +221,16 @@
           "src": "assets/characters/nurse__present.webp",
           "alt": "护士·present",
           "kind": "character",
-          "scale": 1.42
+          "scale": 1.42,
+          "dy": 0
         },
         {
           "id": "villain_corona__smug",
           "src": "assets/characters/villain_corona__smug.webp",
           "alt": "冠冠怪·smug",
           "kind": "character",
-          "scale": 0.6
+          "scale": 0.6,
+          "dy": 0.02
         }
       ],
       "fact": null,
@@ -236,7 +249,8 @@
         "src": "assets/scenes/scene_drip_rain.jpg",
         "alt": "输液雨夜",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -244,7 +258,8 @@
           "src": "assets/characters/kid_boy__sleep.png",
           "alt": "小患者·男孩·睡着",
           "kind": "character",
-          "scale": 0.5
+          "scale": 0.5,
+          "dy": 0
         }
       ],
       "fact": null,
@@ -263,7 +278,8 @@
         "src": "assets/scenes/scene_wake_up.jpg",
         "alt": "醒来",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -271,14 +287,16 @@
           "src": "assets/characters/kid_boy__cheer.png",
           "alt": "小患者·男孩·欢呼",
           "kind": "character",
-          "scale": 1
+          "scale": 1,
+          "dy": 0
         },
         {
           "id": "mom__hug",
           "src": "assets/characters/mom__hug.png",
           "alt": "妈妈·抱抱",
           "kind": "character",
-          "scale": 0.95
+          "scale": 0.95,
+          "dy": 0
         }
       ],
       "fact": {
@@ -303,7 +321,8 @@
         "src": "assets/scenes/scene_hospital_front.jpg",
         "alt": "医院门前",
         "kind": "scene",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [
         {
@@ -311,14 +330,16 @@
           "src": "assets/characters/doctor__cheer.webp",
           "alt": "白大褂医生·欢呼",
           "kind": "character",
-          "scale": 1.5
+          "scale": 1.5,
+          "dy": 0
         },
         {
           "id": "villain_corona__happy",
           "src": "assets/characters/villain_corona__happy.webp",
           "alt": "冠冠怪·happy",
           "kind": "character",
-          "scale": 0.6
+          "scale": 0.6,
+          "dy": 0.02
         }
       ],
       "fact": null,
@@ -337,7 +358,8 @@
         "src": "assets/badges/badge_star.webp",
         "alt": "小勇士徽章",
         "kind": "badge",
-        "scale": 1
+        "scale": 1,
+        "dy": 0
       },
       "props": [],
       "fact": null,
@@ -367,7 +389,7 @@
     "page_count": 9,
     "fact_pages": 1,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:33:57.081Z"
+    "built_at": "2026-10-30T14:38:17.521Z"
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

@@ -430,6 +430,14 @@
     },
     "special": {
       "_comment": "sleep / bed 姿势走床面版式（stand=\"bed\"），不参与地面基线缩放"
+    },
+    "offsets": {
+      "_comment": "基线下压：圆底、脚很短的角色（病毒球、石头怪、小恐龙）在图里脚不明显，按图片底边对齐会显得飘。数值是页高比例，渲染成 margin-bottom 负值。",
+      "villain_pebble": 0.022,
+      "villain_corona": 0.02,
+      "villain_dino": 0.016,
+      "doctor": 0,
+      "nurse": 0
     }
   }
 }
