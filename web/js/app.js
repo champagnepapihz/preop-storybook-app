@@ -84,7 +84,7 @@ function renderIdle(hint) {
   host.innerHTML = `<div class="page page--checklist" data-density="hard">
     <div class="page__inner">
       <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有选病例</span>
-      <h2 class="cl-title" style="font-size:19px;line-height:1.55">从左边选一个病种开始</h2>
+      <h2 class="cl-title" style="font-size:19px;line-height:1.55">先选一个病种</h2>
       <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">
         科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和留置针。<br />填了什么就出现什么，没填的不会出现在书里。
       </p>
@@ -661,8 +661,9 @@ function renderBook(book) {
   };
   state.pageHeight = 0;
   syncPageHeight();
-  requestAnimationFrame(syncPageHeight);   // PageFlip 定尺寸可能晚一帧
-  setTimeout(syncPageHeight, 120);
+  // PageFlip 定尺寸是异步的（窄屏要更久），多补几次；值没变就不会触发重排
+  requestAnimationFrame(syncPageHeight);
+  [120, 400, 900].forEach((t) => setTimeout(syncPageHeight, t));
 
   state.flip = flip;
   flip.on('flip', (e) => {

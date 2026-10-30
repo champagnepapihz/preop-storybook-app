@@ -7,6 +7,7 @@
   position: relative;
   width: 430px;
   height: 560px;
+  max-width: 100%;   /* 窄屏：永远不超过容器宽度（PageFlip 的 stretch 有时算偏） */
   padding: 18px;
   overflow: hidden;
   font-family: var(--font-round); /* 绘本内字体统一：全圆体，旁白/数字/标题一致 */
@@ -301,8 +302,8 @@
 .page__cover-cast img {
   height: calc(var(--ph, 560px) * .36 * var(--s, 1));
   width: auto;
-  max-width: 34%;
-  margin: 0 -6px calc(var(--ph, 560px) * var(--dy, 0) * -1);
+  max-width: 31%;
+  margin: 0 -5px calc(var(--ph, 560px) * var(--dy, 0) * -1);
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));
