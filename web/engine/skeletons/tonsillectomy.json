@@ -91,7 +91,29 @@
         "title": "如果要做手术，会先坐一朵云",
         "text": "如果医生决定把它收走，会有人送来一朵会睡觉的云。坐上它，数到三就睡着了，中间什么都不知道。"
       },
-      "stand": "bed"
+      "stand": "bed",
+      "variants": {
+        "fact": "anesthesia",
+        "cases": {
+          "regional": {
+            "title": "第二件事：让喉咙先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让喉咙那一小块先睡着，动的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ]
+          },
+          "local": {
+            "title": "第二件事：让喉咙先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让喉咙那一小块先睡着，动的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ]
+          },
+          "none": {
+            "skip": true
+          }
+        }
+      }
     },
     {
       "id": "needle",

@@ -16,7 +16,7 @@ function isSurgical(skeletonKey) {
 export function requiredFields(skeletonKey) {
   return isSurgical(skeletonKey)
     ? ['anesthesia', 'fasting', 'stay', 'device']
-    : ['anesthesia', 'stay'];
+    : ['stay'];
 }
 
 /**
@@ -74,6 +74,7 @@ export function composeCase(input) {
       label: '麻醉方式',
       short: anes.label,
       value_text: anes.label,
+      ids: [anes.id],   // 页面变体按 id 匹配（全麻/镇静 vs 局麻/椎管内，画面对不上）
       evidence: null,
       source: 'catalog',
     };

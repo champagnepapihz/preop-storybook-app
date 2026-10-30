@@ -200,7 +200,20 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         return null;
       }
 
-      const src = draft ? { ...p, ...p.conditional } : p;
+      // 同一页在不同取值下内容不同：全麻是"睡着的云"，局麻是"醒着的，只让一小块睡着"，
+      // 这类差异必须按事实值切换，不能只做字符串替换 —— 否则"局麻也会睡着"就是错的。
+      let variant = null;
+      if (!draft && p.variants) {
+        const fv = caseObj.facts[p.variants.fact];
+        const id = fv?.ids?.[0];
+        variant = (p.variants.cases || {})[id] || null;
+        if (variant?.skip) {
+          skipped.push({ id: p.id, reason: `该取值下不适用（${p.variants.fact}=${id}）` });
+          return null;
+        }
+      }
+
+      const src = { ...(draft ? { ...p, ...p.conditional } : p), ...(variant || {}) };
       const fact = !draft && p.fact
         ? (() => {
             const f = caseObj.facts[p.fact.key];

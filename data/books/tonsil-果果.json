@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV2UJ0A",
+  "book_id": "CASE-MVV39VXW",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV2UJ0A",
+    "case_id": "CASE-MVV39VXW",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -418,7 +418,7 @@
     "page_count": 9,
     "fact_pages": 3,
     "draft_pages": 0,
-    "built_at": "2026-10-30T14:38:17.530Z"
+    "built_at": "2026-10-30T14:50:14.133Z"
   },
   "manifest_version": "0.3.0",
   "slug": "tonsil-果果"
