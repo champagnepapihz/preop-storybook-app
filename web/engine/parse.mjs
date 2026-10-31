@@ -104,6 +104,7 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
       label: '手上装置',
       short: device.label,
       value_text: device.label,
+      ids: [device.key],            // 与词表路径对齐：页面按 id 判断该不该插
       evidence: (raw.match(device.match) || [device.label])[0],
     };
   } else {

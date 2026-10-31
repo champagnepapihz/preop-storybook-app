@@ -18,7 +18,7 @@
       "stand": "micro",
       "fact": {
         "key": "device",
-        "label": "留置针",
+        "label": "手上会留",
         "display": "value_text"
       }
     },
@@ -36,7 +36,7 @@
       ],
       "fact": {
         "key": "fasting",
-        "label": "术前禁食",
+        "label": "术前空腹",
         "display": "value_text"
       }
     }

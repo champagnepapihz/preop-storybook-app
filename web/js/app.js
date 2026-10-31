@@ -371,16 +371,16 @@ function renderStatus(caseObj, book, report) {
   st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
     <span class="status__text">${book.mode === 'checklist'
       ? `${book.pages.length + 1} 面 · 这类术式还没有专属故事，只出事实与注意事项`
-      : book.stats.draft_pages
-        ? `${book.pages.length + 1} 面 · 其中 ${book.stats.draft_pages} 页是“如果……”`
-        : `${book.pages.length + 1} 面 · 事实齐全，无“如果……”页`}</span>`;
+      : (caseObj.missing || []).length
+        ? `${book.pages.length + 1} 面 · ${caseObj.missing.length} 项未确认，对应的页没有生成`
+        : `${book.pages.length + 1} 面 · 事实齐全`}</span>`;
 
   // 缺口：只列"未确认"，不猜
   const audit = $('#audit');
   const notes = auditCase(caseObj);
   const gaps = (caseObj.missing || []).map((k) => missingName(k));
   const items = [];
-  if (gaps.length) items.push(`<li class="audit__item audit__item--warn">未确认：${gaps.map(escapeHTML).join('、')} —— 书里只会出现“如果……”，不出现数字</li>`);
+  if (gaps.length) items.push(`<li class="audit__item audit__item--warn">未确认：${gaps.map(escapeHTML).join('、')} —— 这几项对应的页不会出现在书里</li>`);
   for (const n of notes) items.push(`<li class="audit__item audit__item--${n.level}">${escapeHTML(n.text)}</li>`);
   audit.innerHTML = items.join('');
   audit.style.display = items.length ? '' : 'none';
@@ -497,10 +497,15 @@ function pageHTML(page, book) {
     </div>`;
   }
 
+  // 便签 = 标签 + 值。值和标签重复（如「术前禁食 / 禁食6小时」）时只留值，别读两遍。
+  const factLabel = page.fact?.label || '';
+  const factValue = page.fact?.value || '';
   const factHTML = page.fact
     ? `<div class="page__fact">
-         <span class="page__fact-label">${escapeHTML(page.fact.label)}</span>
-         <span class="page__fact-value">${escapeHTML(page.fact.value)}</span>
+         ${factLabel && factLabel !== factValue && !factValue.startsWith(factLabel)
+    ? `<span class="page__fact-label">${escapeHTML(factLabel)}</span>`
+    : ''}
+         <span class="page__fact-value">${escapeHTML(factValue)}</span>
        </div>`
     : '';
 
@@ -517,7 +522,7 @@ function pageHTML(page, book) {
     </div>`;
   }
 
-  return `<div class="page" data-density="soft">
+  return `<div class="page page--imgright" data-density="soft">
     <div class="page__inner">
       ${imageHTML}
       <h3 class="page__title">${escapeHTML(page.title)}</h3>
@@ -603,9 +608,56 @@ function schedulePageHeightSync() {
  * 直接打印会重影/裁切。这里用同一套 pageHTML 重新生成一份顺序 DOM，
  * 只给打印用，平时隐藏。
  */
+const dataUrlCache = new Map();
+
+function arrayBufferToBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  const CHUNK = 0x8000; // 分块，避免 String.fromCharCode 参数过多爆栈
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(bin);
+}
+
+/** 把打印副本里的 <img> 全部换成内联 data URL。
+ *
+ * 为什么必须内联：打印是同步拍的快照，浏览器不会等图片下载/解码。
+ * 只要有一张图没落地（封面那张 1:1 大图最容易输给 1.2s 超时），
+ * 打出来就是一块白底 —— 而用户根本看不出是哪一步出的问题。
+ * 内联之后打印时零网络、零竞态，有就是有，没有就是真的没有。
+ */
+async function inlinePrintImages(root) {
+  const imgs = [...root.querySelectorAll('img')];
+  await Promise.all(imgs.map(async (img) => {
+    const src = img.getAttribute('src');
+    if (!src || src.startsWith('data:')) return;
+    let task = dataUrlCache.get(src);
+    if (!task) {
+      task = fetch(src)
+        .then(async (r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const buf = await r.arrayBuffer();
+          const type = r.headers.get('content-type')?.split(';')[0] || 'image/png';
+          return `data:${type};base64,${arrayBufferToBase64(buf)}`;
+        })
+        .catch(() => ''); // 拿不到就保留原 src，不因为一张图卡死整本书
+      dataUrlCache.set(src, task);
+    }
+    const dataUrl = await task;
+    if (dataUrl) img.src = dataUrl;
+  }));
+  // 内联后仍等一轮解码，确保打印瞬间每一张都已经有像素
+  await Promise.all(imgs.map((i) => (i.complete && i.naturalWidth
+    ? null
+    : new Promise((res) => { i.onload = i.onerror = res; }))));
+}
+
+let printSheetsTask = null;
+
 function buildPrintSheets(book) {
   const root = document.getElementById('print-root');
-  if (!root) return;
+  if (!root) return Promise.resolve();
   root.innerHTML = '';
   const sheets = [
     ...book.pages.map((p) => pageHTML(p, book)),
@@ -617,9 +669,11 @@ function buildPrintSheets(book) {
     sheet.innerHTML = html;
     root.appendChild(sheet);
   }
+  root.dataset.bookId = book.book_id || '';
   // 懒加载的图不进视口就不会解码，打印出来是空白 —— 打印副本一律 eager
   root.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
-  root.dataset.bookId = book.book_id || '';
+  printSheetsTask = inlinePrintImages(root);
+  return printSheetsTask;
 }
 
 async function printBook() {
@@ -631,11 +685,12 @@ async function printBook() {
   const label = btn.textContent;
   btn.textContent = '正在准备…';
 
-  // 关键：不要无条件重建。renderBook 时已经烘好一份，图片早就解码完了；
-  // 再重建一次等于让图片重新加载，而 window.print() 不会等 —— 打出来就是白底封面。
+  // 关键：不要无条件重建。renderBook 时已经烘好一份，图片也内联好了。
   const root = document.getElementById('print-root');
   const stale = !root.querySelector('.print-sheet') || root.dataset.bookId !== (state.book.book_id || '');
   if (stale) buildPrintSheets(state.book);
+  // 等烘图/内联完成（正常是秒回，因为生成书时就开始烘了）
+  if (printSheetsTask) await Promise.race([printSheetsTask, new Promise((r) => setTimeout(r, 6000))]);
 
   // 兜底：只等还没加载完的图。不要对已 complete 的图调 decode() ——
   // 在部分 Chromium 上它返回的 promise 会一直 pending，打印就永远等下去。

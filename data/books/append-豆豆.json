@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVV5STV8",
+  "book_id": "CASE-MVWDEXZ7",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVV5STV8",
+    "case_id": "CASE-MVWDEXZ7",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -58,6 +58,9 @@
         "label": "手上装置",
         "short": "留置针",
         "value_text": "留置针",
+        "ids": [
+          "iv"
+        ],
         "evidence": "留置针"
       },
       "stay": {
@@ -249,7 +252,7 @@
       ],
       "fact": {
         "key": "fasting",
-        "label": "术前禁食",
+        "label": "术前空腹",
         "value": "禁食6小时、禁水2小时",
         "evidence": [
           "禁食时间 6 小时",
@@ -290,6 +293,49 @@
         "label": "麻醉方式",
         "value": "全身麻醉",
         "evidence": "全身麻醉",
+        "source": "notice"
+      },
+      "badge": null
+    },
+    {
+      "id": "needle",
+      "layout": "image_right",
+      "stand": "micro",
+      "draft": false,
+      "condition": null,
+      "title": "第三件事：手上停一只小蝴蝶",
+      "text": "留置针就是那只小蝴蝶。它进驻的时候有一点点痒，像被蚊子轻轻亲了一下。之后所有的针都从它这里走，不用再受第二次惊。",
+      "image": {
+        "id": "scene_butterfly_hand",
+        "src": "assets/scenes/scene_butterfly_hand.jpg",
+        "alt": "手背小蝴蝶",
+        "kind": "scene",
+        "scale": 1,
+        "dy": 0
+      },
+      "props": [
+        {
+          "id": "nurse__wave",
+          "src": "assets/characters/nurse__wave.webp",
+          "alt": "护士·挥手",
+          "kind": "character",
+          "scale": 1.42,
+          "dy": 0
+        },
+        {
+          "id": "kid_boy__stand",
+          "src": "assets/characters/kid_boy__stand.png",
+          "alt": "小患者·男孩·站",
+          "kind": "character",
+          "scale": 1,
+          "dy": 0
+        }
+      ],
+      "fact": {
+        "key": "device",
+        "label": "留置针",
+        "value": "留置针",
+        "evidence": "留置针",
         "source": "notice"
       },
       "badge": null
@@ -338,7 +384,7 @@
       "draft": false,
       "condition": null,
       "title": "醒来，肚子轻了",
-      "text": "豆豆睁开眼睛，肚子上盖着一块软软的纱布，小尾巴怪已经搬走了。医生说：住院4天，就能回家吃第一口粥。",
+      "text": "豆豆睁开眼睛，太阳已经爬进窗口。肚子上的纱布还在，那种坠坠的疼却不见了 —— 小尾巴怪真的搬走了。医生说：住院4天，就能回家喝第一口粥。",
       "image": {
         "id": "scene_wake_up",
         "src": "assets/scenes/scene_wake_up.jpg",
@@ -396,29 +442,14 @@
         "name": "小尾巴怪搬走了",
         "engrave": "豆豆"
       }
-    },
-    {
-      "id": "notes",
-      "layout": "notes",
-      "title": "写给豆豆的一句话",
-      "text": "这一页空着。等这本书读完，你可以在这里写一句话，或者贴一张照片。",
-      "image": null,
-      "props": [],
-      "fact": null,
-      "badge": null
     }
   ],
-  "skipped": [
-    {
-      "id": "needle",
-      "reason": "已确认不适用: device"
-    }
-  ],
+  "skipped": [],
   "stats": {
     "page_count": 9,
-    "fact_pages": 3,
+    "fact_pages": 4,
     "draft_pages": 0,
-    "built_at": "2026-10-30T16:00:57.142Z"
+    "built_at": "2026-10-31T12:21:52.389Z"
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"

@@ -17,7 +17,15 @@
               "skeleton": "tonsillectomy",
               "cautions": {
                 "术前准备": [
-                  "手背留置针建立静脉通路",
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "更换病号服",
                   "取下饰物"
                 ],
@@ -33,7 +41,15 @@
               "skeleton": "tonsillectomy",
               "cautions": {
                 "术前准备": [
-                  "手背留置针建立静脉通路",
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "更换病号服"
                 ],
                 "术后注意": [
@@ -59,7 +75,15 @@
               "skeleton": "appendectomy",
               "cautions": {
                 "术前准备": [
-                  "留置针穿刺",
+                  {
+                    "text": "留置针穿刺",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "脐部及下腹备皮",
                   "术前排空小便"
                 ],
@@ -75,7 +99,15 @@
               "skeleton": "appendectomy",
               "cautions": {
                 "术前准备": [
-                  "留置针穿刺",
+                  {
+                    "text": "留置针穿刺",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "腹部备皮",
                   "术前排空小便"
                 ],
@@ -97,7 +129,15 @@
               "skeleton": null,
               "cautions": {
                 "术前准备": [
-                  "留置针穿刺",
+                  {
+                    "text": "留置针穿刺",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "脐部备皮",
                   "术前排空小便"
                 ],

@@ -62,12 +62,8 @@
       ],
       "fact": {
         "key": "fasting",
-        "label": "术前禁食",
+        "label": "术前空腹",
         "display": "value_text"
-      },
-      "conditional": {
-        "title": "如果医生说，得先让肚子空一会儿",
-        "text": "有时候要请医生把{{villain.name}}收走，前一天晚上就得让肚子空着。具体从几点开始不能吃、不能喝，医生会告诉你。"
       }
     },
     {
@@ -86,10 +82,6 @@
         "key": "anesthesia",
         "label": "麻醉方式",
         "display": "value_text"
-      },
-      "conditional": {
-        "title": "如果要做手术，会先坐一朵云",
-        "text": "如果医生决定把它收走，会有人送来一朵会睡觉的云。坐上它，数到三就睡着了，中间什么都不知道。"
       },
       "stand": "bed",
       "variants": {
@@ -138,10 +130,6 @@
         "label": "留置针",
         "display": "value_text"
       },
-      "conditional": {
-        "title": "如果手上要留一只小蝴蝶",
-        "text": "有时候护士会在手上放一只小蝴蝶 —— 那是留置针。有一点点痒，之后打针都从它这儿走，不用再扎一次。"
-      },
       "stand": "micro"
     },
     {
@@ -172,10 +160,6 @@
         "key": "stay",
         "label": "住院时长",
         "display": "value_text"
-      },
-      "conditional": {
-        "title": "醒过来的时候",
-        "text": "不管走哪一条路，醒来的时候喉咙都会舒服一点。要住几天，医生会告诉你。"
       }
     },
     {

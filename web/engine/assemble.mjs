@@ -3,9 +3,11 @@
  *
  * 确定性：同一个 case 永远装配出同一本书，零随机、零 LLM 调用。
  * 降级策略（按顺序）：
- *   1. 页面缺事实，但骨架给了 conditional → 用"如果……"的条件句版本（draft）
- *   2. 页面缺事实且没条件句 → 整页跳过（宁缺页，不编事实）
- *   3. 术式没有骨架 → 出清单书：不出故事，只出事实 + 注意事项（不编故事）
+ *   0. 页面要求某个字段的"具体取值"（has_id），而该字段还没确认 → 整页跳过。
+ *      取值未知不等于"可能是它"，而且这类页的配图就是那个事实本身（手背上的留置针），
+ *      配上图就等于把没确认的事画成了既成画面 —— 宁缺页，不编事实。
+ *   1. 页面缺事实 → 整页不出（宁缺页，不编事实；不写「如果」，不生成条件页）
+ *   2. 术式没有骨架 → 出清单书：不出故事，只出事实 + 注意事项（不编故事）
  *
  * 骨架由调用方注入（浏览器 fetch JSON / Node 读文件），引擎本身不绑运行时。
  */
@@ -176,34 +178,49 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       // requires 支持两种写法：
       //   "device"                      —— 只要有这个字段
       //   { fact: 'device', has_id:'iv'} —— 字段存在且取值是 iv
-      // 后者还区分两种情况：没有这个字段 = 未确认（可走"如果……"），
-      //                    有字段但不是 iv = 已确认不留（这一页根本不该出现）。
+      //
+      // 三种情况，语义完全不同，不能混着处理：
+      //   1) 已确认但不等于该取值 → 这一页根本不适用，不出页（也不进页码）
+      //   2) 未确认 + 普通要求     → 骨架给了"如果……"就用条件句版本（draft）
+      //   3) 未确认 + 取值要求     → 整页不出。取值未知不等于"可能是它"；
+      //      而且这类页的插画画的就是那个事实本身（手背上的留置针），
+      //      一旦配上，"如果"两个字压不住画面 —— 宁缺页，不编事实。
       const conflict = [];
-      const lack = (p.requires || []).filter((r) => {
-        if (typeof r === 'string') return !caseObj.facts[r];
-        const f = caseObj.facts[r.fact];
-        if (!f) return true;                       // 未确认
-        if (r.has_id && !(f.ids || []).includes(r.has_id)) { conflict.push(r); return false; }
-        return false;
-      });
+      const lack = [];
+      const unknownValue = [];
+      for (const r of p.requires || []) {
+        const isValueReq = typeof r !== 'string' && Boolean(r.has_id);
+        const f = caseObj.facts[typeof r === 'string' ? r : r.fact];
+        if (!f) (isValueReq ? unknownValue : lack).push(r);
+        else if (isValueReq && !(f.ids || []).includes(r.has_id)) conflict.push(r);
+      }
 
       if (conflict.length) {
         skipped.push({ id: p.id, reason: `已确认不适用: ${conflict.map((c) => c.fact).join(',')}` });
         return null;
       }
 
-      const draft = lack.length > 0;
+      if (unknownValue.length) {
+        skipped.push({
+          id: p.id,
+          reason: `取值未确认: ${unknownValue.map((c) => c.fact).join(',')}（不写成“如果”，整页不出）`,
+        });
+        return null;
+      }
 
-      // 缺事实时优先用条件句版本，其次跳过
-      if (draft && !p.conditional) {
-        skipped.push({ id: p.id, reason: `缺少事实: ${lack.map((r) => (typeof r === 'string' ? r : r.fact)).join(',')}` });
+      // 未确认 = 这一页不存在。不再生成「如果……」条件页。
+      if (lack.length) {
+        skipped.push({
+          id: p.id,
+          reason: `缺少事实: ${lack.map((r) => (typeof r === 'string' ? r : r.fact)).join(',')}（不出条件页）`,
+        });
         return null;
       }
 
       // 同一页在不同取值下内容不同：全麻是"睡着的云"，局麻是"醒着的，只让一小块睡着"，
       // 这类差异必须按事实值切换，不能只做字符串替换 —— 否则"局麻也会睡着"就是错的。
       let variant = null;
-      if (!draft && p.variants) {
+      if (p.variants) {
         const fv = caseObj.facts[p.variants.fact];
         const id = fv?.ids?.[0];
         variant = (p.variants.cases || {})[id] || null;
@@ -213,8 +230,8 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         }
       }
 
-      const src = { ...(draft ? { ...p, ...p.conditional } : p), ...(variant || {}) };
-      const fact = !draft && p.fact
+      const src = { ...p, ...(variant || {}) };
+      const fact = p.fact
         ? (() => {
             const f = caseObj.facts[p.fact.key];
             return {
@@ -231,8 +248,8 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         id: p.id,
         layout: src.layout || p.layout,
         stand: src.stand || p.stand || null,
-        draft,
-        condition: draft ? lack : null,
+        draft: false,
+        condition: null,
         title: resolve(src.title, ctx, `${p.id}.title`),
         text: resolve(src.text, ctx, `${p.id}.text`),
         image: asset(src.asset || p.asset),

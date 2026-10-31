@@ -73,6 +73,16 @@
   min-height: 150px;
 }
 
+/* 图在上、文在下的页：同理，图片吃掉剩余高度。
+   否则短文案页会在文字和便签之间留下一道 100px 的死白，看起来像没渲染完。 */
+.page--imgright .page__img--h {
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 232px;
+}
+
+.page--imgright .page__fact { margin-top: 14px; }
+
 .page--imgleft .page__fact { margin-top: 12px; }
 
 /* 布偶站位：角色立牌压在场景上
@@ -788,6 +798,15 @@
   @page { size: 430px 560px; margin: 0; }
 
   html, body { background: #fff !important; }
+
+  /* 强制绘制背景：Chrome/Edge 打印对话框里「背景图形」默认是**不勾**的，
+     不勾就意味着布纹纸底、封面压暗遮罩、胶囊底色全部消失 —— 整本书变白纸，
+     白字标题直接看不见（这是最坑的一处：报错现场完全不像"背景没打"）。
+     print-color-adjust: exact 让浏览器无条件绘制背景，不依赖那个复选框。 */
+  html, body, .page, .page * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
   /* 屏幕上的一切都不要，只留打印副本 */
   body > *:not(#print-root) { display: none !important; }

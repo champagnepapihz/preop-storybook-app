@@ -1,6 +1,7 @@
 /** Split each rawpic 2x2 contact sheet into 4 overlapping quadrants.
  * Usage: node tooling/split4.mjs
- * Output: rawpic/parts/<base>_a.png ... _d.png  (a=top-left, b=top-right, c=bottom-left, d=bottom-right)
+ * Input:  ../archive/rawpic/   （原始设定表已移出仓库，见 preop/archive）
+ * Output: ../archive/rawpic/parts/<base>_a.png ... _d.png
  */
 import { createServer } from 'node:http';
 import { writeFileSync, readFileSync, mkdirSync, readdirSync } from 'node:fs';
@@ -12,8 +13,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 5199;
 const only = process.argv[2];
 const onlyQ = process.argv[3]; // a/b/c/d
-const files = readdirSync(join(ROOT, 'rawpic')).filter((f) => /\.(jpe?g|png)$/i.test(f) && (!only || f.startsWith(only)));
-const jobs = files.map((f) => ({ file: f, b64: readFileSync(join(ROOT, 'rawpic', f)).toString('base64'), mime: /\.png$/i.test(f) ? 'image/png' : 'image/jpeg' }));
+const RAW = join(ROOT, '..', 'archive', 'rawpic');
+const files = readdirSync(RAW).filter((f) => /\.(jpe?g|png)$/i.test(f) && (!only || f.startsWith(only)));
+const jobs = files.map((f) => ({ file: f, b64: readFileSync(join(RAW, f)).toString('base64'), mime: /\.png$/i.test(f) ? 'image/png' : 'image/jpeg' }));
 
 const PAGE = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>
 <pre id="log">running</pre><script>

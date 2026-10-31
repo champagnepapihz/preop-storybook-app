@@ -86,7 +86,7 @@ export function composeCase(input) {
   if (isSurgical(skeletonKey) && fasting != null) {
     facts.fasting = {
       key: 'fasting',
-      label: '术前禁食',
+      label: '术前空腹',
       short: `${fasting}小时`,
       short_liquid: liquid != null ? `${liquid}小时` : '足够时间',
       value_text: liquid != null ? `禁食${fasting}小时、禁水${liquid}小时` : `禁食${fasting}小时`,
@@ -104,7 +104,7 @@ export function composeCase(input) {
   if (noDevice) {
     facts.device = {
       key: 'device',
-      label: '留置针',
+      label: '手上装置',   // 值本身就是「留置针 / 不留」，标签再写一遍会变成「留置针 留置针」
       short: '不留',
       value_text: '不留留置针',
       ids: [],                       // 空 ids → 小蝴蝶那页不会插入
@@ -114,7 +114,7 @@ export function composeCase(input) {
   } else if (chosen.length) {
     facts.device = {
       key: 'device',
-      label: '留置针',
+      label: '手上装置',   // 同上：标签「留置针」+ 值「留置针」是重复
       short: chosen[0].label,
       value_text: chosen.map((d) => d.label).join('、'),
       ids: chosen.map((d) => d.id),   // 通用模块页按 id 判断该不该插（iv → 小蝴蝶页）
@@ -130,7 +130,7 @@ export function composeCase(input) {
       key: 'stay',
       label: '住院时长',
       short: `住院${stay}天`,
-      value_text: `住院${stay}天`,
+      value_text: `${stay}天`, // 便签上已经有「住院时长」这个标签，值里不必再重复
       evidence: null,
       source: 'catalog',
     };
@@ -141,11 +141,31 @@ export function composeCase(input) {
   const missing = required.filter((k) => !facts[k]);
 
   // —— 注意事项（来自词表，逐条可审）——
-  const cautions = Object.entries(procedure.cautions || {}).map(([label, items]) => ({
-    label,
-    items: [...items],
-    source: 'catalog',
-  }));
+  //
+  // 词表里的条目可以写成两种形式：
+  //   "更换病号服"                                     —— 这条术式人人要做，照录
+  //   { text: "留置针穿刺", requires: [{fact:'device',has_id:'iv'}] }
+  //                                                    —— 这条取决于某个事实，事实没说就不写
+  //
+  // 为什么未确认时是"整条不出"而不是写"如果"：这是一份 to-do 清单，
+  // 清单上出现「留置针穿刺」就等于告诉家长"你的孩子要扎留置针"，没有任何前缀能救回来。
+  // 和故事页同一条规则：宁缺一条，不编事实。
+  const itemText = (it) => (typeof it === 'string' ? it : it?.text);
+  const itemApplies = (it) => {
+    if (typeof it === 'string') return true;
+    for (const r of it?.requires || []) {
+      const f = facts[typeof r === 'string' ? r : r.fact];
+      if (!f) return false;                                       // 未确认 → 不出
+      if (typeof r !== 'string' && r.has_id && !(f.ids || []).includes(r.has_id)) return false; // 已确认不适用
+    }
+    return true;
+  };
+  const cautions = [];
+  for (const [label, items] of Object.entries(procedure.cautions || {})) {
+    const kept = (items || []).filter(itemApplies).map(itemText).filter(Boolean);
+    if (!kept.length) continue;                                   // 整组都被摘掉就不要再留一个空标题
+    cautions.push({ label, items: kept, source: 'catalog' });
+  }
 
   return {
     case_id: `CASE-${Date.now().toString(36).toUpperCase()}`,

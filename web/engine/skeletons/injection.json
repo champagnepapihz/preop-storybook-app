@@ -81,10 +81,6 @@
         "label": "留置针",
         "display": "value_text"
       },
-      "conditional": {
-        "title": "如果手上要留一只小蝴蝶",
-        "text": "护士可能会在手上放一只小蝴蝶 —— 那是留置针。有一点点痒，之后输液都从它这儿走。"
-      },
       "stand": "micro"
     },
     {
@@ -95,6 +91,12 @@
       "asset": "scene_drip_rain",
       "props": [
         "kid:sleep"
+      ],
+      "requires": [
+        {
+          "fact": "device",
+          "has_id": "iv"
+        }
       ],
       "stand": "bed"
     },
@@ -115,10 +117,6 @@
         "key": "stay",
         "label": "住院时长",
         "display": "value_text"
-      },
-      "conditional": {
-        "title": "打完针以后",
-        "text": "打完针，{{child.name}}会舒服一些。要观察多久，医生会告诉你。"
       }
     },
     {
