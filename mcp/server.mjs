@@ -92,7 +92,7 @@ const TOOLS = [
     description:
       '用受控参数直接产出一本术前绘本的 PDF 文件（一次调用拿到一本书）。' +
       '入参与 build_preop_book 完全一致；返回 PDF 的绝对路径、页数、以及 resource_link。' +
-      'missing / questions 仍会出现在返回文本里（这是产品特性：没确认的事实只会变成"如果……"和该问的问题）。' +
+      'missing / questions 仍会出现在返回文本里（这是产品特性：没确认的事实不会出现在书里，只会变成该问的问题）。' +
       '依赖本机 Chrome / Edge；找不到浏览器时降级返回一份可直接打印的自包含 HTML 路径。',
     inputSchema: {
       type: 'object',
@@ -362,7 +362,13 @@ function buildFallbackHtml(book) {
   const css = [readFileSync(join(WEB_DIR, 'css/fabric.css'), 'utf8'), readFileSync(join(WEB_DIR, 'css/book.css'), 'utf8')].join('\n');
   // 内联后没有外部字体文件可解析，剥掉 @font-face，让 --font-round 落到系统圆体
   const safeCss = css.replace(/@font-face\s*\{[^}]*\}/g, '');
-  const renderSrc = readFileSync(join(WEB_DIR, 'print-render.mjs'), 'utf8').replace(/^export\s+/gm, '');
+  // 降级路径要把「书页渲染 + 打印副本」两段源码按顺序内联。两者都是零依赖源码，
+  // 去掉 export / import 之后就是普通脚本，拼起来即可（顺序不能反：后者用前者的函数）。
+  const stripModule = (rel) =>
+    readFileSync(join(WEB_DIR, rel), 'utf8')
+      .replace(/^export\s+/gm, '')
+      .replace(/^import\s+.*?;\s*$/gm, '');
+  const renderSrc = `${stripModule('js/book-render.mjs')}\n${stripModule('print-render.mjs')}`;
   const inlined = inlineBookAssets(book, makeAssetInliner());
   const json = JSON.stringify(inlined).replace(/</g, '\\u003c');
 

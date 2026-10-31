@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVWDEXZN",
+  "book_id": "CASE-1VKT7BR",
   "mode": "story",
   "version": "draft",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVWDEXZN",
+    "case_id": "CASE-1VKT7BR",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -419,8 +419,7 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 2,
-    "draft_pages": 0,
-    "built_at": "2026-10-31T12:21:52.404Z"
+    "draft_pages": 0
   },
   "manifest_version": "0.3.0",
   "slug": "shot-苗苗"

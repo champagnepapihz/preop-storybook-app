@@ -7,6 +7,8 @@
  *   3. 抽不到的字段标记 missing，装配层据此降级或跳过整页，绝不编造。
  */
 
+import { caseId } from './compose.mjs';
+
 const PROCEDURE_RULES = [
   { key: 'tonsillectomy', label: '扁桃体切除术', match: /扁桃体|腺样体|tonsil/i },
   { key: 'appendectomy', label: '腹腔镜阑尾切除术', match: /阑尾|append/i },
@@ -135,7 +137,7 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
   };
 
   return {
-    case_id: `CASE-${Date.now().toString(36).toUpperCase()}`,
+    case_id: caseId(JSON.stringify([procedure, child, facts])),
     procedure,
     child,
     facts,

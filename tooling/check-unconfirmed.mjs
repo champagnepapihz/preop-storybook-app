@@ -100,10 +100,10 @@ for (const procedureId of PROCEDURES) {
     }
   }
 
-  // 3. 留下来的条件页，事实卡必须是空的（不能一边说"如果"一边贴事实）
+  // 3. 条件页机制已取消：未确认就该整页不存在，任何 draft / condition 残留都算缺陷
   for (const p of book.pages) {
-    if (p.draft && p.fact) fail(procedureId, `页 ${p.id} 是条件页却带了事实卡`);
-    if (p.draft && !p.condition?.length) fail(procedureId, `页 ${p.id} 标了 draft 却没有 condition`);
+    if (p.draft) fail(procedureId, `页 ${p.id} 仍是条件页（draft），应当整页不出`);
+    if (p.condition) fail(procedureId, `页 ${p.id} 仍挂着 condition=${p.condition}`);
   }
 
   // 4. 页数与面数自洽
@@ -113,8 +113,8 @@ for (const procedureId of PROCEDURES) {
   if (faces % 2 !== 0) fail(procedureId, `总面数 ${faces} 是奇数，封底会被并进跨页`);
   const ids = book.pages.map((p) => p.id);
   if (new Set(ids).size !== ids.length) fail(procedureId, `页 id 重复：${ids.join(',')}`);
-  if (book.stats.draft_pages !== book.pages.filter((p) => p.draft).length) {
-    fail(procedureId, 'stats.draft_pages 与实际条件页数不一致');
+  if (book.stats.draft_pages !== 0) {
+    fail(procedureId, `stats.draft_pages=${book.stats.draft_pages}，应当为 0`);
   }
 
   // 5. 事实保真校验不能因为改动而放宽

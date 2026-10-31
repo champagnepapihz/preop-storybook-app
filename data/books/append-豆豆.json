@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-MVWDEXZ7",
+  "book_id": "CASE-0BDTASU",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -24,7 +24,7 @@
     }
   },
   "case": {
-    "case_id": "CASE-MVWDEXZ7",
+    "case_id": "CASE-0BDTASU",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -448,8 +448,7 @@
   "stats": {
     "page_count": 9,
     "fact_pages": 4,
-    "draft_pages": 0,
-    "built_at": "2026-10-31T12:21:52.389Z"
+    "draft_pages": 0
   },
   "manifest_version": "0.3.0",
   "slug": "append-豆豆"

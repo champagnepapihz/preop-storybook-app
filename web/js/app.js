@@ -1,6 +1,12 @@
 ﻿import { assembleBook } from '../engine/assemble.mjs';
 import { composeCase, findProcedure } from '../engine/compose.mjs';
 import { validateBook, auditCase } from '../engine/validate.mjs';
+import { esc, pageHTML as renderPageHTML, colophonHTML } from './book-render.mjs';
+
+// 版面逻辑只有一份（book-render.mjs）。这里只决定"阅读器里的图懒加载"。
+// 打印副本必须 eager：懒加载的图不进视口就不解码，PDF 里是空白。
+const pageHTML = (page, book) => renderPageHTML(page, book, { lazy: true });
+const escapeHTML = esc;
 
 const $ = (s) => document.querySelector(s);
 
@@ -413,181 +419,9 @@ function el(html) {
   return t.content.firstElementChild;
 }
 
-function imgTag(asset, cls = '') {
-  if (!asset?.src) return '';
-  const vars = [];
-  if (asset.scale && asset.scale !== 1) vars.push(`--s:${asset.scale}`);
-  if (asset.dy) vars.push(`--dy:${asset.dy}`);
-  const s = vars.length ? ` style="${vars.join(';')}"` : '';
-  return `<img class="${cls}" src="${asset.src}" alt="${escapeHTML(asset.alt || '')}" loading="lazy"${s} />`;
-}
 
-function propsHTML(props, stand) {
-  if (!props?.length) return '';
-  const cls = `${stand ? ` page__props--${stand}` : ''} page__props--n${props.length}`;
-  return `<div class="page__props${cls}">${props.map((p) => imgTag(p)).join('')}</div>`;
-}
 
-function pageHTML(page, book) {
-  if (page.layout === 'cover') {
-    // 清单书没有骨架，封面文案由页面自带；故事书沿用骨架的 cover
-    const cv = page.cover || {};
-    const kicker = cv.kicker || book.skeleton.label;
-    const title = cv.title || book.cover.title;
-    const sub = cv.subtitle || book.cover.subtitle;
-    const ribbon = cv.ribbon || '术前 · 故事';
-    return `<div class="page page--cover cover--${book.skeleton.key}" data-density="hard">
-      <div class="page__inner">
-        <div class="page__cover-art">${imgTag(page.image)}</div>
-        <div class="page__cover-veil"></div>
-        <div class="page__cover-cast">${(page.props || []).map((p) => imgTag(p)).join('')}</div>
-        <div class="page__cover-ribbon">${escapeHTML(ribbon)}</div>
-        <div class="page__cover-plate">
-          <h2 class="page__cover-title">${escapeHTML(title)}</h2>
-          <span class="page__cover-kicker">${escapeHTML(kicker)}</span>
-          <p class="page__cover-sub">${escapeHTML(sub)}</p>
-        </div>
-      </div>
-    </div>`;
-  }
 
-  if (page.layout === 'checklist') {
-    return `<div class="page page--checklist" data-density="hard">
-      <div class="page__inner">
-        <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有故事</span>
-        <h2 class="cl-title" style="font-size:20px;line-height:1.5">${escapeHTML(page.title)}</h2>
-        <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">${escapeHTML(page.text)}</p>
-        <div class="page__checklist-cast">${(page.props || []).map((p) => imgTag(p)).join('')}</div>
-        <p class="page__text cl-questions__lead" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">翻到下一页：要确认的事实、要问医生的问题。</p>
-      </div>
-    </div>`;
-  }
-
-  if (page.layout === 'notes') {
-    return `<div class="page page--notes" data-density="soft">
-      <div class="page__inner">
-        <h3 class="page__title" style="text-align:center">${escapeHTML(page.title)}</h3>
-        <p class="page__text" style="text-align:center;font-size:11px;color:#8a7460;margin-top:6px">${escapeHTML(page.text)}</p>
-        <div class="notes-lines" aria-hidden="true"></div>
-      </div>
-    </div>`;
-  }
-
-  if (page.layout === 'full') {
-    const standCls = page.stand === 'high' ? ' page--stand-high' : '';
-    return `<div class="page page--full${standCls}" data-density="soft">
-      <div class="page__inner">
-        <div class="page__img">${imgTag(page.image)}${propsHTML(page.props, page.stand)}</div>
-        <div class="page__caption">
-          <h3 class="page__title">${escapeHTML(page.title)}</h3>
-          <p class="page__text">${escapeHTML(page.text)}</p>
-        </div>
-      </div>
-    </div>`;
-  }
-
-  if (page.layout === 'badge') {
-    return `<div class="page page--badge" data-density="soft">
-      <div class="page__inner">
-        <div class="badge-art">${imgTag(page.image)}</div>
-        <div class="badge-name">${escapeHTML(page.badge?.name || '小勇士')}</div>
-        <div class="badge-engrave">${escapeHTML(page.badge?.engrave || '')}</div>
-        <p class="page__text badge-text">${escapeHTML(page.text)}</p>
-      </div>
-    </div>`;
-  }
-
-  // 便签 = 标签 + 值。值和标签重复（如「术前禁食 / 禁食6小时」）时只留值，别读两遍。
-  const factLabel = page.fact?.label || '';
-  const factValue = page.fact?.value || '';
-  const factHTML = page.fact
-    ? `<div class="page__fact">
-         ${factLabel && factLabel !== factValue && !factValue.startsWith(factLabel)
-    ? `<span class="page__fact-label">${escapeHTML(factLabel)}</span>`
-    : ''}
-         <span class="page__fact-value">${escapeHTML(factValue)}</span>
-       </div>`
-    : '';
-
-  const imageHTML = `<div class="page__img page__img--h">${imgTag(page.image)}${propsHTML(page.props, page.stand)}</div>`;
-
-  if (page.layout === 'image_left') {
-    return `<div class="page page--imgleft" data-density="soft">
-      <div class="page__inner">
-        <h3 class="page__title">${escapeHTML(page.title)}</h3>
-        <p class="page__text">${escapeHTML(page.text)}</p>
-        ${factHTML}
-        ${imageHTML}
-      </div>
-    </div>`;
-  }
-
-  return `<div class="page page--imgright" data-density="soft">
-    <div class="page__inner">
-      ${imageHTML}
-      <h3 class="page__title">${escapeHTML(page.title)}</h3>
-      <p class="page__text">${escapeHTML(page.text)}</p>
-      ${factHTML}
-    </div>
-  </div>`;
-}
-
-function colophonHTML(book) {
-  const facts = Object.values(book.case.facts || {});
-  const emptyLine = '<li class="cl-empty">数值尚未确认 —— 逐项确认后，这里会按项列出，并标明来源。</li>';
-  const rows = facts.length === 0 ? emptyLine : facts
-    .map((f) => {
-      const ev = Array.isArray(f.evidence) ? f.evidence.join(' / ') : f.evidence;
-      const evLine = ev ? `原文：${escapeHTML(ev)}` : '来源：录入时逐项确认';
-      return `<li class="cl-item">
-        <span class="cl-label">${escapeHTML(f.label)}</span>
-        <span class="cl-dots" aria-hidden="true"></span>
-        <span class="cl-value">${escapeHTML(f.value_text || f.short)}</span>
-        <span class="cl-ev">${evLine}</span>
-      </li>`;
-    })
-    .join('');
-
-  // 注意事项：原文照录，一个字不改。这一类内容不接受任何"合理改写"。
-  const cauGroups = Array.isArray(book.cautions) ? book.cautions : [];
-  const cautions = cauGroups
-    .map((g) => `<div class="cl-cau-row">
-        <span class="cl-cau-tag">${escapeHTML(g.label)}</span>
-        <ul class="cl-cau-items">${g.items.map((t) => `<li>${escapeHTML(t)}</li>`).join('')}</ul>
-      </div>`)
-    .join('');
-
-  // 草稿书：把"还没确认的事"变成带去问医生的问题（只问事实，不制造预期）
-  const qs = Array.isArray(book.questions) ? book.questions : [];
-  const questions = qs.length
-    ? `<div class="cl-questions">
-        <h4 class="cl-cau-head">带去问医生的几件事</h4>
-        <ul class="cl-q-list">${qs.map((q) => `<li>${escapeHTML(q.question)}</li>`).join('')}</ul>
-      </div>`
-    : '';
-
-  // 版面压力按「行数」算：事实行（无事实时算占位那一行）+ 提问行 + 注意事项条目
-  const total = Math.max(facts.length, 1)
-    + qs.length
-    + cauGroups.reduce((n, g) => n + g.items.length, 0);
-  const sparse = facts.length <= 2 && cauGroups.length <= 1;
-  const dense = total > 6;
-  const xdense = total > 10;   // 条目特别多时再压一档，避免页脚被挤出去
-
-  return `<div class="page page--colophon${sparse ? ' is-sparse' : ''}${dense ? ' is-dense' : ''}${xdense ? ' is-xdense' : ''}" data-density="soft">
-    <div class="page__inner">
-      <div class="cl-head">
-        <span class="cl-kicker">术前准备 · 陪护</span>
-        <h3 class="cl-title">家长陪护说明</h3>
-        <span class="cl-flourish" aria-hidden="true"></span>
-      </div>
-      <ul class="cl-list${facts.length === 0 ? ' cl-list--empty' : ''}">${rows}</ul>
-      ${questions}
-      ${cautions ? `<div class="cl-cautions"><h4 class="cl-cau-head">家长还要做的 · 原文照录</h4>${cautions}</div>` : ''}
-      <p class="cl-note">陪护请对照上表落实术前准备；住院期间孩子如有不适，或您有任何疑问，请及时告知医护人员。</p>
-    </div>
-  </div>`;
-}
 
 let phResizeTimer = 0;
 function schedulePageHeightSync() {
@@ -821,9 +655,6 @@ function renderBook(book) {
   }
 }
 
-function escapeHTML(s) {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
 
 boot().catch((e) => {
   console.error(e);

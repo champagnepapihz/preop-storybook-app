@@ -8,6 +8,21 @@
  */
 
 /** 术式是否属于"需要禁食"的手术类（输液、观察类不需要） */
+/**
+ * 病例编号：由内容决定，不用时间戳。
+ * 同一次输入永远得到同一个编号 —— 构建可复现，git diff 里不会每次多出三行垃圾。
+ * 32 位 FNV-1a（纯 JS，浏览器与 Node 通用），这个量级下碰撞可以忽略。
+ */
+export function caseId(seed) {
+  let h = 0x811c9dc5;
+  const s = String(seed);
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return `CASE-${h.toString(36).toUpperCase().padStart(7, '0')}`;
+}
+
 function isSurgical(skeletonKey) {
   return skeletonKey !== 'injection';
 }
@@ -168,7 +183,7 @@ export function composeCase(input) {
   }
 
   return {
-    case_id: `CASE-${Date.now().toString(36).toUpperCase()}`,
+    case_id: caseId(JSON.stringify([procedure.id, input.childName || '', input.age ?? null, facts])),
     source: 'catalog',
     version: missing.length ? 'draft' : 'confirmed',
     procedure: { key: skeletonKey || 'generic', id: procedure.id, label: procedure.label },

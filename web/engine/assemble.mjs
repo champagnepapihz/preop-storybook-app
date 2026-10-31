@@ -162,7 +162,6 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         page_count: clPages.length,
         fact_pages: clPages.filter((p) => p.fact).length,
         draft_pages: 0,
-        built_at: new Date().toISOString(),
       },
       manifest_version: manifest?.version || 'unknown',
     };
@@ -181,7 +180,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       //
       // 三种情况，语义完全不同，不能混着处理：
       //   1) 已确认但不等于该取值 → 这一页根本不适用，不出页（也不进页码）
-      //   2) 未确认 + 普通要求     → 骨架给了"如果……"就用条件句版本（draft）
+      //   2) 未确认 + 普通要求     → 这一页不出（不写「如果」，不生成条件页）
       //   3) 未确认 + 取值要求     → 整页不出。取值未知不等于"可能是它"；
       //      而且这类页的插画画的就是那个事实本身（手背上的留置针），
       //      一旦配上，"如果"两个字压不住画面 —— 宁缺页，不编事实。
@@ -212,7 +211,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       if (lack.length) {
         skipped.push({
           id: p.id,
-          reason: `缺少事实: ${lack.map((r) => (typeof r === 'string' ? r : r.fact)).join(',')}（不出条件页）`,
+          reason: `缺少事实: ${lack.map((r) => (typeof r === 'string' ? r : r.fact)).join(',')}（不写「如果」，整页不出）`,
         });
         return null;
       }
@@ -301,7 +300,6 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       page_count: pages.length,
       fact_pages: pages.filter((p) => p.fact).length,
       draft_pages: pages.filter((p) => p.draft).length,
-      built_at: new Date().toISOString(),
     },
     manifest_version: manifest?.version || 'unknown',
   };
