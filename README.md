@@ -16,11 +16,11 @@
 web/engine/compose.mjs   选择 → 病例：只承载明确输入，没选＝缺失
       │                 缺口反推 questions：缺什么问什么，只问事实
       ▼
-web/engine/skeletons/*   故事骨架 DSL（按术式选；缺事实的页走 conditional 条件句）
+web/engine/skeletons/*   故事骨架 DSL（按术式选；缺事实的页整页不出）
       ▼
-web/engine/assemble.mjs  确定性装配：无骨架 → 清单书；缺事实 → "如果……"页
+web/engine/assemble.mjs  确定性装配：无骨架 → 清单书；缺事实 → 该页不存在
       ▼
-web/engine/validate.mjs  事实校验：孤儿数字 / 证据溯源 / 条件句混入事实卡
+web/engine/validate.mjs  事实校验：孤儿数字 / 证据溯源 / 未确认字段混入正文
       ▼
 web/js/app.js            布艺剧场 + 翻页阅读器（StPageFlip）
 ```
