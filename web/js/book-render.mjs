@@ -55,18 +55,6 @@ export function pageHTML(page, book, opts = {}) {
     </div>`;
   }
 
-  if (page.layout === 'checklist') {
-    return `<div class="page page--checklist" data-density="hard">
-      <div class="page__inner">
-        <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有故事</span>
-        <h2 class="cl-title" style="font-size:20px;line-height:1.5">${esc(page.title)}</h2>
-        <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">${esc(page.text)}</p>
-        <div class="page__checklist-cast">${(page.props || []).map((p) => img(p)).join('')}</div>
-        <p class="page__text cl-questions__lead" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">翻到下一页：要确认的事实、要问医生的问题。</p>
-      </div>
-    </div>`;
-  }
-
   if (page.layout === 'notes') {
     return `<div class="page page--notes" data-density="soft">
       <div class="page__inner">

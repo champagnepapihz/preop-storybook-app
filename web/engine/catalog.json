@@ -57,6 +57,33 @@
                 ]
               }
             }
+          ],
+          "villain": {
+            "id": "villain_volcano",
+            "name": "火山怪",
+            "home": "喉咙的山洞里",
+            "line": "它住在{{child.name}}喉咙的山洞里，脾气热烘烘的，一闹起来喉咙就疼。"
+          }
+        },
+        {
+          "id": "ome",
+          "label": "分泌性中耳炎",
+          "procedures": [
+            {
+              "id": "tympanostomy",
+              "label": "鼓膜置管术",
+              "cautions": {
+                "术前准备": [
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "耳朵不要进水",
+                  "避免用力擤鼻涕",
+                  "按医生要求复查听力"
+                ]
+              }
+            }
           ]
         }
       ]
@@ -117,7 +144,13 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_pebble",
+            "name": "小尾巴怪",
+            "home": "肚子右下角的小口袋里",
+            "line": "它住在{{child.name}}肚子右下角的小口袋里，鼓鼓的、胀胀的，一走快就拽着肚子往下沉。"
+          }
         },
         {
           "id": "hernia",
@@ -126,11 +159,11 @@
             {
               "id": "hernia",
               "label": "腹腔镜腹股沟疝修补术",
-              "skeleton": null,
+              "skeleton": "hernia",
               "cautions": {
                 "术前准备": [
                   {
-                    "text": "留置针穿刺",
+                    "text": "手背留置针建立静脉通路",
                     "requires": [
                       {
                         "fact": "device",
@@ -138,12 +171,48 @@
                       }
                     ]
                   },
-                  "脐部备皮",
-                  "术前排空小便"
+                  "更换病号服",
+                  "取下饰物"
                 ],
                 "术后注意": [
-                  "避免剧烈哭闹与奔跑",
-                  "观察伤口敷料有无渗液"
+                  "保持伤口敷料清洁干燥",
+                  "一个月内避免剧烈跑跳"
+                ]
+              },
+              "kind": "surgical"
+            }
+          ],
+          "villain": {
+            "id": "villain_pebble",
+            "name": "小石头怪",
+            "home": "肚皮上一个小缝里",
+            "line": "{{child.name}}的肚皮上有一个小缝，小石头怪就从那儿挤了出来，鼓起一个小小的包。躺下来的时候，它又悄悄溜回去了。"
+          }
+        },
+        {
+          "id": "umbilical",
+          "label": "脐疝",
+          "procedures": [
+            {
+              "id": "umbilical-hernia",
+              "label": "脐疝修补术",
+              "cautions": {
+                "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "保持脐部敷料清洁干燥",
+                  "避免剧烈哭闹"
                 ]
               }
             }
@@ -171,7 +240,13 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_corona",
+            "name": "冠冠怪",
+            "home": "鼻子和喉咙中间的小山洞里",
+            "line": "它住在{{child.name}}鼻子和喉咙中间的那个小山洞里，一身紫紫的绒毛，头上顶着一顶小小的皇冠。大人把它写在本子上叫「上呼吸道感染」，我们叫它冠冠怪。它不是大坏蛋，只是不请自来、来了就不肯走——它一赖着，{{child.name}}就发烧、流鼻涕，两条腿软得像棉花。"
+          }
         },
         {
           "id": "fever",
@@ -186,6 +261,86 @@
                   "多喝温水",
                   "按时测量体温",
                   "如精神差请及时告知医护人员"
+                ]
+              },
+              "kind": "medical"
+            }
+          ]
+        },
+        {
+          "id": "pneumonia",
+          "label": "肺炎",
+          "villain": {
+            "id": "villain_corona",
+            "name": "小冠冠",
+            "home": "肺里",
+            "line": "一群小冠冠搬进了{{child.name}}的肺里，在那里开派对，把肺弄得又热又闷。"
+          },
+          "procedures": [
+            {
+              "id": "pneumonia",
+              "label": "肺炎住院治疗",
+              "skeleton": "pneumonia",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "多喝温水",
+                  "按时测量体温",
+                  "配合拍背排痰"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "seizure",
+          "label": "高热惊厥",
+          "procedures": [
+            {
+              "id": "febrile-seizure",
+              "label": "高热惊厥观察",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "按医嘱使用退热药",
+                  "记录抽搐持续时间和表现",
+                  "抽搐时让孩子侧卧"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "asthma",
+          "label": "哮喘",
+          "procedures": [
+            {
+              "id": "asthma",
+              "label": "哮喘急性发作",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "按医嘱做雾化",
+                  "远离烟雾和毛绒玩具",
+                  "记录喘息发作的时间"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "gastro",
+          "label": "急性胃肠炎",
+          "procedures": [
+            {
+              "id": "gastroenteritis",
+              "label": "急性胃肠炎补液",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "少量多次口服补液",
+                  "观察尿量",
+                  "便后洗手"
                 ]
               }
             }
@@ -213,6 +368,99 @@
                 "术后注意": [
                   "观察手指末梢颜色与温度",
                   "保持石膏干燥"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "polydactyly",
+          "label": "多指",
+          "procedures": [
+            {
+              "id": "polydactyly",
+              "label": "多指切除术",
+              "cautions": {
+                "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "保持伤口敷料清洁干燥",
+                  "观察手指末梢颜色与温度"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "torticollis",
+          "label": "斜颈",
+          "procedures": [
+            {
+              "id": "torticollis",
+              "label": "胸锁乳突肌松解术",
+              "cautions": {
+                "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
+                  "更换病号服"
+                ],
+                "术后注意": [
+                  "按医生指导做颈部活动",
+                  "按时复查"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ophth",
+      "label": "眼科",
+      "groups": [
+        {
+          "id": "strabismus",
+          "label": "斜视",
+          "procedures": [
+            {
+              "id": "strabismus",
+              "label": "斜视矫正术",
+              "cautions": {
+                "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "不要揉眼睛",
+                  "按医嘱滴眼药水",
+                  "按时复查视力"
                 ]
               }
             }
@@ -323,5 +571,11 @@
       "gender": "m",
       "demo": "no-story"
     }
-  ]
+  ],
+  "default_villain": {
+    "id": "villain_dino",
+    "name": "阿呜",
+    "home": "身体里一个安静的地方",
+    "line": "{{child.name}}身体里住着一只紫色的小怪兽，它叫阿呜。它不坏，只是有时候会闹——它一闹，{{child.name}}就不舒服。"
+  }
 }

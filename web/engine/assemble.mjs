@@ -28,10 +28,16 @@ function resolve(str, ctx, where = '') {
 }
 
 /** 按术式选骨架；没有骨架返回 null（走清单书，而不是报错） */
+/**
+ * 按术式选骨架。
+ *   有专属骨架 → 用它；
+ *   没有 → 回落到 generic-story（「默认小怪兽」），任何术式都能讲一个不编造的故事；
+ *   连通用骨架都没有 → null，走清单书（老数据仍然安全）。
+ */
 export function pickSkeleton(caseObj, skeletons) {
   const key = caseObj.procedure?.key;
-  if (!key || key === 'generic') return null;
-  return skeletons[key] || null;
+  const own = key && key !== 'generic' ? skeletons?.[key] : null;
+  return own || skeletons?.['generic-story'] || null;
 }
 
 /**
@@ -69,7 +75,8 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
   const sk = pickSkeleton(caseObj, skeletons);
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
 
-  const baseCtx = { child: caseObj.child, fact: caseObj.facts };
+  // procedure 也进上下文：通用骨架要用 {{procedure.label}} 说出这次是什么术式
+  const baseCtx = { child: caseObj.child, fact: caseObj.facts, procedure: caseObj.procedure || {} };
 
   /**
    * 通用模块页：只看「某一项事实有没有」，与术式无关。
@@ -109,65 +116,23 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     return out;
   };
 
-  // —— 没有骨架：清单书。不出故事，一个字也不编。 ——
+  // 没有骨架 = 数据缺了通用骨架。走到这里说明 skeletons 里没有 generic-story，
+  // 宁可报错，也不要悄悄出一本"没有故事的书"。
   if (!sk) {
-    const clPages = [
-      {
-        id: 'checklist-cover',
-        layout: 'cover',
-        title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
-        text: '',
-        image: asset('scene_cover'),
-        props: ['kid:stand', 'villain_dino__peek'].map(resolveProp).map(asset),
-        cover: {
-          kicker: caseObj.procedure?.label || '待确认术式',
-          title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
-          subtitle: '还没有专属故事 —— 先列出要确认的事实和要问的问题。',
-          ribbon: '术前 · 清单',
-        },
-        fact: null,
-        badge: null,
-      },
-      ...buildModules(new Set(['checklist-cover'])),
-    ];
-    if ((clPages.length + 1) % 2 !== 0) {
-      clPages.push({
-        id: 'notes',
-        layout: 'notes',
-        title: `写给${caseObj.child?.name || '孩子'}的一句话`,
-        text: '这一页空着。等这本书读完，你可以在这里写一句话，或者贴一张照片。',
-        image: null,
-        props: [],
-        fact: null,
-        badge: null,
-      });
-    }
-    return {
-      book_id: caseObj.case_id,
-      mode: 'checklist',
-      version: 'checklist',
-      skeleton: { key: 'generic', label: caseObj.procedure?.label || '待确认术式' },
-      cover: {
-        title: `《${caseObj.child?.name || '小勇士'}的术前说明》`,
-        subtitle: '这类手术还没有专属故事。下面这几页，全是需要确认的事实。',
-      },
-      cast: { villain: null, hero: null },
-      case: caseObj,
-      cautions: caseObj.cautions || [],
-      missing: caseObj.missing || [],
-      questions: caseObj.questions || [],
-      pages: clPages,
-      skipped: [],
-      stats: {
-        page_count: clPages.length,
-        fact_pages: clPages.filter((p) => p.fact).length,
-        draft_pages: 0,
-      },
-      manifest_version: manifest?.version || 'unknown',
-    };
+    const err = new Error(`没有可用骨架：${caseObj.procedure?.id || 'unknown'}（缺少 generic-story）`);
+    err.code = 'NO_SKELETON';
+    throw err;
   }
 
-  const villain = { ...sk.villain, line: resolve(sk.villain.line, baseCtx, 'villain.line') };
+  // 反派由病种决定（同一疾病不同术式共用一只），病种没写专属就落到 default_villain
+  const villainDef = caseObj.disease?.villain;
+  if (!villainDef) {
+    const err = new Error('词表里没有反派定义，也没有 default_villain');
+    err.code = 'NO_VILLAIN';
+    throw err;
+  }
+
+  const villain = { ...villainDef, line: resolve(villainDef.line, baseCtx, 'villain.line') };
   const hero = { ...sk.hero, line: resolve(sk.hero.line, baseCtx, 'hero.line') };
   const ctx = { ...baseCtx, villain, hero };
   const skipped = [];
@@ -261,8 +226,20 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     })
     .filter(Boolean);
 
-  // 骨架没写到、但事实已经确认的通用页，补在故事之后（不重复）
-  pages.push(...buildModules(new Set(pages.map((p) => p.id))));
+  // 骨架没写到、但事实已经确认的通用页（禁食 / 留置针），补在故事里、徽章之前。
+  // 直接 push 会排到徽章后面，翻到最后突然又冒出「肚子空一会儿」。
+  // 插入位置按叙事顺序：准备页（禁食 / 留置针）要排在「治疗」之前、不能落到结尾。
+  //   battle / drip 是治疗，wake 是收尾，badge 是最后一页
+  const mods = buildModules(new Set(pages.map((p) => p.id)));
+  if (mods.length) {
+    // 禁食 / 留置针都属于「术前准备」，要排在麻醉、治疗之前；
+    // 取页序里最早出现的那个锚点，而不是按数组顺序取第一个匹配
+    const ANCHORS = ['cloud', 'drip', 'battle', 'wake', 'badge'];
+    const idxs = ANCHORS.map((id) => pages.findIndex((p) => p.id === id)).filter((i) => i >= 0);
+    const at = idxs.length ? Math.min(...idxs) : -1;
+    if (at >= 0) pages.splice(at, 0, ...mods);
+    else pages.push(...mods);
+  }
 
   // —— 面数奇偶：封底必须单独占一面（左侧单页）。
   // PageFlip 的跨页是 [1,2][3,4]…，总面数为奇数时封底会被拼进跨页。

@@ -6,7 +6,7 @@
 > 故事是虚构的，事实是真实的 —— 书里的每个数字都来自逐项确认，每句注意事项都原文照录。
 
 **在线预览**：<https://champagnepapihz.github.io/preop-storybook-app/>
-（`?case=1` 事实齐全 · `?case=2` 清单书 · `?case=3` 四项全未确认，能看到缺页不出）
+（`?case=1` 事实齐全 · `?case=2` 另一术式 · `?case=3` 四项全未确认，能看到缺页不出）
 
 > `dist/` 是构建产物，不放在 master 上，走 `gh-pages` 分支发布；改完代码执行
 > `npm run build` 后把 `dist/` 推到 `gh-pages` 即可更新预览。
@@ -23,12 +23,17 @@ web/engine/compose.mjs   选择 → 病例：只承载明确输入，没选＝�
       │                 缺口反推 questions：缺什么问什么，只问事实
       ▼
 web/engine/skeletons/*   故事骨架 DSL（按术式选；缺事实的页整页不出）
+                         没有专属骨架 → 通用小怪兽（generic-story）
       ▼
-web/engine/assemble.mjs  确定性装配：无骨架 → 清单书；缺事实 → 该页不存在
+web/engine/assemble.mjs  确定性装配：术式 → 骨架；反派 → 病种；缺事实 → 该页不存在
       ▼
 web/engine/validate.mjs  事实校验：孤儿数字 / 证据溯源 / 未确认字段混入正文
       ▼
 web/js/app.js            布艺剧场 + 翻页阅读器（StPageFlip）
+
+**内容分层**：科室 → 病种（决定反派：同一疾病换一种做法，敌人还是同一个）→ 术式（决定故事骨架）。
+词表现在是 5 个科室 / 15 个病种 / 17 个术式；没写专属骨架的术式会自动落到通用小怪兽 `generic-story`，
+不会出现「这类术式还没有专属故事」的空白书。
 ```
 
 **三条入口，一份内容源**

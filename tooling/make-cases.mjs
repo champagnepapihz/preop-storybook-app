@@ -6,6 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseNotice } from '../web/engine/parse.mjs';
+import { attachDisease } from '../web/engine/compose.mjs';
 import { assembleBook } from '../web/engine/assemble.mjs';
 import { validateBook, formatReport } from '../web/engine/validate.mjs';
 
@@ -15,6 +16,8 @@ const outDir = join(ROOT, 'data/books');
 mkdirSync(outDir, { recursive: true });
 
 const manifest = JSON.parse(readFileSync(join(ROOT, 'assets/manifest.json'), 'utf8'));
+// 词表也要读：反派挂在病种上，B 路径同样要能查到
+const catalog = JSON.parse(readFileSync(join(ROOT, 'web/engine/catalog.json'), 'utf8'));
 
 // 骨架：与浏览器共用同一批 JSON
 const skDir = join(ROOT, 'web/engine/skeletons');
@@ -80,7 +83,7 @@ const index = [];
 
 for (const f of files) {
   const raw = readFileSync(join(rawDir, f), 'utf8');
-  const caseObj = parseNotice(raw);
+  const caseObj = attachDisease(parseNotice(raw), catalog);
   const book = assembleBook(caseObj, manifest, skeletons, modules);
   const result = validateBook(book);
 

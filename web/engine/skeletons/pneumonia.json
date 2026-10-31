@@ -1,0 +1,95 @@
+{
+  "key": "pneumonia",
+  "label": "肺炎住院治疗",
+  "title": "《{{child.name}}和肺里的小冠冠》",
+  "subtitle": "一个关于咳嗽、一场小雨，和慢慢好起来的故事",
+  "hero": {
+    "id": "nurse",
+    "name": "护士阿姨",
+    "line": "护士阿姨走路很轻，说话也很轻。她每次来，都会先看看{{child.name}}的额头。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和肺里的小冠冠",
+      "text": "这是{{child.name}}的故事。故事里有一群不请自来的小冠冠，还有一场下在身体里的雨。",
+      "asset": "scene_cover",
+      "props": [
+        "mom__hug",
+        "kid:stand",
+        "villain_corona__smug"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "它们在肺里开派对",
+      "text": "{{villain.line}}它们一闹，{{child.name}}就咳个不停，额头烫烫的，晚上也睡不好。",
+      "asset": "scene_fever_night",
+      "props": [
+        "villain_corona__wow",
+        "kid:sleep"
+      ],
+      "stand": "bed"
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "护士阿姨来了",
+      "text": "护士阿姨说：不用怕，我们有的是办法。{{child.name}}只要好好躺着，多喝一点温水。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "nurse__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "drip",
+      "layout": "full",
+      "title": "身体里下了一场小雨",
+      "text": "凉凉的药水一点一点进到身体里，像下了一场小雨。小冠冠不喜欢这场雨。",
+      "asset": "scene_drip_rain",
+      "props": [
+        "kid:sleep"
+      ],
+      "stand": "bed",
+      "requires": [
+        {
+          "fact": "device",
+          "has_id": "iv"
+        }
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "烧退了，咳嗽轻了",
+      "text": "{{child.name}}的额头不烫了，咳起来也没那么费劲。医生说：{{fact.stay.short}}，观察稳定就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "mom__hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "小冠冠被雨冲走了，{{child.name}}的呼吸顺了。这枚徽章，是你在医院里乖乖待着的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "小冠冠走了",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}

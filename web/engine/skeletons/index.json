@@ -1,5 +1,8 @@
 {
   "tonsillectomy": "tonsillectomy.json",
   "appendectomy": "appendectomy.json",
-  "injection": "injection.json"
+  "injection": "injection.json",
+  "hernia": "hernia.json",
+  "pneumonia": "pneumonia.json",
+  "generic-story": "generic-story.json"
 }

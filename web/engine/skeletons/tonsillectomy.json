@@ -3,12 +3,6 @@
   "label": "扁桃体切除术",
   "title": "《{{child.name}}和喉咙里的火山怪》",
   "subtitle": "一个关于睡觉、云朵和一颗勇敢的心的故事",
-  "villain": {
-    "id": "villain_volcano",
-    "name": "火山怪",
-    "home": "喉咙的山洞里",
-    "line": "它住在{{child.name}}喉咙的山洞里，脾气热烘烘的，一闹起来喉咙就疼。"
-  },
   "hero": {
     "id": "doctor",
     "name": "白大褂医生",

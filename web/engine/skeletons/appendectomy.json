@@ -3,12 +3,6 @@
   "label": "腹腔镜阑尾切除术",
   "title": "《{{child.name}}和肚子里的小尾巴怪》",
   "subtitle": "一个关于三条小通道、一朵云和一觉睡醒的故事",
-  "villain": {
-    "id": "villain_pebble",
-    "name": "小尾巴怪",
-    "home": "肚子右下角的小口袋里",
-    "line": "它住在{{child.name}}肚子右下角的小口袋里，鼓鼓的、胀胀的，一走快就拽着肚子往下沉。"
-  },
   "hero": {
     "id": "doctor",
     "name": "白大褂医生",

@@ -10,7 +10,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { composeCase, requiredFields } from '../web/engine/compose.mjs';
+import { composeCase, requiredFields, findProcedure, kindOf } from '../web/engine/compose.mjs';
 import { assembleBook } from '../web/engine/assemble.mjs';
 import { validateBook } from '../web/engine/validate.mjs';
 
@@ -42,8 +42,16 @@ const FIELD_WORDS = {
 const problems = [];
 const fail = (where, msg) => problems.push(`[${where}] ${msg}`);
 
-// 三个有骨架的术式各跑一遍：词表 id → 骨架 key
-const PROCEDURES = ['tonsillectomy', 'appendectomy', 'iv-infusion'];
+// 覆盖四类路径：专属剧本（扁桃体/阑尾）、医疗类（输液/肺炎）、通用小怪兽（外科/医疗）
+const PROCEDURES = [
+  'tonsillectomy',     // 专属剧本 · 手术
+  'appendectomy',      // 专属剧本 · 手术
+  'hernia',            // 专属剧本 · 手术（小石头怪）
+  'iv-infusion',       // 医疗类 · 专属
+  'pneumonia',         // 医疗类 · 专属
+  'polydactyly',       // 通用小怪兽 · 手术
+  'febrile-seizure',   // 通用小怪兽 · 医疗
+];
 
 for (const procedureId of PROCEDURES) {
   // 事实一个都不给：只剩术式本身
@@ -80,8 +88,14 @@ for (const procedureId of PROCEDURES) {
   /* ---------- 断言 ---------- */
 
   // 1. 缺什么就写缺什么：missing 不得被渲染步骤悄悄抹掉
-  for (const k of requiredFields(caseObj.procedure.key)) {
+  //    必填项按「术式类别」算：医疗类只要求住院天数，手术类才要求麻醉/禁食/留置针
+  const procDef = findProcedure(catalog, procedureId);
+  const required = requiredFields(procDef?.skeleton || null, kindOf(procDef, procDef?.skeleton || null));
+  for (const k of required) {
     if (!book.missing.includes(k)) fail(procedureId, `missing 里缺了 ${k}`);
+  }
+  for (const k of book.missing) {
+    if (!required.includes(k)) fail(procedureId, `missing 里多出了不必要的字段 ${k}`);
   }
 
   // 2. 未确认的字段，不得有「把该字段当既成事实」的页
@@ -130,7 +144,12 @@ for (const procedureId of PROCEDURES) {
     if (hit.length) fail(procedureId, `注意事项（封底/清单页）出现未确认字段 ${field} 的条目：${hit.join('、')} → ${cautionText}`);
   }
   // 与 device 无关的通用准备不能跟着被误删
-  const generic = { tonsillectomy: ['更换病号服', '取下饰物'], appendectomy: ['脐部及下腹备皮', '术前排空小便'] }[procedureId];
+  const generic = {
+    tonsillectomy: ['更换病号服', '取下饰物'],
+    appendectomy: ['脐部及下腹备皮', '术前排空小便'],
+    hernia: ['更换病号服', '取下饰物'],
+    polydactyly: ['更换病号服', '取下饰物'],
+  }[procedureId];
   for (const g of generic || []) {
     if (!cautionText.includes(g)) fail(procedureId, `与 device 无关的通用准备「${g}」被误删`);
   }

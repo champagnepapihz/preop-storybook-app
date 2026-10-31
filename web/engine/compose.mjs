@@ -23,15 +23,26 @@ export function caseId(seed) {
   return `CASE-${h.toString(36).toUpperCase().padStart(7, '0')}`;
 }
 
-function isSurgical(skeletonKey) {
-  return skeletonKey !== 'injection';
+/**
+ * 术式归类：手术类要问「麻醉 / 禁食 / 住几天 / 留置针」，
+ * 医疗类（输液、肺炎住院、高热观察）只问「住几天」——
+ * 给一个「对症观察」的孩子问「手术前从几点开始不能吃」是荒谬的。
+ *
+ * 优先看词表里的 kind（procedure.kind），没写就退回骨架推断：
+ * injection 骨架算医疗类，其余算手术类（保持既有病例的行为不变）。
+ */
+export function kindOf(procedure, skeletonKey) {
+  if (procedure?.kind === 'medical') return 'medical';
+  if (procedure?.kind === 'surgical') return 'surgical';
+  return skeletonKey === 'injection' ? 'medical' : 'surgical';
 }
 
-/** 该术式下，哪些字段属于"必须确认" */
-export function requiredFields(skeletonKey) {
-  return isSurgical(skeletonKey)
-    ? ['anesthesia', 'fasting', 'stay', 'device']
-    : ['stay'];
+/** 该术式下，哪些字段属于"必须确认"。kind 省略时按骨架推断，兼容旧调用。 */
+export function requiredFields(skeletonKey, kind) {
+  const k = kind || (skeletonKey === 'injection' ? 'medical' : 'surgical');
+  return k === 'medical'
+    ? ['stay']
+    : ['anesthesia', 'fasting', 'stay', 'device'];
 }
 
 /**
@@ -58,6 +69,28 @@ export function buildQuestions(missing = []) {
 }
 
 /**
+ * 给病例补上「病种 + 反派」。
+ * 反派挂在病种上（同一疾病换一种做法，敌人还是同一个），
+ * 所以 A 路径（受控录入）和 B 路径（原文解析）都要走这一步。
+ */
+export function attachDisease(caseObj, catalog) {
+  const key = caseObj.procedure?.id || caseObj.procedure?.key;
+  let group = null;
+  for (const dep of catalog?.departments || []) {
+    for (const g of dep.groups || []) {
+      if ((g.procedures || []).some((p) => p.id === key || p.skeleton === key)) { group = g; break; }
+    }
+    if (group) break;
+  }
+  caseObj.disease = {
+    id: group?.id || null,
+    label: group?.label || null,
+    villain: group?.villain || catalog?.default_villain || null,
+  };
+  return caseObj;
+}
+
+/**
  * @param {object} input
  * @param {object} input.catalog   受控词表
  * @param {string} input.procedureId
@@ -79,6 +112,7 @@ export function composeCase(input) {
   }
 
   const skeletonKey = procedure.skeleton || null;
+  const kind = kindOf(procedure, skeletonKey);
   const facts = {};
 
   // —— 麻醉 ——
@@ -98,7 +132,7 @@ export function composeCase(input) {
   // —— 禁食 / 禁水（手术类才需要）——
   const fasting = Number.isFinite(input.fastingHours) ? input.fastingHours : null;
   const liquid = Number.isFinite(input.liquidHours) ? input.liquidHours : null;
-  if (isSurgical(skeletonKey) && fasting != null) {
+  if (kind === 'surgical' && fasting != null) {
     facts.fasting = {
       key: 'fasting',
       label: '术前空腹',
@@ -152,7 +186,7 @@ export function composeCase(input) {
   }
 
   // —— 缺口 ——
-  const required = requiredFields(skeletonKey);
+  const required = requiredFields(skeletonKey, kind);
   const missing = required.filter((k) => !facts[k]);
 
   // —— 注意事项（来自词表，逐条可审）——
@@ -182,7 +216,7 @@ export function composeCase(input) {
     cautions.push({ label, items: kept, source: 'catalog' });
   }
 
-  return {
+  const out = {
     case_id: caseId(JSON.stringify([procedure.id, input.childName || '', input.age ?? null, facts])),
     source: 'catalog',
     version: missing.length ? 'draft' : 'confirmed',
@@ -199,6 +233,7 @@ export function composeCase(input) {
     questions: buildQuestions(missing),
     raw: null,
   };
+  return attachDisease(out, catalog);
 }
 
 /** 在词表里按 id 找术式，同时带出科室/分组标签（用于书名与面包屑） */

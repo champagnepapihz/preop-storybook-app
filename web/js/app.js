@@ -163,7 +163,8 @@ function fillProcedures() {
   const group = (dept?.groups || []).find((g) => g.id === $('#f-group').value);
   const procs = group?.procedures || [];
   $('#f-proc').innerHTML = opt('', procs.length ? '未选择' : '—')
-    + procs.map((p) => opt(p.id, p.label + (p.skeleton ? '' : '（暂无故事）'))).join('');
+    // 没有专属骨架的术式会落到通用小怪兽，所以不再需要「暂无故事」这种标注
+    + procs.map((p) => opt(p.id, p.label)).join('');
 }
 
 function selectProcedure(id) {
@@ -371,15 +372,13 @@ async function goPrev() {
 /* ---------------- 侧栏：事实与校验 ---------------- */
 
 function renderStatus(caseObj, book, report) {
-  const VERSION_LABEL = { confirmed: '已确认', draft: '草稿', checklist: '清单' };
+  const VERSION_LABEL = { confirmed: '已确认', draft: '草稿' };
   const st = $('#status');
   st.className = `status status--${book.version}`;
   st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
-    <span class="status__text">${book.mode === 'checklist'
-      ? `${book.pages.length + 1} 面 · 这类术式还没有专属故事，只出事实与注意事项`
-      : (caseObj.missing || []).length
-        ? `${book.pages.length + 1} 面 · ${caseObj.missing.length} 项未确认，对应的页没有生成`
-        : `${book.pages.length + 1} 面 · 事实齐全`}</span>`;
+    <span class="status__text">${(caseObj.missing || []).length
+      ? `${book.pages.length + 1} 面 · ${caseObj.missing.length} 项未确认，对应的页没有生成`
+      : `${book.pages.length + 1} 面 · 事实齐全`}</span>`;
 
   // 缺口：只列"未确认"，不猜
   const audit = $('#audit');
