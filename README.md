@@ -5,6 +5,12 @@
 
 > 故事是虚构的，事实是真实的 —— 书里的每个数字都来自逐项确认，每句注意事项都原文照录。
 
+**在线预览**：<https://champagnepapihz.github.io/preop-storybook-app/>
+（`?case=1` 事实齐全 · `?case=2` 清单书 · `?case=3` 四项全未确认，能看到缺页不出）
+
+> `dist/` 是构建产物，不放在 master 上，走 `gh-pages` 分支发布；改完代码执行
+> `npm run build` 后把 `dist/` 推到 `gh-pages` 即可更新预览。
+
 ---
 
 ## 1. 架构
