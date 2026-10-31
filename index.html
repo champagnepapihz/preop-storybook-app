@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>术前绘本 · 把术前须知变成孩子的故事</title>
+<meta name="description" content="医护选一个病种，缝一本属于这个孩子的布艺绘本。疾病角色化、治疗故事化，每个孩子拿到的故事都不一样。" />
+<link rel="stylesheet" href="css/fonts-zcool.css" />
+<link rel="stylesheet" href="css/fabric.css" />
+<link rel="stylesheet" href="css/book.css" />
+<link rel="preload" as="image" href="assets/ui/stage.webp" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f6e6c8'/%3E%3Cpath d='M32 10l6.5 14.3 15.5 1.9-11.5 10.7 3 15.4L32 44.9 18.5 52.3l3-15.4L10 26.2l15.5-1.9z' fill='%23e0b25f'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="theater" aria-hidden="true">
+    <div class="theater__veil"></div>
+  </div>
+
+  <main class="stage">
+    <header class="marquee">
+      <span class="marquee__ticket">术前 24 小时</span>
+      <h1 class="marquee__title">小勇士的手术故事</h1>
+      <p class="marquee__sub">把术前须知，缝成一本孩子自己的布艺绘本</p>
+    </header>
+
+    <section class="workbench">
+      <aside class="panel felt">
+        <h2 class="panel__h">① 选病例</h2>
+        <p class="panel__hint">受控词表录入：只做选择，不写字。词表里没有的术式选不出来。</p>
+        <div class="picker">
+          <label class="field"><span>科室</span><select id="f-dept"></select></label>
+          <label class="field"><span>病种</span><select id="f-group"></select></label>
+          <label class="field"><span>术式 / 处置</span><select id="f-proc"></select></label>
+          <div class="field-row field-row--three">
+            <label class="field field--stack"><span>姓名</span><input id="f-name" type="text" maxlength="8" placeholder="可不填" /></label>
+            <label class="field field--stack"><span>性别</span><select id="f-gender"><option value="">—</option><option value="m">男</option><option value="f">女</option></select></label>
+            <label class="field field--stack"><span>年龄</span><input id="f-age" type="number" min="0" max="18" placeholder="岁" /></label>
+          </div>
+        </div>
+
+        <h2 class="panel__h">② 逐项确认</h2>
+        <p class="panel__hint">不选＝未确认。没确认的那几页，书里不会出现，也不会写数字。</p>
+        <div class="picker">
+          <label class="field"><span>麻醉方式</span><select id="f-anes"></select></label>
+          <div class="field-row">
+            <label class="field"><span>禁食</span><select id="f-fast"></select></label>
+            <label class="field"><span>禁水</span><select id="f-liquid"></select></label>
+          </div>
+          <div class="field-row">
+            <label class="field"><span>住院</span><select id="f-stay"></select></label>
+            <label class="field"><span>留置针</span><select id="f-device"></select></label>
+          </div>
+        </div>
+
+        <div class="panel__row">
+          <button class="btn btn--primary" id="gen">缝一本绘本</button>
+        </div>
+        <div class="panel__row panel__row--sub">
+          <button class="btn btn--ghost" id="new">新建病例</button>
+          <button class="btn btn--ghost" id="sample">换个病例</button>
+          <button class="btn btn--ghost" id="print">打印 / PDF</button>
+        </div>
+
+        <p class="print-hint">导出时若打印对话框的「背景图形」未勾选，纸纹与封面底会变白 —— 建议勾上。</p>
+
+        <div class="status" id="status"></div>
+        <ul class="audit" id="audit"></ul>
+        <p class="report" id="report"></p>
+      </aside>
+
+      <section class="reader">
+        <div class="book-glow" aria-hidden="true"></div>
+        <div class="book" id="book"></div>
+        <div class="reader__bar">
+          <button class="btn btn--tiny" id="prev" aria-label="上一页">‹</button>
+          <span class="reader__page" id="pageinfo">封面</span>
+          <button class="btn btn--tiny" id="next" aria-label="下一页">›</button>
+        </div>
+      </section>
+    </section>
+
+    <footer class="foot">
+      <span>故事是虚构的，事实是真实的 —— 每一条医学事实都能溯源到原文。</span>
+    </footer>
+  </main>
+
+  <div id="print-root" aria-hidden="true"></div>
+
+  <script src="vendor/page-flip.browser.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

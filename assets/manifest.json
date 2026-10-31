@@ -1,0 +1,443 @@
+{
+  "version": "0.3.0",
+  "note": "id 即文件名（不含扩展名）。丢文件进 assets/{scenes,characters,badges}/ 即自动登记，无需改代码。",
+  "assets": {
+    "scene_belly_pocket": {
+      "src": "assets/scenes/scene_belly_pocket.jpg",
+      "alt": "肚子小口袋",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_butterfly_hand": {
+      "src": "assets/scenes/scene_butterfly_hand.jpg",
+      "alt": "手背小蝴蝶",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_cloud_anesthesia": {
+      "src": "assets/scenes/scene_cloud_anesthesia.jpg",
+      "alt": "云朵麻醉",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_cover": {
+      "src": "assets/scenes/scene_cover.jpg",
+      "alt": "封面舞台",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_drip_rain": {
+      "src": "assets/scenes/scene_drip_rain.jpg",
+      "alt": "输液雨夜",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_fasting_moon": {
+      "src": "assets/scenes/scene_fasting_moon.jpg",
+      "alt": "夜里空肚子",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_fever_night": {
+      "src": "assets/scenes/scene_fever_night.jpg",
+      "alt": "发热之夜",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_hospital_front": {
+      "src": "assets/scenes/scene_hospital_front.jpg",
+      "alt": "医院门前",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_throat_cave": {
+      "src": "assets/scenes/scene_throat_cave.jpg",
+      "alt": "喉咙山洞",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_wake_up": {
+      "src": "assets/scenes/scene_wake_up.jpg",
+      "alt": "醒来",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_ward_bed_close": {
+      "src": "assets/scenes/scene_ward_bed_close.jpg",
+      "alt": "病房床头特写",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_ward_talk": {
+      "src": "assets/scenes/scene_ward_talk.jpg",
+      "alt": "病房谈话",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "dad__hug": {
+      "src": "assets/characters/dad__hug.png",
+      "alt": "爸爸·抱抱",
+      "kind": "character",
+      "placeholder": false
+    },
+    "dad__sit": {
+      "src": "assets/characters/dad__sit.png",
+      "alt": "爸爸·坐",
+      "kind": "character",
+      "placeholder": false
+    },
+    "dad__stand": {
+      "src": "assets/characters/dad__stand.png",
+      "alt": "爸爸·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "dad__thumb": {
+      "src": "assets/characters/dad__thumb.png",
+      "alt": "爸爸·点赞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "doctor": {
+      "src": "assets/characters/doctor.webp",
+      "alt": "白大褂医生",
+      "kind": "character",
+      "placeholder": false
+    },
+    "doctor__cheer": {
+      "src": "assets/characters/doctor__cheer.webp",
+      "alt": "白大褂医生·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "doctor__wave": {
+      "src": "assets/characters/doctor__wave.webp",
+      "alt": "白大褂医生·挥手",
+      "kind": "character",
+      "placeholder": false
+    },
+    "friend__bear": {
+      "src": "assets/characters/friend__bear.png",
+      "alt": "病房朋友·抱熊",
+      "kind": "character",
+      "placeholder": false
+    },
+    "friend__bed": {
+      "src": "assets/characters/friend__bed.png",
+      "alt": "病房朋友·病床",
+      "kind": "character",
+      "placeholder": false
+    },
+    "friend__stand": {
+      "src": "assets/characters/friend__stand.png",
+      "alt": "病房朋友·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "friend__wave": {
+      "src": "assets/characters/friend__wave.png",
+      "alt": "病房朋友·挥手",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_boy__cheer": {
+      "src": "assets/characters/kid_boy__cheer.png",
+      "alt": "小患者·男孩·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_boy__hug": {
+      "src": "assets/characters/kid_boy__hug.png",
+      "alt": "小患者·男孩·抱抱",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_boy__sleep": {
+      "src": "assets/characters/kid_boy__sleep.png",
+      "alt": "小患者·男孩·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_boy__stand": {
+      "src": "assets/characters/kid_boy__stand.png",
+      "alt": "小患者·男孩·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_girl__cheer": {
+      "src": "assets/characters/kid_girl__cheer.png",
+      "alt": "小患者·女孩·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_girl__hug": {
+      "src": "assets/characters/kid_girl__hug.png",
+      "alt": "小患者·女孩·抱抱",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_girl__sleep": {
+      "src": "assets/characters/kid_girl__sleep.png",
+      "alt": "小患者·女孩·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "kid_girl__stand": {
+      "src": "assets/characters/kid_girl__stand.png",
+      "alt": "小患者·女孩·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "mom__hug": {
+      "src": "assets/characters/mom__hug.png",
+      "alt": "妈妈·抱抱",
+      "kind": "character",
+      "placeholder": false
+    },
+    "mom__sit": {
+      "src": "assets/characters/mom__sit.png",
+      "alt": "妈妈·坐",
+      "kind": "character",
+      "placeholder": false
+    },
+    "mom__stand": {
+      "src": "assets/characters/mom__stand.png",
+      "alt": "妈妈·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "mom__wave": {
+      "src": "assets/characters/mom__wave.png",
+      "alt": "妈妈·挥手",
+      "kind": "character",
+      "placeholder": false
+    },
+    "nurse_cloud": {
+      "src": "assets/characters/nurse_cloud.webp",
+      "alt": "云朵护士",
+      "kind": "character",
+      "placeholder": false
+    },
+    "nurse__cuddle": {
+      "src": "assets/characters/nurse__cuddle.webp",
+      "alt": "护士·cuddle",
+      "kind": "character",
+      "placeholder": false
+    },
+    "nurse__hug": {
+      "src": "assets/characters/nurse__hug.webp",
+      "alt": "护士·抱抱",
+      "kind": "character",
+      "placeholder": false
+    },
+    "nurse__present": {
+      "src": "assets/characters/nurse__present.webp",
+      "alt": "护士·present",
+      "kind": "character",
+      "placeholder": false
+    },
+    "nurse__wave": {
+      "src": "assets/characters/nurse__wave.webp",
+      "alt": "护士·挥手",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_corona__happy": {
+      "src": "assets/characters/villain_corona__happy.webp",
+      "alt": "冠冠怪·happy",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_corona__sad": {
+      "src": "assets/characters/villain_corona__sad.webp",
+      "alt": "冠冠怪·sad",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_corona__smug": {
+      "src": "assets/characters/villain_corona__smug.webp",
+      "alt": "冠冠怪·smug",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_corona__wow": {
+      "src": "assets/characters/villain_corona__wow.webp",
+      "alt": "冠冠怪·wow",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_dino__back": {
+      "src": "assets/characters/villain_dino__back.png",
+      "alt": "紫色小恐龙·背影",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_dino__peek": {
+      "src": "assets/characters/villain_dino__peek.png",
+      "alt": "紫色小恐龙·偷看",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_dino__shy": {
+      "src": "assets/characters/villain_dino__shy.png",
+      "alt": "紫色小恐龙·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_dino__sleep": {
+      "src": "assets/characters/villain_dino__sleep.png",
+      "alt": "紫色小恐龙·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_pebble": {
+      "src": "assets/characters/villain_pebble.webp",
+      "alt": "小尾巴怪",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_pebble__angry": {
+      "src": "assets/characters/villain_pebble__angry.webp",
+      "alt": "小尾巴怪·angry",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_pebble__happy": {
+      "src": "assets/characters/villain_pebble__happy.webp",
+      "alt": "小尾巴怪·happy",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_pebble__sad": {
+      "src": "assets/characters/villain_pebble__sad.webp",
+      "alt": "小尾巴怪·sad",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_pebble__wow": {
+      "src": "assets/characters/villain_pebble__wow.webp",
+      "alt": "小尾巴怪·wow",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_volcano": {
+      "src": "assets/characters/villain_volcano.webp",
+      "alt": "火山怪",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_volcano__angry": {
+      "src": "assets/characters/villain_volcano__angry.webp",
+      "alt": "火山怪·angry",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_volcano__sad": {
+      "src": "assets/characters/villain_volcano__sad.webp",
+      "alt": "火山怪·sad",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_volcano__smug": {
+      "src": "assets/characters/villain_volcano__smug.webp",
+      "alt": "火山怪·smug",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_volcano__wow": {
+      "src": "assets/characters/villain_volcano__wow.webp",
+      "alt": "火山怪·wow",
+      "kind": "character",
+      "placeholder": false
+    },
+    "badge_star": {
+      "src": "assets/badges/badge_star.webp",
+      "alt": "小勇士徽章",
+      "kind": "badge",
+      "placeholder": false
+    }
+  },
+  "proportions": {
+    "note": "体型比例表。基准 = 患儿站立身高 1.00。所有立牌脚底同一基线，按此表缩放；姿势系数用于抵消'跪/坐/趴'本身更矮的像素高度，避免被强行拉到与站姿等高。设计语言：反派（villain_*）永远不超过 1.00 —— 怪兽比孩子大，故事就变成威胁而不是陪伴。",
+    "base": 1,
+    "roles": {
+      "kid_boy": {
+        "scale": 1,
+        "label": "患儿·男孩"
+      },
+      "kid_girl": {
+        "scale": 1,
+        "label": "患儿·女孩"
+      },
+      "friend": {
+        "scale": 0.96,
+        "label": "同龄病房朋友"
+      },
+      "mom": {
+        "scale": 1.44,
+        "label": "妈妈"
+      },
+      "dad": {
+        "scale": 1.5,
+        "label": "爸爸"
+      },
+      "doctor": {
+        "scale": 1.5,
+        "label": "医生"
+      },
+      "nurse": {
+        "scale": 1.42,
+        "label": "护士"
+      },
+      "nurse_cloud": {
+        "scale": 1.42,
+        "label": "云朵护士"
+      },
+      "villain_pebble": {
+        "scale": 0.78,
+        "label": "小尾巴怪"
+      },
+      "villain_volcano": {
+        "scale": 0.9,
+        "label": "火山怪"
+      },
+      "villain_corona": {
+        "scale": 0.6,
+        "label": "冠冠怪"
+      },
+      "villain_dino": {
+        "scale": 0.82,
+        "label": "紫色小恐龙"
+      },
+      "badge_star": {
+        "scale": 1,
+        "label": "徽章"
+      }
+    },
+    "poses": {
+      "stand": 1,
+      "wave": 1,
+      "cheer": 1,
+      "thumb": 1,
+      "back": 1,
+      "shy": 1,
+      "peek": 1,
+      "hug": 0.66,
+      "sit": 0.6,
+      "bear": 0.62,
+      "bed": 0.72,
+      "sleep": 0.5
+    },
+    "special": {
+      "_comment": "sleep / bed 姿势走床面版式（stand=\"bed\"），不参与地面基线缩放"
+    },
+    "offsets": {
+      "_comment": "基线下压：圆底、脚很短的角色（病毒球、石头怪、小恐龙）在图里脚不明显，按图片底边对齐会显得飘。数值是页高比例，渲染成 margin-bottom 负值。",
+      "villain_pebble": 0.022,
+      "villain_corona": 0.02,
+      "villain_dino": 0.016,
+      "doctor": 0,
+      "nurse": 0
+    }
+  }
+}

@@ -1,0 +1,839 @@
+/* ============================================================
+   书页：毡布质感 + 缝线内框 + 布偶站位
+   页尺寸由 PageFlip 初始化参数决定（430 × 560 基准）
+   ============================================================ */
+
+.page {
+  position: relative;
+  width: 430px;
+  height: 560px;
+  max-width: 100%;   /* 窄屏：永远不超过容器宽度（PageFlip 的 stretch 有时算偏） */
+  padding: 18px;
+  overflow: hidden;
+  font-family: var(--font-round); /* 绘本内字体统一：全圆体，旁白/数字/标题一致 */
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(120% 80% at 20% 0%, #fffefa 0%, rgba(255, 254, 250, 0) 55%),
+    var(--grain);
+  background-size: auto, 180px 180px;
+  box-shadow: inset 0 0 0 1px rgba(150, 112, 74, .12), inset 0 0 46px rgba(168, 126, 82, .10);
+  color: var(--ink-solid);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 12px;
+  border: 2px dashed rgba(255, 255, 255, .85);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.page__inner {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* ---------- 图片 ---------- */
+
+.page__img {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f7e9d2, #eddcbf);
+  box-shadow:
+    0 8px 18px rgba(90, 60, 36, .18),
+    inset 0 0 0 1px rgba(255, 255, 255, .7);
+}
+
+.page__img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page__img--h {
+  height: 232px;
+  flex: 0 0 auto;
+  margin-bottom: 16px;
+}
+
+/* 文在上、图在下的页：图片吃掉剩余空间 */
+.page--imgleft .page__img--h {
+  margin: 14px 0 0;
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 150px;
+}
+
+/* 图在上、文在下的页：同理，图片吃掉剩余高度。
+   否则短文案页会在文字和便签之间留下一道 100px 的死白，看起来像没渲染完。 */
+.page--imgright .page__img--h {
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 232px;
+}
+
+.page--imgright .page__fact { margin-top: 14px; }
+
+.page--imgleft .page__fact { margin-top: 12px; }
+
+/* 布偶站位：角色立牌压在场景上
+ *
+ * 体型规则（唯一真相：web/engine/proportions.json，随 manifest 下发）：
+ *   --s = 角色系数 × 姿势系数，基准 = 患儿站立身高 1.00
+ *   --k = 本页同框系数（人越多整体越小，但相互比例不变）
+ *
+ * 尺寸单位是 --ph（页高 px，由 JS 在翻页器定尺寸后写入），因此无论这一页的
+ * 图片区多高、立牌站在哪一页，同一个角色永远同一身高 —— 比例是全局的。
+ */
+.page__props {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 10px 6px;
+  pointer-events: none;
+}
+
+.page__props--n1 { --k: 1; }
+.page__props--n2 { --k: .72; }
+.page__props--n3 { --k: .54; }
+
+.page__props img {
+  height: calc(var(--ph, 560px) * .4 * var(--s, 1) * var(--k, 1));
+  width: auto;
+  max-width: calc(var(--ph, 560px) * .48);
+  object-fit: contain;
+  object-position: center bottom;
+  margin-bottom: calc(var(--ph, 560px) * var(--dy, 0) * -1);
+  filter: drop-shadow(0 10px 10px rgba(60, 34, 18, .3));
+}
+
+/* 右位镜像：素材统一朝右生成，站在右侧的人必须翻过来才面向场景中心 */
+.page__props:not(.page__props--bed) img:not(:only-child):last-child { transform: scaleX(-1); }
+.page__props:not(.page__props--bed) img:nth-child(2):not(:last-child) { transform: none; }
+
+/* 床面定位：睡姿立牌摆在床上，不按脚底贴边（cloud/drip 页用 stand="bed"） */
+.page__props--bed {
+  inset: 0;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.page__props--bed img {
+  height: auto;
+  width: 56%;
+  max-width: 56%;
+  margin-top: 12%;
+  margin-left: 12%;
+  object-position: center top;
+  transform: none;
+}
+
+/* 微距特写页（手背留置针等）：场景本身是近景，人物按比例站进去必然"小人国"，
+   所以缩到 .5 并压到下角，读作「画面边角上的讲述者」，不参与与场景的大小比较。 */
+.page__props--micro { --k: .5; padding: 0 14px 4px; }
+
+/* 坐在场景里（云床、病床）：不贴地，按画面中部定位 */
+.page__props--seated {
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.page__props--seated img {
+  height: auto;
+  width: 27%;
+  max-width: 27%;
+  margin-top: 27%;
+  transform: none;
+}
+
+/* 全幅页：立牌并排站在文字卡上方，脚被卡片自然遮住 */
+.page--full .page__props { bottom: 26%; --k: .8; }
+
+/* 长文案全幅页：立牌站到上半区，不被高字卡埋掉 */
+.page--stand-high .page__props {
+  bottom: auto; top: 19%;
+  justify-content: flex-start;
+  padding-left: 20%;
+  --k: .68;
+}
+
+/* ---------- 文字 ---------- */
+
+.page__title {
+  font-family: var(--font-round);
+  font-size: 21px;
+  line-height: 1.4;
+  margin: 0 0 10px;
+  color: #43301f;
+  letter-spacing: .02em;
+}
+
+.page__text {
+  font-size: 13.5px;
+  line-height: 1.95;
+  margin: 0;
+  color: #5a4636;
+  text-align: justify;
+}
+
+.page__text--tight { font-size: 13px; }
+
+/* ---------- 事实便签 ---------- */
+
+.page__fact {
+  margin-top: auto;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background:
+    var(--grain),
+    linear-gradient(180deg, #d7ecdf, #b6d9c6);
+  background-size: 180px 180px, auto;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .8),
+    0 6px 12px rgba(60, 40, 24, .16);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.page__fact::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 9px;
+  border: 1.5px dashed rgba(47, 107, 83, .35);
+  pointer-events: none;
+}
+
+.page__fact-label {
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: #2f6b53;
+  white-space: nowrap;
+}
+
+.page__fact-value {
+  font-family: var(--font-round);
+  font-size: 14px;
+  color: #1d4a39;
+}
+
+/* ---------- 封面 ---------- */
+
+.page--cover {
+  padding: 0;
+  background: #f7e7c9;
+}
+
+.page--cover::after { border-color: rgba(255, 255, 255, .7); inset: 12px; }
+
+.page--cover .page__inner { padding: 0; }
+
+.page__cover-art {
+  position: absolute;
+  inset: 0;
+}
+
+.page__cover-art img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.page__cover-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(60, 30, 18, .38) 0%, transparent 32%),
+    linear-gradient(0deg, rgba(60, 30, 18, .55) 0%, transparent 46%);
+}
+
+.page__cover-plate {
+  position: absolute;
+  left: 22px; right: 22px; bottom: 52px;
+  z-index: 3;
+  text-align: center;
+  color: #fff6e6;
+}
+
+.page__cover-kicker {
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 4px 0 8px;
+  font-size: 10px;
+  letter-spacing: .22em;
+  border-radius: 999px;
+  border: 1.5px dashed rgba(255, 240, 214, .6);
+  background: rgba(0, 0, 0, .22);
+}
+
+.page__cover-title {
+  font-family: var(--font-round);
+  font-size: 23px;
+  line-height: 1.42;
+  margin: 0 0 8px;
+  letter-spacing: .01em;
+  text-shadow: 0 2px 0 rgba(70, 30, 20, .5), 0 10px 22px rgba(0, 0, 0, .45);
+}
+
+.page__cover-sub {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: rgba(255, 244, 228, .88);
+  letter-spacing: .04em;
+}
+
+.page__cover-cast {
+  position: absolute;
+  left: 12px; right: 12px;
+  bottom: 129px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.page__cover-cast img {
+  height: calc(var(--ph, 560px) * .36 * var(--s, 1));
+  width: auto;
+  max-width: 31%;
+  margin: 0 -5px calc(var(--ph, 560px) * var(--dy, 0) * -1);
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .45));
+}
+
+/* 各反派实心脚离底不同（pebble 绒脚发虚）：C 位按本下沉对齐基线，多余绒边藏进标题后 */
+.page__cover-cast img:nth-child(3) { transform: scaleX(-1); } /* 三人组里最右的反派镜像，面向中间
+   （两人组不镜像：小恐龙是"捂脸偷看"侧身素材，翻过来会变成背影） */
+
+/* 清单书的 kicker 是术式全名，比骨架类目长：字号收一档、底色加深一档 */
+.cover--generic .page__cover-kicker {
+  font-size: 9px;
+  letter-spacing: .08em;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, .42);
+  color: #fff3dd;
+}
+
+/* 清单书封面只有两个立牌：分开站在两侧，中间让出标题牌顶部的小字 */
+.cover--generic .page__cover-cast {
+  bottom: 138px;
+  justify-content: space-around;
+  padding: 0 26px;
+}
+
+.cover--appendectomy .page__cover-cast img:nth-child(2) { transform: translateY(19px); }
+.cover--injection .page__cover-cast img:nth-child(2) { transform: translateY(7px); }
+
+.page__cover-ribbon {
+  position: absolute;
+  top: 20px; left: 20px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-align: center;
+  font-family: var(--font-round);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  color: #5a2416;
+  background: linear-gradient(180deg, #ffe0ae, #eeb877);
+  box-shadow: 0 6px 14px rgba(60, 26, 14, .28), inset 0 0 0 1.5px rgba(255, 255, 255, .55);
+}
+
+/* ---------- 全幅页 ---------- */
+
+.page--full { padding: 0; }
+
+.page--full .page__img {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  height: 100%;
+}
+
+.page__caption {
+  position: absolute;
+  left: 20px; right: 20px; bottom: 22px;
+  z-index: 3;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background:
+    var(--grain),
+    linear-gradient(180deg, rgba(255, 249, 236, .96), rgba(246, 232, 208, .96));
+  background-size: 180px 180px, auto;
+  box-shadow: 0 12px 26px rgba(40, 20, 10, .34), inset 0 2px 0 rgba(255, 255, 255, .85);
+}
+
+.page__caption::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 13px;
+  border: 1.5px dashed rgba(150, 112, 74, .3);
+  pointer-events: none;
+}
+
+/* ---------- 徽章页 ---------- */
+
+.page--badge .page__inner {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+/* 裸放素材：不画圆盘、不加描边，让徽章自己立住 */
+.badge-art {
+  width: min(292px, 80%);
+  margin-bottom: 0;
+}
+
+.badge-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 22px rgba(96, 64, 22, .26));
+}
+
+.badge-name {
+  font-family: var(--font-round);
+  font-size: 19px;
+  line-height: 1.3;
+  color: #9a7433;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  margin: -4px 0 6px;
+}
+
+.badge-engrave {
+  font-family: var(--font-round);
+  font-size: 25px;
+  line-height: 1.25;
+  color: #6f4d1c;
+  letter-spacing: .2em;
+  text-indent: .2em;
+  margin: 0 0 8px;
+}
+
+.badge-text {
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #5a4636;
+  max-width: 88%;
+}
+
+/* ---------- 尾页说明 ---------- */
+
+/* ---------- 留白页（补齐偶数面用） ---------- */
+
+.page--notes .page__inner { padding: 26px 10px 18px; }
+
+.notes-lines {
+  flex: 1 1 auto;
+  margin-top: 18px;
+  background-image: repeating-linear-gradient(180deg,
+    transparent 0 33px,
+    rgba(150, 112, 74, .20) 33px 34px);
+  border-radius: 4px;
+}
+
+/* ---------- 清单书封面 ---------- */
+
+.page__checklist-cast {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  flex: 0 0 auto;
+}
+
+.page__checklist-cast img {
+  height: 150px;
+  width: auto;
+  max-width: 40%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 8px 10px rgba(40, 18, 10, .28));
+}
+
+.page--checklist .page__inner {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 26px 18px 20px;
+}
+
+/* ---------- 封底：提问清单 ---------- */
+
+.cl-questions {
+  margin-top: 14px;
+  padding-top: 12px;
+  position: relative;
+}
+
+.cl-questions::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(150, 112, 74, 0),
+    rgba(150, 112, 74, .22) 14%,
+    rgba(150, 112, 74, .22) 86%,
+    rgba(150, 112, 74, 0));
+}
+
+.cl-q-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 7px;
+  counter-reset: q;
+}
+
+.cl-q-list li {
+  position: relative;
+  padding-left: 17px;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: #4f3c2d;
+}
+
+.cl-q-list li::before {
+  counter-increment: q;
+  content: counter(q);
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(63, 122, 96, .14);
+  color: #3f7a60;
+  font-family: var(--font-round);
+  font-size: 8px;
+  line-height: 12px;
+  text-align: center;
+}
+
+/* ---------- 封底：家长陪护说明 ---------- */
+
+/* 注意事项：原文照录区（标签 + 逐条原文，不做任何改写） */
+.cl-cautions {
+  margin-top: 14px;
+  padding-top: 12px;
+  position: relative;
+}
+
+.cl-cautions::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(150, 112, 74, 0),
+    rgba(150, 112, 74, .22) 14%,
+    rgba(150, 112, 74, .22) 86%,
+    rgba(150, 112, 74, 0));
+}
+
+.cl-cau-head {
+  margin: 0 0 8px;
+  font-family: var(--font-round);
+  font-size: 10px;
+  letter-spacing: .12em;
+  color: #a98d68;
+}
+
+.cl-cau-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  column-gap: 8px;
+  margin-bottom: 7px;
+}
+
+.cl-cau-tag {
+  font-family: var(--font-round);
+  font-size: 9.5px;
+  letter-spacing: .04em;
+  color: #3f7a60;
+  padding-top: 1px;
+}
+
+.cl-cau-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.cl-cau-items li {
+  position: relative;
+  padding-left: 10px;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: #4f3c2d;
+}
+
+.cl-cau-items li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(63, 122, 96, .55);
+}
+
+/* 事实多 + 注意事项多的一本，整体再收一口气，保证不越出书页 */
+.page--colophon.is-dense .cl-head { margin-bottom: 2px; }
+.page--colophon.is-dense .cl-title { font-size: 19px; }
+.page--colophon.is-dense .cl-list { margin-top: 12px; }
+.page--colophon.is-dense .cl-item { padding: 9px 2px 7px; }
+.page--colophon.is-dense .cl-label { font-size: 11px; }
+.page--colophon.is-dense .cl-value { font-size: 11.5px; }
+.page--colophon.is-dense .cl-ev { font-size: 8.5px; margin-top: 4px; line-height: 1.5; }
+.page--colophon.is-dense .cl-cautions { margin-top: 10px; padding-top: 9px; }
+.page--colophon.is-dense .cl-cau-head { margin-bottom: 6px; font-size: 9.5px; }
+.page--colophon.is-dense .cl-cau-row { margin-bottom: 5px; }
+.page--colophon.is-dense .cl-cau-items { gap: 2px; }
+.page--colophon.is-dense .cl-cau-items li { font-size: 10px; line-height: 1.45; }
+.page--colophon.is-dense .cl-note { font-size: 9.5px; line-height: 1.65; padding: 10px 2px 0; }
+
+/* 极端情况：事实 + 注意事项超过 10 条，再压一档 */
+.page--colophon.is-xdense .cl-item { padding: 7px 2px 6px; }
+.page--colophon.is-xdense .cl-cau-items li { font-size: 9.5px; line-height: 1.4; }
+.page--colophon.is-xdense .cl-cau-row { margin-bottom: 4px; }
+.page--colophon.is-xdense .cl-note { font-size: 9px; line-height: 1.55; padding-top: 8px; }
+
+/* 事实只有两三条时，别把行铺满整页，整块内容居中更稳 */
+.page--colophon.is-sparse .page__inner { justify-content: center; }
+.page--colophon.is-sparse .cl-list { flex: 0 0 auto; margin-top: 24px; }
+.page--colophon.is-sparse .cl-note { margin-top: 28px; }
+
+.page--colophon .page__inner {
+  padding: 22px 6px 14px;
+  text-align: left;
+}
+
+.cl-head { text-align: center; }
+
+.cl-kicker {
+  display: block;
+  font-family: var(--font-round);
+  font-size: 9.5px;
+  letter-spacing: .34em;
+  text-indent: .34em;
+  color: #a98d68;
+  margin-bottom: 8px;
+}
+
+.cl-title {
+  font-family: var(--font-round);
+  font-size: 21px;
+  line-height: 1.3;
+  margin: 0;
+  color: #463222;
+  letter-spacing: .1em;
+  text-indent: .1em;
+}
+
+.cl-flourish {
+  display: block;
+  width: 76px;
+  height: 1px;
+  margin: 12px auto 0;
+  background: linear-gradient(90deg,
+    rgba(200, 160, 96, 0),
+    rgba(200, 160, 96, .75) 22%,
+    rgba(200, 160, 96, .75) 78%,
+    rgba(200, 160, 96, 0));
+}
+
+.cl-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+
+.cl-list--empty { flex: 0 0 auto; margin-top: 14px; }
+
+.cl-empty {
+  font-size: 10.5px;
+  line-height: 1.7;
+  color: #9a8674;
+  padding: 10px 2px;
+}
+
+.cl-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  column-gap: 8px;
+  padding: 16px 2px 13px;
+}
+
+/* 两端渐隐的细分隔线，比整条生硬的 hairline 干净 */
+.cl-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(150, 112, 74, 0),
+    rgba(150, 112, 74, .26) 14%,
+    rgba(150, 112, 74, .26) 86%,
+    rgba(150, 112, 74, 0));
+}
+
+.cl-label {
+  font-family: var(--font-round);
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: #3f7a60;
+}
+
+/* 目录式点线引导，把标签和值连起来 */
+.cl-dots {
+  position: relative;
+  top: -3px;
+  height: 1px;
+  align-self: end;
+  margin: 0 2px 0 4px;
+  background-image: repeating-linear-gradient(90deg,
+    rgba(150, 112, 74, .38) 0 1.5px,
+    transparent 1.5px 6px);
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  opacity: .95;
+}
+
+.cl-value {
+  font-family: var(--font-round);
+  font-size: 12.5px;
+  letter-spacing: .02em;
+  color: #40301f;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cl-ev {
+  grid-column: 1 / -1;
+  margin-top: 7px;
+  font-size: 10px;
+  line-height: 1.6;
+  letter-spacing: .02em;
+  color: #9a8674;
+}
+
+.cl-note {
+  margin: 0;
+  padding: 16px 2px 4px;
+  font-size: 10.5px;
+  line-height: 1.9;
+  color: #6d5949;
+  position: relative;
+}
+
+.cl-note::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    rgba(150, 112, 74, 0),
+    rgba(150, 112, 74, .22) 14%,
+    rgba(150, 112, 74, .22) 86%,
+    rgba(150, 112, 74, 0));
+}
+
+/* ============================================================
+   打印 / 存为 PDF
+   屏幕上看到的是 PageFlip 的绝对定位那本；打印用 #print-root 里
+   顺序排列的静态副本，一页一张 A4（竖版），内容等比放大。
+   ============================================================ */
+
+/* 屏幕外而不是 display:none：display:none 里的 <img> 不解码，
+   打印时就只有文字、没有场景图（白底封面）。放屏幕外它照常加载。 */
+#print-root {
+  position: fixed;
+  left: -20000px;
+  top: 0;
+  width: 430px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@media print {
+  /* 页面尺寸精确等于书页（430×560 CSS px ≈ 114×148mm）：
+     一页一张、图像 1:1 不重采样，PDF 体积小、字仍然矢量。
+     打印时在系统对话框选"适合纸张"即可铺满 A4。 */
+  @page { size: 430px 560px; margin: 0; }
+
+  html, body { background: #fff !important; }
+
+  /* 强制绘制背景：Chrome/Edge 打印对话框里「背景图形」默认是**不勾**的，
+     不勾就意味着布纹纸底、封面压暗遮罩、胶囊底色全部消失 —— 整本书变白纸，
+     白字标题直接看不见（这是最坑的一处：报错现场完全不像"背景没打"）。
+     print-color-adjust: exact 让浏览器无条件绘制背景，不依赖那个复选框。 */
+  html, body, .page, .page * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 屏幕上的一切都不要，只留打印副本 */
+  body > *:not(#print-root) { display: none !important; }
+  #print-root {
+    position: static !important;
+    left: auto !important;
+    width: auto !important;
+    opacity: 1 !important;
+    --ph: 560px;
+  }
+
+  .print-sheet {
+    width: 430px;
+    height: 560px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .print-sheet:last-child { break-after: auto; page-break-after: auto; }
+
+  .print-sheet > .page {
+    box-shadow: none !important;
+    background-clip: padding-box;
+  }
+
+  * { animation: none !important; transition: none !important; }
+}

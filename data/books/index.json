@@ -1,0 +1,28 @@
+{
+  "books": [
+    {
+      "slug": "append-豆豆",
+      "title": "《豆豆和肚子里的小尾巴怪》",
+      "procedure": "腹腔镜阑尾切除术",
+      "child": "豆豆",
+      "pages": 9,
+      "valid": true
+    },
+    {
+      "slug": "shot-苗苗",
+      "title": "《苗苗和鼻子后面的冠冠怪》",
+      "procedure": "呼吸道感染",
+      "child": "苗苗",
+      "pages": 9,
+      "valid": true
+    },
+    {
+      "slug": "tonsil-果果",
+      "title": "《果果和喉咙里的火山怪》",
+      "procedure": "扁桃体切除术",
+      "child": "果果",
+      "pages": 9,
+      "valid": true
+    }
+  ]
+}

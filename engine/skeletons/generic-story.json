@@ -1,0 +1,130 @@
+{
+  "key": "generic-story",
+  "label": "通用故事（默认小怪兽）",
+  "title": "《{{child.name}}和身体里的小怪兽》",
+  "subtitle": "一个关于去医院、见医生，和一点点勇敢的故事",
+  "hero": {
+    "id": "doctor",
+    "name": "白大褂医生",
+    "line": "白大褂医生不打人，也不凶它。他只是蹲下来，跟它轻轻说了几句话。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和身体里的小怪兽",
+      "text": "这是{{child.name}}的故事。故事里有一只不太说话的小怪兽，还有一位愿意跟它讲道理的医生。",
+      "asset": "scene_cover",
+      "props": [
+        "mom__hug",
+        "kid:stand",
+        "villain_dino__peek"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "它住在身体里",
+      "text": "{{villain.line}}它不太会说话，只会用身体告诉你：这里不舒服，那里不对劲。",
+      "asset": "scene_ward_bed_close",
+      "props": [
+        "villain_dino__shy"
+      ]
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "医生说，他来想办法",
+      "text": "这次要做的是{{procedure.label}}。医生跟{{child.name}}说：你不用跟它打架，这件事交给我。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "doctor__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "title": "睡一小觉",
+      "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。睡着的时候一点感觉都没有。",
+      "asset": "scene_cloud_anesthesia",
+      "props": [
+        "kid:sleep"
+      ],
+      "stand": "bed",
+      "requires": [
+        "anesthesia"
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "display": "value_text"
+      },
+      "variants": {
+        "fact": "anesthesia",
+        "cases": {
+          "regional": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让要动的那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "local": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让要动的那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "none": {
+            "skip": true
+          }
+        }
+      }
+    },
+    {
+      "id": "battle",
+      "layout": "full",
+      "title": "那天，医生和护士一起帮忙",
+      "text": "{{child.name}}只要躺着，剩下的交给他们。他们知道怎么让它安静下来。",
+      "asset": "scene_hospital_front",
+      "props": [
+        "doctor__wave",
+        "villain_dino__back"
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "醒来的时候，它安静了",
+      "text": "{{child.name}}睁开眼睛，身体轻了一点。医生说：{{fact.stay.short}}，我们就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "mom__hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "它不闹了，{{child.name}}也舒服了。这枚徽章，是那天你自己走进去、又自己走出来的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "小怪兽安静了",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}

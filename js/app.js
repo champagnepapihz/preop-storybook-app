@@ -1,0 +1,661 @@
+﻿import { assembleBook } from '../engine/assemble.mjs';
+import { composeCase, findProcedure } from '../engine/compose.mjs';
+import { validateBook, auditCase } from '../engine/validate.mjs';
+import { esc, pageHTML as renderPageHTML, colophonHTML } from './book-render.mjs';
+
+// 版面逻辑只有一份（book-render.mjs）。这里只决定"阅读器里的图懒加载"。
+// 打印副本必须 eager：懒加载的图不进视口就不解码，PDF 里是空白。
+const pageHTML = (page, book) => renderPageHTML(page, book, { lazy: true });
+const escapeHTML = esc;
+
+const $ = (s) => document.querySelector(s);
+
+const state = {
+  manifest: null,
+  skeletons: {},
+  catalog: null,
+  presets: [],
+  presetIdx: 0,
+  flip: null,
+  book: null,
+  modules: null,
+  demoIdx: -1,
+  pageHeight: 0,
+};
+
+/* ---------------- 数据加载 ---------------- */
+
+async function loadJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url} -> ${r.status}`);
+  return r.json();
+}
+
+async function boot() {
+  const [manifest, skIndex, catalog, modules] = await Promise.all([
+    loadJSON('assets/manifest.json'),
+    loadJSON('engine/skeletons/index.json'),
+    loadJSON('engine/catalog.json'),
+    loadJSON('engine/modules.json'),
+  ]);
+  state.manifest = manifest;
+  state.catalog = catalog;
+  state.modules = modules;
+
+  const entries = await Promise.all(
+    Object.entries(skIndex).map(async ([k, file]) => [k, await loadJSON(`engine/skeletons/${file}`)])
+  );
+  state.skeletons = Object.fromEntries(entries);
+
+  state.presets = catalog.presets || [];
+  buildPicker();
+
+  $('#gen').addEventListener('click', () => generate());
+  $('#sample').addEventListener('click', () => applyDemo(1));
+  $('#new').addEventListener('click', () => startNewCase());
+  $('#print').addEventListener('click', printBook);
+  $('#prev').addEventListener('click', () => goPrev());
+  $('#next').addEventListener('click', () => goNext());
+  document.addEventListener('keydown', (e) => {
+    if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+    if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'ArrowRight') goNext();
+  });
+
+  // 窗口尺寸变了，页面被 PageFlip 重算，立牌基准跟着更新（防抖，翻页时不参与）
+  window.addEventListener('resize', schedulePageHeightSync);
+
+  // 默认：不预填任何东西，书位显示"待选"卡片。
+  // 只有 ?case=N（演示/回归）或点「换个病例」才会填入具体值。
+  const raw = new URLSearchParams(location.search).get('case');
+  if (raw !== null) {
+    const n = Number(raw);
+    applyPreset(Number.isFinite(n) && n > 0 ? n : 0);
+  } else {
+    renderIdle();
+  }
+}
+
+/* ---------------- 空白态 ---------------- */
+
+function renderIdle(hint) {
+  setFlipDetached(false);
+  if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
+  state.book = null;
+
+  const reader = document.querySelector('.reader');
+  document.getElementById('book')?.remove();
+  const host = document.createElement('div');
+  host.className = 'book book--idle';
+  host.id = 'book';
+  host.innerHTML = `<div class="page page--checklist" data-density="hard">
+    <div class="page__inner">
+      <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有选病例</span>
+      <h2 class="cl-title" style="font-size:19px;line-height:1.55">先选一个病种</h2>
+      <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">
+        科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和留置针。<br />填了什么就出现什么，没填的不会出现在书里。
+      </p>
+      <p class="page__text" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">
+        想先看一眼成品？点「换个病例」。
+      </p>
+    </div>
+  </div>`;
+  reader.insertBefore(host, reader.querySelector('.reader__bar'));
+
+  const info = $('#pageinfo');
+  if (info) info.textContent = '未选择';
+  const st = $('#status');
+  st.className = 'status status--idle';
+  st.innerHTML = '<span class="status__chip">未开始</span><span class="status__text">选择科室、病种、术式后生成</span>';
+  $('#audit').innerHTML = hint ? `<li class="audit__item audit__item--warn">${escapeHTML(hint)}</li>` : '';
+  $('#audit').style.display = hint ? '' : 'none';
+  $('#report').textContent = '';
+}
+
+/* ---------------- 选择器（受控词表） ---------------- */
+
+function opt(value, label) {
+  return `<option value="${escapeHTML(value)}">${escapeHTML(label)}</option>`;
+}
+
+function buildPicker() {
+  const c = state.catalog;
+
+  // 科室 → 病种 → 术式：三级都从「未选择」开始，
+  // 不存在任何默认值 —— 每一项都必须有人亲手选一次，才算确认。
+  $('#f-dept').innerHTML = opt('', '未选择') + c.departments.map((d) => opt(d.id, d.label)).join('');
+  $('#f-dept').addEventListener('change', () => { fillGroups(false); });
+  $('#f-group').addEventListener('change', () => { fillProcedures(false); });
+
+  // 麻醉：默认"未确认"
+  $('#f-anes').innerHTML = opt('', '未确认') + c.anesthesia.map((a) => opt(a.id, a.label)).join('');
+
+  // 数字一律不预填：0-24 小时 / 0-10 天
+  const hours = (id) => {
+    const el = $(id);
+    el.innerHTML = opt('', '未确认');
+    for (let i = 0; i <= 24; i++) el.innerHTML += opt(String(i), `${i} 小时`);
+  };
+  hours('#f-fast');
+  hours('#f-liquid');
+
+  const stay = $('#f-stay');
+  stay.innerHTML = opt('', '未确认');
+  for (let i = 0; i <= 10; i++) stay.innerHTML += opt(String(i), `${i} 天`);
+
+  // 留置针：确认"有"和确认"没有"都算确认，只有"未确认"才进缺口
+  $('#f-device').innerHTML = opt('', '未确认')
+    + opt('iv', '会留一只')
+    + opt('none', '不留');
+
+  fillGroups(false);
+}
+
+function fillGroups() {
+  const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
+  const groups = dept?.groups || [];
+  $('#f-group').innerHTML = opt('', groups.length ? '未选择' : '—') + groups.map((g) => opt(g.id, g.label)).join('');
+  fillProcedures();
+}
+
+function fillProcedures() {
+  const dept = state.catalog.departments.find((d) => d.id === $('#f-dept').value);
+  const group = (dept?.groups || []).find((g) => g.id === $('#f-group').value);
+  const procs = group?.procedures || [];
+  $('#f-proc').innerHTML = opt('', procs.length ? '未选择' : '—')
+    // 没有专属骨架的术式会落到通用小怪兽，所以不再需要「暂无故事」这种标注
+    + procs.map((p) => opt(p.id, p.label)).join('');
+}
+
+function selectProcedure(id) {
+  const found = findProcedure(state.catalog, id);
+  if (!found) return;
+  $('#f-dept').value = found.dept.id;
+  fillGroups();
+  $('#f-group').value = found.group.id;
+  fillProcedures();
+  $('#f-proc').value = id;
+}
+
+/** 清空整个表单（回到"什么都没确认"的状态） */
+function resetForm() {
+  $('#f-dept').value = '';
+  fillGroups();
+  $('#f-name').value = '';
+  $('#f-age').value = '';
+  $('#f-gender').value = '';
+  $('#f-anes').value = '';
+  $('#f-fast').value = '';
+  $('#f-liquid').value = '';
+  $('#f-stay').value = '';
+  $('#f-device').value = '';
+}
+
+const demoList = () => (state.presets || []).filter((p) => p.demo === 'complete');
+
+/** 「换个病例」：只在三份完整病例之间循环，草稿 / 清单形态用 ?case=N 单独看 */
+function applyDemo(step = 1) {
+  const list = demoList();
+  if (!list.length) return;
+  const n = list.length;
+  state.demoIdx = ((state.demoIdx + step) % n + n) % n;
+  applyPresetByObject(list[state.demoIdx]);
+  state.presetIdx = state.presets.indexOf(list[state.demoIdx]);
+}
+
+/** 「新建病例」：回到什么都没确认的状态，下一次「换个病例」从第一份开始 */
+function startNewCase() {
+  resetForm();
+  state.demoIdx = -1;
+  state.presetIdx = 0;
+  renderIdle();
+}
+
+/** 演示病例：这是唯一的"预填"来源，用于演示与回归 */
+function applyPreset(i) {
+  if (!state.presets.length) return;
+  state.presetIdx = ((i % state.presets.length) + state.presets.length) % state.presets.length;
+  const p = state.presets[state.presetIdx];
+  const idx = demoList().indexOf(p);   // 从 ?case=N 进来时，把演示游标对齐到这一本
+  if (idx >= 0) state.demoIdx = idx;
+  applyPresetByObject(p);
+}
+
+function applyPresetByObject(p) {
+  selectProcedure(p.procedure);
+  $('#f-name').value = p.name || '';
+  $('#f-age').value = p.age ?? '';
+  $('#f-gender').value = p.gender || '';
+  $('#f-anes').value = p.anesthesia || '';
+  $('#f-fast').value = p.fasting == null ? '' : String(p.fasting);
+  $('#f-liquid').value = p.liquid == null ? '' : String(p.liquid);
+  $('#f-stay').value = p.stay == null ? '' : String(p.stay);
+  $('#f-device').value = (p.devices && p.devices[0]) || '';
+
+  generate();
+}
+
+/* ---------------- 生成 ---------------- */
+
+let generating = false;
+
+function readForm() {
+  const num = (v) => (v === '' ? null : Number(v));
+  return {
+    procedureId: $('#f-proc').value,
+    childName: $('#f-name').value.trim(),
+    gender: $('#f-gender').value || null,
+    age: num($('#f-age').value),
+    anesthesiaId: $('#f-anes').value || null,
+    fastingHours: num($('#f-fast').value),
+    liquidHours: num($('#f-liquid').value),
+    stayDays: num($('#f-stay').value),
+    devices: $('#f-device').value ? [$('#f-device').value] : [],
+  };
+}
+
+async function generate() {
+  if (generating) return;
+  generating = true;
+  const btn = $('#gen');
+  const label = btn.textContent;
+  btn.textContent = '正在缝…';
+
+  try {
+    const form = readForm();
+    if (!form.procedureId) {
+      renderIdle('请先选择科室、病种和术式 —— 这三项都不是默认值。');
+      return;
+    }
+    const caseObj = composeCase({ catalog: state.catalog, ...form });
+    const book = assembleBook(caseObj, state.manifest, state.skeletons, state.modules);
+    const report = validateBook(book);
+
+    state.book = book;
+    renderStatus(caseObj, book, report);
+    renderBook(book);
+  } catch (err) {
+    renderError(err);
+  } finally {
+    btn.textContent = label;
+    generating = false;
+  }
+}
+
+/* ---------------- 封面/封底位姿：先挪书、停稳、再翻 ---------------- */
+
+const POSE_GLIDE_MS = 900; // glide .8s + 100ms 停稳再翻，节拍：点-移-停-翻
+let seqBusy = false;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const readerEl = () => document.querySelector('.reader');
+
+// landscape 下封面（右半单页）/封底（左半单页）把可见单页挪到阅读区正中；portrait 不处理
+function syncPose(pageIdx) {
+  const flip = state.flip;
+  if (!flip) return;
+  if (pageIdx === undefined) pageIdx = flip.getCurrentPageIndex();
+  const landscape = flip.getOrientation() === 'landscape';
+  const last = flip.getPageCount() - 1;
+  readerEl().classList.toggle('reader--cover', landscape && pageIdx === 0);
+  readerEl().classList.toggle('reader--back', landscape && pageIdx === last);
+}
+
+// Detach flip layer: move .stf__block children (pages + 4 flip shadows) to .reader
+// with position:fixed for the flip duration. Offsets come from --blkL/--blkT (block
+// viewport origin, refreshed every flip). fixed boxes never grow document scroll;
+// paint is identical. Restored on landing. Temp clones created mid-detach via
+// parentElement.appendChild (e.g. portrait drags) are covered by the .reader.flip-on
+// selector automatically and culled here so no orphans survive. A transparent
+// .flip-catcher stays in the emptied block so PageFlip's mousedown/touchstart
+// listeners (bound to .stf__block) keep receiving drag starts.
+const flipStash = [];
+function setFlipDetached(on) {
+  const block = document.querySelector('#book .stf__block');
+  const reader = document.querySelector('.reader');
+  if (!block || !reader) return;
+  if (on) {
+    if (flipStash.length) return;
+    const r = block.getBoundingClientRect();
+    document.body.style.setProperty('--blkL', r.left + 'px');
+    document.body.style.setProperty('--blkT', r.top + 'px');
+    reader.classList.add('flip-on');
+    [...block.children].forEach((el) => {
+      flipStash.push(el);
+      reader.appendChild(el);
+    });
+    const catcher = document.createElement('div');
+    catcher.className = 'flip-catcher';
+    block.appendChild(catcher);
+  } else {
+    if (!flipStash.length) return;
+    reader.classList.remove('flip-on');
+    block.querySelector('.flip-catcher')?.remove();
+    [...reader.children].forEach((el) => {
+      if (el.classList?.contains('stf__item') && !flipStash.includes(el)) el.remove();
+    });
+    flipStash.forEach((el) => {
+      if (el.isConnected) block.appendChild(el);
+    });
+    flipStash.length = 0;
+  }
+}
+
+async function goNext() {
+  const flip = state.flip;
+  if (!flip || seqBusy) return;
+  if (readerEl().classList.contains('reader--cover')) {
+    seqBusy = true;
+    readerEl().classList.remove('reader--cover');
+    await wait(POSE_GLIDE_MS);
+    seqBusy = false;
+    if (flip.getCurrentPageIndex() === 0) flip.flipNext();
+    return;
+  }
+  flip.flipNext();
+}
+
+// 从封底往前翻：先向左挪书、停稳，再翻回（落在封面是翻完再往中挪，由 flip 事件处理）
+async function goPrev() {
+  const flip = state.flip;
+  if (!flip || seqBusy) return;
+  if (readerEl().classList.contains('reader--back')) {
+    seqBusy = true;
+    readerEl().classList.remove('reader--back');
+    await wait(POSE_GLIDE_MS);
+    seqBusy = false;
+    if (flip.getCurrentPageIndex() === flip.getPageCount() - 1) flip.flipPrev();
+    return;
+  }
+  flip.flipPrev();
+}
+
+/* ---------------- 侧栏：事实与校验 ---------------- */
+
+function renderStatus(caseObj, book, report) {
+  const VERSION_LABEL = { confirmed: '已确认', draft: '草稿' };
+  const st = $('#status');
+  st.className = `status status--${book.version}`;
+  st.innerHTML = `<span class="status__chip">${VERSION_LABEL[book.version] || book.version}</span>
+    <span class="status__text">${(caseObj.missing || []).length
+      ? `${book.pages.length + 1} 面 · ${caseObj.missing.length} 项未确认，对应的页没有生成`
+      : `${book.pages.length + 1} 面 · 事实齐全`}</span>`;
+
+  // 缺口：只列"未确认"，不猜
+  const audit = $('#audit');
+  const notes = auditCase(caseObj);
+  const gaps = (caseObj.missing || []).map((k) => missingName(k));
+  const items = [];
+  if (gaps.length) items.push(`<li class="audit__item audit__item--warn">未确认：${gaps.map(escapeHTML).join('、')} —— 这几项对应的页不会出现在书里</li>`);
+  for (const n of notes) items.push(`<li class="audit__item audit__item--${n.level}">${escapeHTML(n.text)}</li>`);
+  audit.innerHTML = items.join('');
+  audit.style.display = items.length ? '' : 'none';
+
+  const el2 = $('#report');
+  if (report.ok) {
+    el2.innerHTML = `<strong>校验通过</strong> · ${report.checked_pages + 1} 面 · 事实逐项来自你的确认，注意事项来自词表`;
+  } else {
+    const bad = report.issues.filter((i) => i.level === 'error');
+    el2.innerHTML = `<span style="color:#b5573c">校验未通过 ${bad.length} 项</span>：${escapeHTML(bad[0].message)}`;
+  }
+}
+
+function missingName(key) {
+  return ({ procedure: '术式', fasting: '禁食时长', anesthesia: '麻醉方式', device: '留置针', stay: '住院时长' })[key] || key;
+}
+
+function renderError(err) {
+  $('#status').className = 'status status--draft';
+  $('#status').innerHTML = '<span class="status__chip">未能生成</span>';
+  $('#audit').innerHTML = `<li class="audit__item audit__item--warn">${escapeHTML(err.message)}</li>`;
+  $('#report').textContent = '';
+}
+
+/* ---------------- 书页渲染 ---------------- */
+
+function el(html) {
+  const t = document.createElement('template');
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+
+
+
+
+let phResizeTimer = 0;
+function schedulePageHeightSync() {
+  clearTimeout(phResizeTimer);
+  phResizeTimer = setTimeout(() => {
+    const host = document.getElementById('book');
+    const el = host?.querySelector('.page');
+    const h = Math.round(el?.clientHeight || 0);
+    if (h > 0) document.documentElement.style.setProperty('--ph', `${h}px`);
+    state.pageHeight = h;
+  }, 260);
+}
+
+/**
+ * 打印视图：把当前书按顺序排成一叠静态页面。
+ *
+ * 为什么不用屏幕上的那本：PageFlip 的页面是绝对定位 + transform 摆放的，
+ * 直接打印会重影/裁切。这里用同一套 pageHTML 重新生成一份顺序 DOM，
+ * 只给打印用，平时隐藏。
+ */
+const dataUrlCache = new Map();
+
+function arrayBufferToBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  const CHUNK = 0x8000; // 分块，避免 String.fromCharCode 参数过多爆栈
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(bin);
+}
+
+/** 把打印副本里的 <img> 全部换成内联 data URL。
+ *
+ * 为什么必须内联：打印是同步拍的快照，浏览器不会等图片下载/解码。
+ * 只要有一张图没落地（封面那张 1:1 大图最容易输给 1.2s 超时），
+ * 打出来就是一块白底 —— 而用户根本看不出是哪一步出的问题。
+ * 内联之后打印时零网络、零竞态，有就是有，没有就是真的没有。
+ */
+async function inlinePrintImages(root) {
+  const imgs = [...root.querySelectorAll('img')];
+  await Promise.all(imgs.map(async (img) => {
+    const src = img.getAttribute('src');
+    if (!src || src.startsWith('data:')) return;
+    let task = dataUrlCache.get(src);
+    if (!task) {
+      task = fetch(src)
+        .then(async (r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const buf = await r.arrayBuffer();
+          const type = r.headers.get('content-type')?.split(';')[0] || 'image/png';
+          return `data:${type};base64,${arrayBufferToBase64(buf)}`;
+        })
+        .catch(() => ''); // 拿不到就保留原 src，不因为一张图卡死整本书
+      dataUrlCache.set(src, task);
+    }
+    const dataUrl = await task;
+    if (dataUrl) img.src = dataUrl;
+  }));
+  // 内联后仍等一轮解码，确保打印瞬间每一张都已经有像素
+  await Promise.all(imgs.map((i) => (i.complete && i.naturalWidth
+    ? null
+    : new Promise((res) => { i.onload = i.onerror = res; }))));
+}
+
+let printSheetsTask = null;
+
+function buildPrintSheets(book) {
+  const root = document.getElementById('print-root');
+  if (!root) return Promise.resolve();
+  root.innerHTML = '';
+  const sheets = [
+    ...book.pages.map((p) => pageHTML(p, book)),
+    colophonHTML(book),
+  ];
+  for (const html of sheets) {
+    const sheet = document.createElement('div');
+    sheet.className = 'print-sheet';
+    sheet.innerHTML = html;
+    root.appendChild(sheet);
+  }
+  root.dataset.bookId = book.book_id || '';
+  // 懒加载的图不进视口就不会解码，打印出来是空白 —— 打印副本一律 eager
+  root.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+  printSheetsTask = inlinePrintImages(root);
+  return printSheetsTask;
+}
+
+async function printBook() {
+  if (!state.book) {
+    renderIdle('还没有书可以打印 —— 先生成一本。');
+    return;
+  }
+  const btn = $('#print');
+  const label = btn.textContent;
+  btn.textContent = '正在准备…';
+
+  // 关键：不要无条件重建。renderBook 时已经烘好一份，图片也内联好了。
+  const root = document.getElementById('print-root');
+  const stale = !root.querySelector('.print-sheet') || root.dataset.bookId !== (state.book.book_id || '');
+  if (stale) buildPrintSheets(state.book);
+  // 等烘图/内联完成（正常是秒回，因为生成书时就开始烘了）
+  if (printSheetsTask) await Promise.race([printSheetsTask, new Promise((r) => setTimeout(r, 6000))]);
+
+  // 兜底：只等还没加载完的图。不要对已 complete 的图调 decode() ——
+  // 在部分 Chromium 上它返回的 promise 会一直 pending，打印就永远等下去。
+  const pending = [...root.querySelectorAll('img')].filter((i) => !i.complete || !i.naturalWidth);
+  if (pending.length) {
+    await Promise.race([
+      Promise.all(pending.map((i) => new Promise((res) => { i.onload = i.onerror = res; }))),
+      new Promise((res) => setTimeout(res, 1200)),
+    ]);
+  }
+  await new Promise((r) => setTimeout(r, 80));
+  btn.textContent = label;
+
+  // 打印 / 存 PDF 时，文件名取书里的名字（浏览器用 document.title 命名）
+  const prev = document.title;
+  const name = (state.book.cover?.title || '').replace(/[《》]/g, '') || '术前绘本';
+  document.title = name;
+  try {
+    window.print();
+  } finally {
+    setTimeout(() => { document.title = prev; }, 800);
+  }
+}
+
+function renderBook(book) {
+  setFlipDetached(false); // 换病例时若正处翻页先把搬走的节点送回去避免孤儿
+  if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
+
+  // PageFlip.destroy() 会把宿主节点一起摘掉，换病例时重建一个新的
+  const reader = document.querySelector('.reader');
+  document.getElementById('book')?.remove();
+  const host = document.createElement('div');
+  host.className = 'book';
+  host.id = 'book';
+  reader.insertBefore(host, reader.querySelector('.reader__bar'));
+
+  const frag = document.createDocumentFragment();
+  for (const p of book.pages) frag.appendChild(el(pageHTML(p, book)));
+  frag.appendChild(el(colophonHTML(book)));
+  host.appendChild(frag);
+
+  // 封面守卫：封面位姿下接管一切指针手势，先挪书、停稳、再自动翻开，
+  // 与按钮/键盘手感一致；挪开后守卫自动隐藏，书内翻页恢复 PageFlip 直接操控。
+  const guard = document.createElement('div');
+  guard.className = 'cover-guard';
+  guard.addEventListener('mousedown', (e) => { if (e.button !== 0) return; e.preventDefault(); goNext(); });
+  let gY = 0, gT = 0;
+  guard.addEventListener('touchstart', (e) => { const t = e.changedTouches[0]; gY = t.clientY; gT = Date.now(); }, { passive: true });
+  guard.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (Math.abs(t.clientY - gY) < 10 && Date.now() - gT < 400) { e.preventDefault(); goNext(); }
+  });
+  host.appendChild(guard);
+
+  const pages = host.querySelectorAll('.page');
+  const flip = new St.PageFlip(host, {
+    width: 430,
+    height: 560,
+    size: 'stretch',
+    minWidth: 300,
+    maxWidth: 460,
+    minHeight: 390,
+    maxHeight: 599,
+    showCover: true,
+    usePortrait: true,
+    drawShadow: true,
+    maxShadowOpacity: 0.32,
+    flippingTime: 820,
+    mobileScrollSupport: true,
+  });
+  flip.loadFromHTML(pages);
+
+  // 立牌尺寸以「整页高度」为单位：把实际页高写进 --ph，比例才不会受图片区高度影响。
+  //
+  // 只在两件事发生时重算：换书、窗口尺寸变化。绝不在翻页过程中重算 ——
+  // PageFlip 翻页时会对页面做 detach / 重排，页高瞬时抖动一次，
+  // 若跟着重算，所有立牌会按新值缩放，看起来就是「翻页时人物抽动一下」。
+  // 变量写在 :root —— 翻页时 PageFlip 会把页面元素临时搬到 .reader 下，
+  // 若变量挂在 #book 上，搬出去的瞬间就继承不到，立牌回落到 560px 默认值，
+  // 于是「翻页时人物抽动一下」。挂在根节点上，搬到哪儿都还是同一个基准。
+  const syncPageHeight = () => {
+    const el = host.querySelector('.page');
+    const h = Math.round(el?.clientHeight || 0);   // 取整：clientHeight 可能是 509.015625，避免亚像素抖动
+    if (h > 0 && h !== state.pageHeight) {
+      state.pageHeight = h;
+      document.documentElement.style.setProperty('--ph', `${h}px`);
+    }
+  };
+  state.pageHeight = 0;
+  syncPageHeight();
+  // PageFlip 定尺寸是异步的（窄屏要更久），多补几次；值没变就不会触发重排
+  requestAnimationFrame(syncPageHeight);
+  [120, 400, 900].forEach((t) => setTimeout(syncPageHeight, t));
+
+  state.flip = flip;
+  buildPrintSheets(book);
+
+  flip.on('flip', (e) => {
+    const i = e.data;
+    const total = book.pages.length + 1;
+    $('#pageinfo').textContent = i === 0 ? '封面' : `${i + 1} / ${total}`;
+    setFlipDetached(false);
+    syncPose(i); // 落在封面/封底：翻完再往中间挪
+  });
+  flip.on('changeState', (e) => {
+    const s = e.data;
+    if (s === 'flipping' || s === 'user_fold' || s === 'fold_corner') {
+      setFlipDetached(true); // 书页/阴影不再撑大 scrollHeight绘制位置不变
+      const c = flip.getCurrentPageIndex();
+      if (s === 'flipping') {
+        if (c === 0) reader.classList.remove('reader--cover');
+        if (c === flip.getPageCount() - 1) reader.classList.remove('reader--back');
+      }
+    } else if (s === 'read') {
+      setFlipDetached(false);
+      syncPose(); // 兜住被取消的手动折页
+    }
+  });
+  flip.on('changeOrientation', () => syncPose());
+  flip.on('init', (e) => syncPose(e.data?.page ?? 0));
+  syncPose(0);
+  $('#pageinfo').textContent = '封面';
+
+  // ?page=N 直接翻到某页（演示/截图用）
+  const want = Number(new URLSearchParams(location.search).get('page'));
+  if (want > 0 && want < book.pages.length + 1) {
+    setTimeout(() => { try { flip.turnToPage(want); } catch {} }, 60);
+  }
+}
+
+
+boot().catch((e) => {
+  console.error(e);
+  $('#report').textContent = `初始化失败：${e.message}`;
+});

@@ -1,0 +1,129 @@
+{
+  "key": "hernia",
+  "label": "腹股沟疝修补术",
+  "title": "《{{child.name}}和肚皮上的小鼓包》",
+  "subtitle": "一个关于小石头、一个小缝，和一次很轻的手术的故事",
+  "hero": {
+    "id": "doctor",
+    "name": "白大褂医生",
+    "line": "白大褂医生不打人，他只是把手掌焐热，再轻轻按一按那个鼓包。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和肚皮上的小鼓包",
+      "text": "这是{{child.name}}的故事。故事里有一颗爱钻缝的小石头，还有一件把它请回去的小事。",
+      "asset": "scene_cover",
+      "props": [
+        "kid:stand",
+        "villain_pebble__wow"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "小石头怪钻了出来",
+      "text": "{{villain.line}}哭得太用力、站得太久，它就又探出头来，鼓成一个小小的包。",
+      "asset": "scene_belly_pocket",
+      "props": [
+        "villain_pebble__angry"
+      ]
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "医生说，缝要补上",
+      "text": "医生说：那不是坏东西，只是走错了地方。把那个小缝补好，它就回不来了。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "doctor__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "title": "睡一小觉",
+      "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。",
+      "asset": "scene_cloud_anesthesia",
+      "props": [
+        "kid:sleep"
+      ],
+      "stand": "bed",
+      "requires": [
+        "anesthesia"
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "display": "value_text"
+      },
+      "variants": {
+        "fact": "anesthesia",
+        "cases": {
+          "regional": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让要动的那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "local": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让要动的那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "none": {
+            "skip": true
+          }
+        }
+      }
+    },
+    {
+      "id": "battle",
+      "layout": "full",
+      "title": "肚皮上贴了一小块敷料",
+      "text": "醒来的时候，鼓包不见了。肚皮上贴着一小块敷料，像一枚小小的邮票。",
+      "asset": "scene_hospital_front",
+      "props": [
+        "doctor__wave",
+        "kid:cheer"
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "它回不来了",
+      "text": "{{child.name}}可以慢慢走路了。医生说：{{fact.stay.short}}，就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "mom__hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "小石头怪回不来了，{{child.name}}的肚皮平平的。这枚徽章，是那天你自己走进去的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "小石头怪回家了",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}
