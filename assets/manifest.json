@@ -74,15 +74,33 @@
       "kind": "scene",
       "placeholder": false
     },
+    "scene_little_stove": {
+      "src": "assets/scenes/scene_little_stove.jpg",
+      "alt": "小火炉·透着橘光",
+      "kind": "scene",
+      "placeholder": false
+    },
     "scene_nebulizer": {
       "src": "assets/scenes/scene_nebulizer.jpg",
       "alt": "雾化·下了一场雾",
       "kind": "scene",
       "placeholder": false
     },
+    "scene_plaster_room": {
+      "src": "assets/scenes/scene_plaster_room.jpg",
+      "alt": "石膏固定室·石膏卷与拐杖",
+      "kind": "scene",
+      "placeholder": false
+    },
     "scene_throat_cave": {
       "src": "assets/scenes/scene_throat_cave.jpg",
       "alt": "喉咙山洞",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_tummy_bubbles": {
+      "src": "assets/scenes/scene_tummy_bubbles.jpg",
+      "alt": "肚子里·气泡在打转",
       "kind": "scene",
       "placeholder": false
     },

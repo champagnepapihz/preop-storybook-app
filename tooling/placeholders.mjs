@@ -241,6 +241,8 @@ const LABELS = {
   scene_ear_room: '耳朵小鼓·被泡潮了', scene_ear_window: '耳朵小窗·开好了',
   scene_eye_room: '眼睛房间·一个看左一个看右',
   scene_airway_slide: '气道滑梯·被堵住了', scene_nebulizer: '雾化·下了一场雾',
+  scene_plaster_room: '石膏固定室·石膏卷与拐杖', scene_tummy_bubbles: '肚子里·气泡在打转',
+  scene_little_stove: '小火炉·透着橘光',
   // 旧角色
   villain_volcano: '火山怪', villain_pebble: '小尾巴怪', villain_corona: '冠冠怪',
   villain_dino: '紫色小恐龙', doctor: '白大褂医生', nurse: '护士', nurse_cloud: '云朵护士',

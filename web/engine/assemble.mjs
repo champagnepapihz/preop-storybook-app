@@ -181,6 +181,17 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     throw err;
   }
 
+  /**
+   * 病种可以换掉通用骨架某几页的场景：{ meet: "scene_plaster_room" }
+   *
+   * 三个新反派都有专属场景，但没有专属骨架 —— 通用骨架的遇见页本来借的是
+   * scene_ward_bed_close，三本书都用它，翻两页就看出重复。按页 id 覆盖最小，
+   * 不用为每只怪兽复制一份骨架（复制出去的骨架以后改文案要改三处）。
+   * 只覆盖骨架里真实存在的页 id，写错了不会凭空多出一页。
+   */
+  const SCENE_OVERRIDE = villainDef.scenes || {};
+  const sceneOf = (pageId, fallback) => SCENE_OVERRIDE[pageId] || fallback;
+
   const villain = { ...villainDef, line: resolve(villainDef.line, baseCtx, 'villain.line') };
   const hero = { ...sk.hero, line: resolve(sk.hero.line, baseCtx, 'hero.line') };
   const ctx = { ...baseCtx, villain, hero };
@@ -265,7 +276,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         condition: null,
         title: resolve(src.title, ctx, `${p.id}.title`),
         text: resolve(src.text, ctx, `${p.id}.text`),
-        image: asset(src.asset || p.asset),
+        image: asset(sceneOf(p.id, src.asset || p.asset)),
         props: (src.props || p.props || []).map(resolveProp).map(asset),
         fact,
         badge: src.badge
@@ -320,8 +331,11 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       ...(sk.kicker ? { kicker: resolve(sk.kicker, ctx, 'kicker') } : {}),
     },
     cover: {
-      title: resolve(sk.title, ctx, 'title'),
-      subtitle: resolve(sk.subtitle, ctx, 'subtitle'),
+      // 书名优先用病种自己的：通用骨架只有一个标题《XX和身体里的小怪兽》，
+      // 十几本书同名，而且和站在封面上的那只怪兽没关系。
+      // 病种写了 title 就用它，没写才回到骨架的（专属骨架本来就有专属标题）。
+      title: resolve(villainDef.title || sk.title, ctx, 'title'),
+      subtitle: resolve(villainDef.subtitle || sk.subtitle, ctx, 'subtitle'),
     },
     cast: { villain, hero },
     case: caseObj,
