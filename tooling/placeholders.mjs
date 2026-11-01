@@ -238,9 +238,13 @@ const LABELS = {
   scene_ward_talk: '病房谈话', scene_fasting_moon: '夜里空肚子', scene_cloud_anesthesia: '云朵麻醉',
   scene_butterfly_hand: '手背小蝴蝶', scene_hospital_front: '医院门前', scene_wake_up: '醒来',
   scene_fever_night: '发热之夜', scene_drip_rain: '输液雨夜', scene_ward_bed_close: '病房床头特写',
+  scene_ear_room: '耳朵小鼓·被泡潮了', scene_ear_window: '耳朵小窗·开好了',
+  scene_eye_room: '眼睛房间·一个看左一个看右',
+  scene_airway_slide: '气道滑梯·被堵住了', scene_nebulizer: '雾化·下了一场雾',
   // 旧角色
   villain_volcano: '火山怪', villain_pebble: '小尾巴怪', villain_corona: '冠冠怪',
   villain_dino: '紫色小恐龙', doctor: '白大褂医生', nurse: '护士', nurse_cloud: '云朵护士',
+  villain_water: '小水洼怪咕嘟', villain_fuzz: '毛球怪呼噜', villain_eyes: '眼睛怪左左右右',
   badge_star: '小勇士徽章',
   // 新角色
   kid_boy: '小患者·男孩', kid_girl: '小患者·女孩',

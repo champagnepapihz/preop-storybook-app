@@ -37,7 +37,13 @@ function resolve(str, ctx, where = '') {
 export function pickSkeleton(caseObj, skeletons) {
   const key = caseObj.procedure?.key;
   const own = key && key !== 'generic' ? skeletons?.[key] : null;
-  return own || skeletons?.['generic-story'] || null;
+  if (own) return own;
+  // 没有专属骨架时按类别回落：
+  //   手术类 → generic-story  「那一天」，有睡一觉、有处置
+  //   医疗类 → generic-medical「一天一天」，没有那一天，只有每天做一点
+  // 两种叙事不能共用一份文案 —— 给「鼻腔冲洗」「遮盖治疗」讲「那天护士帮你」是错的。
+  const fallback = caseObj.procedure?.kind === 'medical' ? 'generic-medical' : 'generic-story';
+  return skeletons?.[fallback] || skeletons?.['generic-story'] || null;
 }
 
 /**
@@ -91,16 +97,25 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       const f = caseObj.facts[w.fact];
       if (!f) continue;
       if (w.has_id && !(f.ids || []).includes(w.has_id)) continue;
+      // 变体：同一页在不同取值下换文案/画面（如全麻睡着、局麻醒着）
+      let src = m;
+      if (m.variants) {
+        const fv = caseObj.facts[m.variants.fact];
+        const vid = fv?.ids?.[0];
+        const v = (m.variants.cases || {})[vid] || null;
+        if (v?.skip) continue;
+        src = { ...m, ...(v || {}) };
+      }
       out.push({
         id: m.id,
-        layout: m.layout || 'image_left',
-        stand: m.stand || null,
+        layout: src.layout || 'image_left',
+        stand: src.stand || null,
         draft: false,
         condition: null,
-        title: resolve(m.title, baseCtx, `${m.id}.title`),
-        text: resolve(m.text, baseCtx, `${m.id}.text`),
-        image: asset(m.asset),
-        props: (m.props || []).map(resolveProp).map(asset),
+        title: resolve(src.title, baseCtx, `${m.id}.title`),
+        text: resolve(src.text, baseCtx, `${m.id}.text`),
+        image: asset(src.asset),
+        props: (src.props || []).map(resolveProp).map(asset),
         fact: m.fact
           ? {
               key: m.fact.key,
@@ -234,7 +249,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
   if (mods.length) {
     // 禁食 / 留置针都属于「术前准备」，要排在麻醉、治疗之前；
     // 取页序里最早出现的那个锚点，而不是按数组顺序取第一个匹配
-    const ANCHORS = ['cloud', 'drip', 'battle', 'wake', 'badge'];
+    const ANCHORS = ['cloud', 'nebulizer', 'drip', 'battle', 'treatment', 'wake', 'badge'];
     const idxs = ANCHORS.map((id) => pages.findIndex((p) => p.id === id)).filter((i) => i >= 0);
     const at = idxs.length ? Math.min(...idxs) : -1;
     if (at >= 0) pages.splice(at, 0, ...mods);
@@ -261,7 +276,15 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     book_id: caseObj.case_id,
     mode: 'story',
     version,
-    skeleton: { key: sk.key, label: sk.label },
+    // label 是内部标识（构建日志用），kicker 才是印在封面书名下方那行。
+    // 专属骨架不写 kicker 就回落 label（术式名）；通用骨架写 {{procedure.label}}，
+    // 于是封面照样说清「这次做什么」，而不是把内部术语「通用故事（默认小怪兽）」印上去。
+    skeleton: {
+      key: sk.key,
+      label: sk.label,
+      // 只有通用骨架才有 kicker；专属骨架不写这个键，免得每本书多出一个 "kicker": null
+      ...(sk.kicker ? { kicker: resolve(sk.kicker, ctx, 'kicker') } : {}),
+    },
     cover: {
       title: resolve(sk.title, ctx, 'title'),
       subtitle: resolve(sk.subtitle, ctx, 'subtitle'),

@@ -50,6 +50,18 @@
       "scale": 0.82,
       "label": "紫色小恐龙"
     },
+    "villain_water": {
+      "scale": 0.75,
+      "label": "湖蓝水怪"
+    },
+    "villain_fuzz": {
+      "scale": 0.7,
+      "label": "驼色毛球怪"
+    },
+    "villain_eyes": {
+      "scale": 0.8,
+      "label": "珊瑚粉双眼睛"
+    },
     "badge_star": {
       "scale": 1,
       "label": "徽章"
@@ -77,6 +89,9 @@
     "villain_pebble": 0.022,
     "villain_corona": 0.02,
     "villain_dino": 0.016,
+    "villain_water": 0.018,
+    "villain_fuzz": 0.02,
+    "villain_eyes": 0.015,
     "doctor": 0,
     "nurse": 0
   }

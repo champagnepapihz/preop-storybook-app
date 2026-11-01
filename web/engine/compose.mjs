@@ -132,7 +132,7 @@ export function composeCase(input) {
   // —— 禁食 / 禁水（手术类才需要）——
   const fasting = Number.isFinite(input.fastingHours) ? input.fastingHours : null;
   const liquid = Number.isFinite(input.liquidHours) ? input.liquidHours : null;
-  if (kind === 'surgical' && fasting != null) {
+  if (fasting != null) {
     facts.fasting = {
       key: 'fasting',
       label: '术前空腹',
@@ -220,7 +220,7 @@ export function composeCase(input) {
     case_id: caseId(JSON.stringify([procedure.id, input.childName || '', input.age ?? null, facts])),
     source: 'catalog',
     version: missing.length ? 'draft' : 'confirmed',
-    procedure: { key: skeletonKey || 'generic', id: procedure.id, label: procedure.label },
+    procedure: { key: skeletonKey || 'generic', id: procedure.id, label: procedure.label, kind },
     child: {
       name: (input.childName || '').trim() || '小勇士',
       age: Number.isFinite(input.age) ? input.age : null,

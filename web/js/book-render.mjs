@@ -36,7 +36,7 @@ export function pageHTML(page, book, opts = {}) {
   if (page.layout === 'cover') {
     // 清单书没有骨架，封面文案由页面自带；故事书沿用骨架的 cover
     const cv = page.cover || {};
-    const kicker = cv.kicker || book.skeleton?.label || '';
+    const kicker = cv.kicker || book.skeleton?.kicker || book.skeleton?.label || '';
     const title = cv.title || book.cover?.title || '';
     const sub = cv.subtitle || book.cover?.subtitle || '';
     const ribbon = cv.ribbon || '术前 · 故事';

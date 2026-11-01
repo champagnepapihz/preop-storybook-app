@@ -93,7 +93,7 @@ function renderIdle(hint) {
       <span class="page__cover-kicker" style="position:static;display:inline-block;margin-bottom:14px">还没有选病例</span>
       <h2 class="cl-title" style="font-size:19px;line-height:1.55">先选一个病种</h2>
       <p class="page__text" style="margin-top:16px;text-align:center;color:#6d5949">
-        科室 → 病种 → 术式，再逐项确认麻醉、禁食、住院和留置针。<br />填了什么就出现什么，没填的不会出现在书里。
+        科室 → 病种 → 术式 / 处置，再逐项确认麻醉、禁食、住院和留置针。<br />填了什么就出现什么，没填的不会出现在书里。
       </p>
       <p class="page__text" style="margin-top:auto;text-align:center;font-size:10.5px;opacity:.75">
         想先看一眼成品？点「换个病例」。
@@ -106,7 +106,7 @@ function renderIdle(hint) {
   if (info) info.textContent = '未选择';
   const st = $('#status');
   st.className = 'status status--idle';
-  st.innerHTML = '<span class="status__chip">未开始</span><span class="status__text">选择科室、病种、术式后生成</span>';
+  st.innerHTML = '<span class="status__chip">未开始</span><span class="status__text">选择科室、病种、术式 / 处置后生成</span>';
   $('#audit').innerHTML = hint ? `<li class="audit__item audit__item--warn">${escapeHTML(hint)}</li>` : '';
   $('#audit').style.display = hint ? '' : 'none';
   $('#report').textContent = '';
@@ -264,7 +264,7 @@ async function generate() {
   try {
     const form = readForm();
     if (!form.procedureId) {
-      renderIdle('请先选择科室、病种和术式 —— 这三项都不是默认值。');
+      renderIdle('请先选择科室、病种和术式 / 处置 —— 这三项都不是默认值。');
       return;
     }
     const caseObj = composeCase({ catalog: state.catalog, ...form });

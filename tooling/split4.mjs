@@ -55,8 +55,8 @@ const server = createServer((req, res) => {
     req.on('data', (c) => chunks.push(c));
     req.on('end', () => {
       const id = decodeURIComponent(req.url.split('id=')[1]);
-      mkdirSync(join(ROOT, 'rawpic/parts'), { recursive: true });
-      writeFileSync(join(ROOT, 'rawpic/parts', `${id}.png`), Buffer.concat(chunks));
+      mkdirSync(join(RAW, 'parts'), { recursive: true });
+      writeFileSync(join(RAW, 'parts', `${id}.png`), Buffer.concat(chunks));
       console.log(`ok ${id}.png`);
       res.writeHead(200); res.end('ok');
     });

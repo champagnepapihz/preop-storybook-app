@@ -4,5 +4,9 @@
   "injection": "injection.json",
   "hernia": "hernia.json",
   "pneumonia": "pneumonia.json",
-  "generic-story": "generic-story.json"
+  "tympanostomy": "tympanostomy.json",
+  "asthma": "asthma.json",
+  "strabismus": "strabismus.json",
+  "generic-story": "generic-story.json",
+  "generic-medical": "generic-medical.json"
 }

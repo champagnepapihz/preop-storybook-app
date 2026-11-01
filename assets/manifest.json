@@ -2,6 +2,12 @@
   "version": "0.3.0",
   "note": "id 即文件名（不含扩展名）。丢文件进 assets/{scenes,characters,badges}/ 即自动登记，无需改代码。",
   "assets": {
+    "scene_airway_slide": {
+      "src": "assets/scenes/scene_airway_slide.jpg",
+      "alt": "气道滑梯·被堵住了",
+      "kind": "scene",
+      "placeholder": false
+    },
     "scene_belly_pocket": {
       "src": "assets/scenes/scene_belly_pocket.jpg",
       "alt": "肚子小口袋",
@@ -32,6 +38,24 @@
       "kind": "scene",
       "placeholder": false
     },
+    "scene_ear_room": {
+      "src": "assets/scenes/scene_ear_room.jpg",
+      "alt": "耳朵小鼓·被泡潮了",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_ear_window": {
+      "src": "assets/scenes/scene_ear_window.jpg",
+      "alt": "耳朵小窗·开好了",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_eye_room": {
+      "src": "assets/scenes/scene_eye_room.jpg",
+      "alt": "眼睛房间·一个看左一个看右",
+      "kind": "scene",
+      "placeholder": false
+    },
     "scene_fasting_moon": {
       "src": "assets/scenes/scene_fasting_moon.jpg",
       "alt": "夜里空肚子",
@@ -47,6 +71,12 @@
     "scene_hospital_front": {
       "src": "assets/scenes/scene_hospital_front.jpg",
       "alt": "医院门前",
+      "kind": "scene",
+      "placeholder": false
+    },
+    "scene_nebulizer": {
+      "src": "assets/scenes/scene_nebulizer.jpg",
+      "alt": "雾化·下了一场雾",
       "kind": "scene",
       "placeholder": false
     },
@@ -290,6 +320,54 @@
       "kind": "character",
       "placeholder": false
     },
+    "villain_eyes__cheer": {
+      "src": "assets/characters/villain_eyes__cheer.png",
+      "alt": "眼睛怪左左右右·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_eyes__peek": {
+      "src": "assets/characters/villain_eyes__peek.png",
+      "alt": "眼睛怪左左右右·偷看",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_eyes__shy": {
+      "src": "assets/characters/villain_eyes__shy.png",
+      "alt": "眼睛怪左左右右·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_eyes__stand": {
+      "src": "assets/characters/villain_eyes__stand.png",
+      "alt": "眼睛怪左左右右·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fuzz__cheer": {
+      "src": "assets/characters/villain_fuzz__cheer.png",
+      "alt": "毛球怪呼噜·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fuzz__shy": {
+      "src": "assets/characters/villain_fuzz__shy.png",
+      "alt": "毛球怪呼噜·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fuzz__sleep": {
+      "src": "assets/characters/villain_fuzz__sleep.png",
+      "alt": "毛球怪呼噜·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fuzz__stand": {
+      "src": "assets/characters/villain_fuzz__stand.png",
+      "alt": "毛球怪呼噜·站",
+      "kind": "character",
+      "placeholder": false
+    },
     "villain_pebble": {
       "src": "assets/characters/villain_pebble.webp",
       "alt": "小尾巴怪",
@@ -347,6 +425,30 @@
     "villain_volcano__wow": {
       "src": "assets/characters/villain_volcano__wow.webp",
       "alt": "火山怪·wow",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_water__peek": {
+      "src": "assets/characters/villain_water__peek.png",
+      "alt": "小水洼怪咕嘟·偷看",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_water__shy": {
+      "src": "assets/characters/villain_water__shy.png",
+      "alt": "小水洼怪咕嘟·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_water__sleep": {
+      "src": "assets/characters/villain_water__sleep.png",
+      "alt": "小水洼怪咕嘟·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_water__stand": {
+      "src": "assets/characters/villain_water__stand.png",
+      "alt": "小水洼怪咕嘟·站",
       "kind": "character",
       "placeholder": false
     },
@@ -409,6 +511,18 @@
         "scale": 0.82,
         "label": "紫色小恐龙"
       },
+      "villain_water": {
+        "scale": 0.75,
+        "label": "湖蓝水怪"
+      },
+      "villain_fuzz": {
+        "scale": 0.7,
+        "label": "驼色毛球怪"
+      },
+      "villain_eyes": {
+        "scale": 0.8,
+        "label": "珊瑚粉双眼睛"
+      },
       "badge_star": {
         "scale": 1,
         "label": "徽章"
@@ -436,6 +550,9 @@
       "villain_pebble": 0.022,
       "villain_corona": 0.02,
       "villain_dino": 0.016,
+      "villain_water": 0.018,
+      "villain_fuzz": 0.02,
+      "villain_eyes": 0.015,
       "doctor": 0,
       "nurse": 0
     }

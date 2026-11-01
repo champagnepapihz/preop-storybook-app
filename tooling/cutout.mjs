@@ -185,6 +185,25 @@ img.onload = async () => {
     alpha[y * W + x] = s / n;
   }
 
+  // ---- 5.5 绿幕渗色清理 ----
+  // 绿底棚拍时，主体轮廓会带一圈绿渗色；脚底接触阴影还会把两脚之间的洞口封住，
+  // 让洞填充把背景绿整块当成主体。这里只处理「绿通道明显压过 R/B」的像素：
+  // 本项目角色是粉/蓝/驼/奶白，绿色占优不可能是主体本色，删了不会缺角。
+  const GREEN_T0 = 14, GREEN_T1 = 44;
+  let greened = 0;
+  for (let i = 0; i < N; i++) {
+    const p = i * 4;
+    if (d[p + 3] === 0) continue;
+    const r = d[p], g = d[p + 1], b = d[p + 2];
+    const lim = Math.max(r, b);
+    const over = g - lim;
+    if (over <= GREEN_T0) continue;
+    const k = Math.min(1, (over - GREEN_T0) / (GREEN_T1 - GREEN_T0));
+    alpha[i] *= 1 - k;
+    d[p + 1] = Math.round(lim + (g - lim) * 0.12); // 顺带把剩下的绿压回中性
+    if (k > 0.5) greened++;
+  }
+
   // 注：地面接触阴影保留。按色相剥离会误伤浅色主体（奶白大褂被啃出洞），
   // 且立牌本身带一点接触影更自然，页面另有 drop-shadow，不冲突。
 
@@ -219,6 +238,7 @@ img.onload = async () => {
 
   document.getElementById('log').textContent =
     'OK ' + OUT_ID + ' comps=' + comps.length + ' kept=' + keep.size +
+    ' greenKilled=' + greened +
     ' bbox=' + [minX, minY, maxX, maxY].join(',');
   document.title = 'done';
 };

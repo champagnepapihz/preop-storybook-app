@@ -126,5 +126,6 @@
         "engrave": "{{child.name}}"
       }
     }
-  ]
+  ],
+  "kicker": "{{procedure.label}}"
 }

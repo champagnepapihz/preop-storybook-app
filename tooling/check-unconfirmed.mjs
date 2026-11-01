@@ -48,9 +48,9 @@ const PROCEDURES = [
   'appendectomy',      // 专属剧本 · 手术
   'hernia',            // 专属剧本 · 手术（小石头怪）
   'iv-infusion',       // 医疗类 · 专属
-  'pneumonia',         // 医疗类 · 专属
+  'pneumonia-iv',      // 医疗类 · 专属（处置＝静脉输液治疗）
   'polydactyly',       // 通用小怪兽 · 手术
-  'febrile-seizure',   // 通用小怪兽 · 医疗
+  'antipyretic-watch', // 通用小怪兽 · 医疗（处置＝退热处理与留观）
 ];
 
 for (const procedureId of PROCEDURES) {

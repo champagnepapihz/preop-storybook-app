@@ -26,7 +26,7 @@
     <section class="workbench">
       <aside class="panel felt">
         <h2 class="panel__h">① 选病例</h2>
-        <p class="panel__hint">受控词表录入：只做选择，不写字。词表里没有的术式选不出来。</p>
+        <p class="panel__hint">受控词表录入：只做选择，不写字。词表里没有的术式 / 处置选不出来。</p>
         <div class="picker">
           <label class="field"><span>科室</span><select id="f-dept"></select></label>
           <label class="field"><span>病种</span><select id="f-group"></select></label>
@@ -41,8 +41,8 @@
         <h2 class="panel__h">② 逐项确认</h2>
         <p class="panel__hint">不选＝未确认。没确认的那几页，书里不会出现，也不会写数字。</p>
         <div class="picker">
-          <label class="field"><span>麻醉方式</span><select id="f-anes"></select></label>
-          <div class="field-row">
+          <label class="field" id="field-anes"><span>麻醉方式</span><select id="f-anes"></select></label>
+          <div class="field-row" id="field-fast">
             <label class="field"><span>禁食</span><select id="f-fast"></select></label>
             <label class="field"><span>禁水</span><select id="f-liquid"></select></label>
           </div>
