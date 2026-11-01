@@ -745,6 +745,47 @@
       ],
       "gender": "f",
       "demo": "complete"
+    },
+    {
+      "slug": "cast-小树",
+      "name": "小树",
+      "age": 7,
+      "procedure": "closed-reduction",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 2,
+      "devices": [
+        "iv"
+      ],
+      "gender": "m",
+      "demo": "complete"
+    },
+    {
+      "slug": "gastro-豆包",
+      "name": "豆包",
+      "age": 3,
+      "procedure": "oral-rehydration",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": 2,
+      "devices": [],
+      "gender": "m",
+      "demo": "complete"
+    },
+    {
+      "slug": "fever-点点",
+      "name": "点点",
+      "age": 2,
+      "procedure": "fever-watch",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": 3,
+      "devices": [],
+      "gender": "f",
+      "demo": "complete"
     }
   ],
   "default_villain": {

@@ -6,7 +6,7 @@
 > 故事是虚构的，事实是真实的 —— 书里的每个数字都来自逐项确认，每句注意事项都原文照录。
 
 **在线预览**：<https://champagnepapihz.github.io/preop-storybook-app/>
-（`?case=1` 果果·扁桃体 · `?case=3` 四项全未确认·能看到缺页不出 · `?case=5` 中耳炎 · `?case=6` 哮喘 · `?case=7` 斜视）
+（`?case=1` 果果·扁桃体 · `?case=3` 四项全未确认·能看到缺页不出 · `?case=5` 中耳炎 · `?case=6` 哮喘 · `?case=7` 斜视 · `?case=8/9/10` 骨折 / 口服补液 / 对症观察）
 
 > `dist/` 是构建产物，不放在 master 上，走 `gh-pages` 分支发布；改完代码执行
 > `npm run build` 后把 `dist/` 推到 `gh-pages` 即可更新预览。
