@@ -226,6 +226,7 @@ function applyPresetByObject(p) {
   $('#f-name').value = p.name || '';
   $('#f-age').value = p.age ?? '';
   $('#f-gender').value = p.gender || '';
+  $('#f-parent').value = p.parent === 'dad' ? 'dad' : 'mom';
   $('#f-anes').value = p.anesthesia || '';
   $('#f-fast').value = p.fasting == null ? '' : String(p.fasting);
   $('#f-liquid').value = p.liquid == null ? '' : String(p.liquid);
@@ -245,6 +246,7 @@ function readForm() {
     procedureId: $('#f-proc').value,
     childName: $('#f-name').value.trim(),
     gender: $('#f-gender').value || null,
+    parent: $('#f-parent')?.value === 'dad' ? 'dad' : 'mom',
     age: num($('#f-age').value),
     anesthesiaId: $('#f-anes').value || null,
     fastingHours: num($('#f-fast').value),

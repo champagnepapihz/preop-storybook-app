@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一团赖在滑梯中间的毛，还有一场软软的雾。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_fuzz__stand"
       ]
@@ -61,7 +61,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

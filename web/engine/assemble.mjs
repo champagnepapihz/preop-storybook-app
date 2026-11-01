@@ -105,9 +105,13 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     return Object.keys(manifest?.assets || {}).find((k) => k.startsWith(`${vid}__`)) || null;
   };
 
+  // 陪同家长：parent:hug → mom__hug / dad__hug。和 kid: 一样是「谁来陪」决定的，
+  // 不写成固定素材名，否则换成爸爸要改每一份骨架。
+  const parentBase = caseObj.child?.parent === 'dad' ? 'dad' : 'mom';
   const resolveProp = (id) => {
     if (typeof id !== 'string') return id;
     if (id.startsWith('kid:')) return `${kidBase}__${id.slice(4)}`;
+    if (id.startsWith('parent:')) return `${parentBase}__${id.slice(7)}`;
     if (id.startsWith('villain:')) return villainPose(id.slice(8)) || id;
     return id;
   };

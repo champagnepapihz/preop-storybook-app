@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_pebble__happy"
       ]
@@ -145,7 +145,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

@@ -643,7 +643,8 @@
         "iv"
       ],
       "gender": "m",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "dad"
     },
     {
       "slug": "tonsil-果果",
@@ -658,7 +659,8 @@
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "shot-苗苗",
@@ -673,7 +675,8 @@
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "draft-只说了阑尾炎",
@@ -686,7 +689,8 @@
       "stay": null,
       "devices": [],
       "gender": "m",
-      "demo": "partial"
+      "demo": "partial",
+      "parent": "dad"
     },
     {
       "slug": "hernia-小鼓",
@@ -701,7 +705,8 @@
         "iv"
       ],
       "gender": "m",
-      "demo": "no-story"
+      "demo": "no-story",
+      "parent": "dad"
     },
     {
       "slug": "ear-朵朵",
@@ -716,7 +721,8 @@
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "asthma-阿宝",
@@ -729,7 +735,8 @@
       "stay": 4,
       "devices": [],
       "gender": "m",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "dad"
     },
     {
       "slug": "eye-星星",
@@ -744,7 +751,8 @@
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "cast-小树",
@@ -759,7 +767,8 @@
         "iv"
       ],
       "gender": "m",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "dad"
     },
     {
       "slug": "gastro-豆包",
@@ -772,7 +781,8 @@
       "stay": 2,
       "devices": [],
       "gender": "m",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "dad"
     },
     {
       "slug": "fever-点点",
@@ -785,7 +795,8 @@
       "stay": 3,
       "devices": [],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     }
   ],
   "default_villain": {

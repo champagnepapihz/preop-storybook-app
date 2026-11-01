@@ -16,6 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一颗爱钻缝的小石头，还有一件把它请回去的小事。",
       "asset": "scene_cover",
       "props": [
+        "parent:hug",
         "kid:stand",
         "villain_pebble__wow"
       ]
@@ -104,7 +105,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一只不太说话的小怪兽，还有一群每天都会来看它的医生和护士。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain:peek"
       ]
@@ -60,7 +60,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

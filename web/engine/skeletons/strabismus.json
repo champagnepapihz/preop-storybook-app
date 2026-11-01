@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有两只闹别扭的小眼睛，还有一次重新看齐的小事。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_eyes__peek"
       ]
@@ -115,7 +115,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

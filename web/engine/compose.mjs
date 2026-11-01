@@ -225,6 +225,8 @@ export function composeCase(input) {
       name: (input.childName || '').trim() || '小勇士',
       age: Number.isFinite(input.age) ? input.age : null,
       gender: input.gender === 'f' || input.gender === 'm' ? input.gender : null,
+      // 陪同家长：封面上的那个成年人。默认妈妈，不选就是妈妈。
+      parent: input.parent === 'dad' ? 'dad' : 'mom',
       name_source: (input.childName || '').trim() ? 'input' : 'fallback',
     },
     facts,

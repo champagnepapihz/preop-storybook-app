@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一只赖着不走的咕嘟，还有一扇开在耳朵里的小窗。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_water__peek"
       ]
@@ -104,7 +104,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"
