@@ -4,7 +4,8 @@
   "version": "confirmed",
   "skeleton": {
     "key": "tonsillectomy",
-    "label": "扁桃体切除术"
+    "label": "扁桃体切除术",
+    "kicker": "扁桃体切除术"
   },
   "cover": {
     "title": "《果果和喉咙里的火山怪》",

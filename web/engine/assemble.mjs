@@ -322,13 +322,19 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     mode: 'story',
     version,
     // label 是内部标识（构建日志用），kicker 才是印在封面书名下方那行。
-    // 专属骨架不写 kicker 就回落 label（术式名）；通用骨架写 {{procedure.label}}，
-    // 于是封面照样说清「这次做什么」，而不是把内部术语「通用故事（默认小怪兽）」印上去。
+    //
+    // 优先用「这一次选中的处置名」，而不是骨架自己的 label，原因有两个：
+    //   1) 一份骨架服务多条处置（扁桃体/腺样体共用），骨架只能写一个名字，
+    //      选了腺样体却印「扁桃体切除术」就是错的；
+    //   2) 骨架 label 容易停在旧名（injection 写着「呼吸道感染」、asthma 写着「哮喘急性发作」），
+    //      词表改了名，封面还印旧名。
+    // 通用骨架写的 {{procedure.label}} 解析出来和这条是同一个值。
     skeleton: {
       key: sk.key,
       label: sk.label,
-      // 只有通用骨架才有 kicker；专属骨架不写这个键，免得每本书多出一个 "kicker": null
-      ...(sk.kicker ? { kicker: resolve(sk.kicker, ctx, 'kicker') } : {}),
+      kicker: sk.kicker
+        ? resolve(sk.kicker, ctx, 'kicker')
+        : (caseObj.procedure?.label || sk.label),
     },
     cover: {
       // 书名优先用病种自己的：通用骨架只有一个标题《XX和身体里的小怪兽》，

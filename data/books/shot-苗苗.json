@@ -4,7 +4,8 @@
   "version": "draft",
   "skeleton": {
     "key": "injection",
-    "label": "呼吸道感染"
+    "label": "呼吸道感染",
+    "kicker": "静脉输液"
   },
   "cover": {
     "title": "《苗苗和鼻子后面的冠冠怪》",

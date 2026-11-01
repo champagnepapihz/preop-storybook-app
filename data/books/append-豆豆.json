@@ -4,7 +4,8 @@
   "version": "confirmed",
   "skeleton": {
     "key": "appendectomy",
-    "label": "腹腔镜阑尾切除术"
+    "label": "腹腔镜阑尾切除术",
+    "kicker": "腹腔镜阑尾切除术"
   },
   "cover": {
     "title": "《豆豆和肚子里的小尾巴怪》",
