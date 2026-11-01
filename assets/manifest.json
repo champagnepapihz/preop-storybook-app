@@ -272,6 +272,30 @@
       "kind": "character",
       "placeholder": false
     },
+    "villain_cast__cheer": {
+      "src": "assets/characters/villain_cast__cheer.png",
+      "alt": "石膏小怪折折·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_cast__shy": {
+      "src": "assets/characters/villain_cast__shy.png",
+      "alt": "石膏小怪折折·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_cast__sleep": {
+      "src": "assets/characters/villain_cast__sleep.png",
+      "alt": "石膏小怪折折·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_cast__stand": {
+      "src": "assets/characters/villain_cast__stand.png",
+      "alt": "石膏小怪折折·站",
+      "kind": "character",
+      "placeholder": false
+    },
     "villain_corona__happy": {
       "src": "assets/characters/villain_corona__happy.webp",
       "alt": "冠冠怪·happy",
@@ -344,6 +368,24 @@
       "kind": "character",
       "placeholder": false
     },
+    "villain_fever__shy": {
+      "src": "assets/characters/villain_fever__shy.png",
+      "alt": "发热怪烫烫·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fever__sleep": {
+      "src": "assets/characters/villain_fever__sleep.png",
+      "alt": "发热怪烫烫·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_fever__stand": {
+      "src": "assets/characters/villain_fever__stand.png",
+      "alt": "发热怪烫烫·站",
+      "kind": "character",
+      "placeholder": false
+    },
     "villain_fuzz__cheer": {
       "src": "assets/characters/villain_fuzz__cheer.png",
       "alt": "毛球怪呼噜·欢呼",
@@ -365,6 +407,30 @@
     "villain_fuzz__stand": {
       "src": "assets/characters/villain_fuzz__stand.png",
       "alt": "毛球怪呼噜·站",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_guji__cheer": {
+      "src": "assets/characters/villain_guji__cheer.png",
+      "alt": "肚子怪咕叽·欢呼",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_guji__shy": {
+      "src": "assets/characters/villain_guji__shy.png",
+      "alt": "肚子怪咕叽·害羞",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_guji__sleep": {
+      "src": "assets/characters/villain_guji__sleep.png",
+      "alt": "肚子怪咕叽·睡着",
+      "kind": "character",
+      "placeholder": false
+    },
+    "villain_guji__stand": {
+      "src": "assets/characters/villain_guji__stand.png",
+      "alt": "肚子怪咕叽·站",
       "kind": "character",
       "placeholder": false
     },
@@ -526,6 +592,18 @@
       "badge_star": {
         "scale": 1,
         "label": "徽章"
+      },
+      "villain_cast": {
+        "scale": 0.84,
+        "label": "石膏小怪·折折"
+      },
+      "villain_guji": {
+        "scale": 0.76,
+        "label": "柠檬黄肚子怪·咕叽"
+      },
+      "villain_fever": {
+        "scale": 0.8,
+        "label": "暖橘发热怪·烫烫"
       }
     },
     "poses": {
@@ -554,7 +632,10 @@
       "villain_fuzz": 0.02,
       "villain_eyes": 0.015,
       "doctor": 0,
-      "nurse": 0
+      "nurse": 0,
+      "villain_cast": 0.02,
+      "villain_guji": 0.022,
+      "villain_fever": 0.02
     }
   }
 }

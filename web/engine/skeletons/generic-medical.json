@@ -18,7 +18,7 @@
       "props": [
         "mom__hug",
         "kid:stand",
-        "villain_dino__peek"
+        "villain:peek"
       ]
     },
     {
@@ -28,7 +28,7 @@
       "text": "{{villain.line}}它不太会说话，只会用身体告诉你：这里不舒服，那里不对劲。",
       "asset": "scene_ward_bed_close",
       "props": [
-        "villain_dino__shy"
+        "villain:shy"
       ]
     },
     {
@@ -49,8 +49,7 @@
       "text": "{{child.name}}不用做别的，只要配合医生和护士，每天做一点点。小怪兽最怕的，就是每天都有人管着它。",
       "asset": "scene_hospital_front",
       "props": [
-        "kid:hug",
-        "villain_dino__back"
+        "villain:back"
       ]
     },
     {
@@ -81,7 +80,8 @@
       "badge": {
         "name": "小怪兽安静了",
         "engrave": "{{child.name}}"
-      }
+      },
+      "props": []
     }
   ],
   "kicker": "{{procedure.label}}"

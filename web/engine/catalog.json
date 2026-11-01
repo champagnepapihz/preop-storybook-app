@@ -300,7 +300,13 @@
               },
               "kind": "medical"
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_fever",
+            "name": "烫烫",
+            "home": "身体里",
+            "line": "{{child.name}}身体里有一个小火炉，叫烫烫。它一烧起来，{{child.name}}的额头就烫烫的，整个人软绵绵的，不想动。"
+          }
         },
         {
           "id": "pneumonia",
@@ -386,7 +392,13 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_guji",
+            "name": "咕叽",
+            "home": "肚子里",
+            "line": "{{child.name}}的肚子里住着一个圆滚滚的小家伙，叫咕叽。它一着急就翻跟头，肚子里就咕噜咕噜响。"
+          }
         }
       ]
     },
@@ -413,7 +425,13 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_cast",
+            "name": "折折",
+            "home": "身体里一根小骨头上",
+            "line": "{{child.name}}身体里有一根小骨头，它叫折折。它平时站得直直的，这几天却弯下腰，怎么也直不起来。"
+          }
         },
         {
           "id": "polydactyly",

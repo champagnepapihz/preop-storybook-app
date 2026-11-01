@@ -34,6 +34,16 @@ for (const [key, sk] of Object.entries(skeletons)) {
     const ids = [pg.asset, ...(pg.props || [])].filter(Boolean);
     for (const id of ids) {
       if (id.startsWith('kid:')) continue;               // kid:* 运行时展开
+      if (id.startsWith('villain:')) {
+        // villain:peek 也是运行时展开（按病例的反派解析），但姿势名必须先存在，
+        // 否则 assemble 的兜底会静默退回 stand，写错了也没人发现
+        const pose = id.slice(8);
+        if (!manifest?.proportions?.poses?.[pose]) {
+          console.error(`✗ UNKNOWN_POSE  骨架 ${key} 第 ${pg.id} 页写了不存在的反派姿势：${id}`);
+          process.exitCode = 1;
+        }
+        continue;
+      }
       if (!manifest.assets[id]) {
         console.error(`✗ MISSING_ASSET  骨架 ${key} 第 ${pg.id} 页引用了不存在的素材：${id}`);
         process.exitCode = 1;
@@ -47,6 +57,7 @@ for (const [key, sk] of Object.entries(skeletons)) {
 const roles = manifest?.proportions?.roles || {};
 const checkRole = (id) => {
   if (id.startsWith('kid:')) return true;             // 运行时展开为 kid_boy / kid_girl
+  if (id.startsWith('villain:')) return true;         // 运行时按病例反派展开为 villain_xxx__pose
   const role = id.split('__')[0];
   if (!roles[role]) {
     console.error(`✗ MISSING_PROPORTION  素材 ${id} 在 proportions.json 里没有角色系数`);

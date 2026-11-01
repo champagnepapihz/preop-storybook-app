@@ -245,6 +245,7 @@ const LABELS = {
   villain_volcano: '火山怪', villain_pebble: '小尾巴怪', villain_corona: '冠冠怪',
   villain_dino: '紫色小恐龙', doctor: '白大褂医生', nurse: '护士', nurse_cloud: '云朵护士',
   villain_water: '小水洼怪咕嘟', villain_fuzz: '毛球怪呼噜', villain_eyes: '眼睛怪左左右右',
+  villain_cast: '石膏小怪折折', villain_guji: '肚子怪咕叽', villain_fever: '发热怪烫烫',
   badge_star: '小勇士徽章',
   // 新角色
   kid_boy: '小患者·男孩', kid_girl: '小患者·女孩',

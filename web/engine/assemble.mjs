@@ -74,9 +74,43 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
 
   // 主角立牌由性别决定：kid:stand → kid_boy__stand / kid_girl__stand
   const kidBase = caseObj.child?.gender === 'f' ? 'kid_girl' : 'kid_boy';
-  const resolveProp = (id) => (typeof id === 'string' && id.startsWith('kid:')
-    ? `${kidBase}__${id.slice(4)}`
-    : id);
+
+  /**
+   * 反派立牌：骨架写 villain:peek，按这一例的反派解析成 villain_xxx__peek。
+   *
+   * 为什么需要它：通用骨架要服务所有没有专属剧本的处置，而每个反派会画的姿势
+   * 并不一致（紫恐龙有背影、石膏小怪没有）。写死 villain_dino__peek 的结果是
+   * 词表换成别的反派之后，书里还站着紫恐龙 —— 名字和画面直接对不上。
+   *
+   * 兜底不是一条链，是分用途的 —— 同一张姿势在不同页上意思不一样：
+   *   封面要「它站着」（peek 退 stand，绝不能退成睡姿）
+   *   处置页要「它被请走了」（back 退 sleep，睡姿同样表示安静下来了）
+   * 一条链走到底的话，石膏小怪没有 peek 也没有 back，封面会直接变成躺着睡觉。
+   */
+  const VILLAIN_FALLBACK = {
+    peek:  ['peek', 'stand', 'shy', 'cheer', 'sleep'],
+    stand: ['stand', 'peek', 'shy', 'cheer', 'sleep'],
+    shy:   ['shy', 'stand', 'peek', 'cheer', 'sleep'],
+    cheer: ['cheer', 'stand', 'shy', 'peek', 'sleep'],
+    back:  ['back', 'sleep', 'shy', 'stand', 'cheer', 'peek'],
+    sleep: ['sleep', 'shy', 'stand', 'peek', 'cheer'],
+  };
+  const villainPose = (pose) => {
+    const vid = caseObj.disease?.villain?.id;
+    if (!vid) return null;
+    for (const p of VILLAIN_FALLBACK[pose] || [pose, 'stand']) {
+      const key = `${vid}__${p}`;
+      if (manifest?.assets?.[key]) return key;
+    }
+    return Object.keys(manifest?.assets || {}).find((k) => k.startsWith(`${vid}__`)) || null;
+  };
+
+  const resolveProp = (id) => {
+    if (typeof id !== 'string') return id;
+    if (id.startsWith('kid:')) return `${kidBase}__${id.slice(4)}`;
+    if (id.startsWith('villain:')) return villainPose(id.slice(8)) || id;
+    return id;
+  };
 
   const sk = pickSkeleton(caseObj, skeletons);
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');

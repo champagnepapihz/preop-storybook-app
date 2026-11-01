@@ -65,6 +65,18 @@
     "badge_star": {
       "scale": 1,
       "label": "徽章"
+    },
+    "villain_cast": {
+      "scale": 0.84,
+      "label": "石膏小怪·折折"
+    },
+    "villain_guji": {
+      "scale": 0.76,
+      "label": "柠檬黄肚子怪·咕叽"
+    },
+    "villain_fever": {
+      "scale": 0.8,
+      "label": "暖橘发热怪·烫烫"
     }
   },
   "poses": {
@@ -93,6 +105,9 @@
     "villain_fuzz": 0.02,
     "villain_eyes": 0.015,
     "doctor": 0,
-    "nurse": 0
+    "nurse": 0,
+    "villain_cast": 0.02,
+    "villain_guji": 0.022,
+    "villain_fever": 0.02
   }
 }
