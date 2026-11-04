@@ -87,6 +87,6 @@ pastel colors, children's picture book illustration, no characters, no people, n
 
 ## 拼装注意
 
-- 场景出图**不要带角色**，角色立牌单独出，前端叠在场景上（`page__props`），这样 14 个素材能拼出几十种画面组合。
+- 场景出图**不要带角色**，角色立牌单独出，前端叠在场景上（`page__props`），这样 90 件素材能拼出大量画面组合。
 - 角色统一 3/4 侧身站姿、朝向一致（面向右），叠图时不会撞脸。
 - 同一角色多情绪版本命名加后缀（`villain_volcano__sleep.png`），装配层按 `props` 数组取基础版，暂不解析后缀。
