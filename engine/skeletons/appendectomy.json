@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只躲在肚子里的小尾巴怪。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_pebble__happy"
       ]
@@ -58,6 +58,14 @@
         "key": "fasting",
         "label": "术前空腹",
         "display": "value_text"
+      },
+      "variants": {
+        "fact": "fasting",
+        "cases": {
+          "food-only": {
+            "text": "医生说要{{fact.fasting.short}}不吃东西。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。能不能喝水，护士会再跟你确认一次。饿的时候可以想一想，等事情办完，第一口粥会有多香。"
+          }
+        }
       }
     },
     {
@@ -145,7 +153,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

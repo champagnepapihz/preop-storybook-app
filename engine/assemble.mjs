@@ -37,7 +37,13 @@ function resolve(str, ctx, where = '') {
 export function pickSkeleton(caseObj, skeletons) {
   const key = caseObj.procedure?.key;
   const own = key && key !== 'generic' ? skeletons?.[key] : null;
-  return own || skeletons?.['generic-story'] || null;
+  if (own) return own;
+  // 没有专属骨架时按类别回落：
+  //   手术类 → generic-story  「那一天」，有睡一觉、有处置
+  //   医疗类 → generic-medical「一天一天」，没有那一天，只有每天做一点
+  // 两种叙事不能共用一份文案 —— 给「鼻腔冲洗」「遮盖治疗」讲「那天护士帮你」是错的。
+  const fallback = caseObj.procedure?.kind === 'medical' ? 'generic-medical' : 'generic-story';
+  return skeletons?.[fallback] || skeletons?.['generic-story'] || null;
 }
 
 /**
@@ -68,15 +74,57 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
 
   // 主角立牌由性别决定：kid:stand → kid_boy__stand / kid_girl__stand
   const kidBase = caseObj.child?.gender === 'f' ? 'kid_girl' : 'kid_boy';
-  const resolveProp = (id) => (typeof id === 'string' && id.startsWith('kid:')
-    ? `${kidBase}__${id.slice(4)}`
-    : id);
+
+  /**
+   * 反派立牌：骨架写 villain:peek，按这一例的反派解析成 villain_xxx__peek。
+   *
+   * 为什么需要它：通用骨架要服务所有没有专属剧本的处置，而每个反派会画的姿势
+   * 并不一致（紫恐龙有背影、石膏小怪没有）。写死 villain_dino__peek 的结果是
+   * 词表换成别的反派之后，书里还站着紫恐龙 —— 名字和画面直接对不上。
+   *
+   * 兜底不是一条链，是分用途的 —— 同一张姿势在不同页上意思不一样：
+   *   封面要「它站着」（peek 退 stand，绝不能退成睡姿）
+   *   处置页要「它被请走了」（back 退 sleep，睡姿同样表示安静下来了）
+   * 一条链走到底的话，石膏小怪没有 peek 也没有 back，封面会直接变成躺着睡觉。
+   */
+  const VILLAIN_FALLBACK = {
+    peek:  ['peek', 'stand', 'shy', 'cheer', 'sleep'],
+    stand: ['stand', 'peek', 'shy', 'cheer', 'sleep'],
+    shy:   ['shy', 'stand', 'peek', 'cheer', 'sleep'],
+    cheer: ['cheer', 'stand', 'shy', 'peek', 'sleep'],
+    back:  ['back', 'sleep', 'shy', 'stand', 'cheer', 'peek'],
+    sleep: ['sleep', 'shy', 'stand', 'peek', 'cheer'],
+  };
+  const villainPose = (pose) => {
+    const vid = caseObj.disease?.villain?.id;
+    if (!vid) return null;
+    for (const p of VILLAIN_FALLBACK[pose] || [pose, 'stand']) {
+      const key = `${vid}__${p}`;
+      if (manifest?.assets?.[key]) return key;
+    }
+    return Object.keys(manifest?.assets || {}).find((k) => k.startsWith(`${vid}__`)) || null;
+  };
+
+  // 陪同家长：parent:hug → mom__hug / dad__hug。和 kid: 一样是「谁来陪」决定的，
+  // 不写成固定素材名，否则换成爸爸要改每一份骨架。
+  const parentBase = caseObj.child?.parent === 'dad' ? 'dad' : 'mom';
+  const resolveProp = (id) => {
+    if (typeof id !== 'string') return id;
+    if (id.startsWith('kid:')) return `${kidBase}__${id.slice(4)}`;
+    if (id.startsWith('parent:')) return `${parentBase}__${id.slice(7)}`;
+    if (id.startsWith('villain:')) return villainPose(id.slice(8)) || id;
+    return id;
+  };
 
   const sk = pickSkeleton(caseObj, skeletons);
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
 
   // procedure 也进上下文：通用骨架要用 {{procedure.label}} 说出这次是什么术式
-  const baseCtx = { child: caseObj.child, fact: caseObj.facts, procedure: caseObj.procedure || {} };
+  const childCtx = {
+    ...caseObj.child,
+    parent_label: caseObj.child?.parent_label || (caseObj.child?.parent === 'dad' ? '爸爸' : '妈妈'),
+  };
+  const baseCtx = { child: childCtx, fact: caseObj.facts, procedure: caseObj.procedure || {} };
 
   /**
    * 通用模块页：只看「某一项事实有没有」，与术式无关。
@@ -91,16 +139,25 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
       const f = caseObj.facts[w.fact];
       if (!f) continue;
       if (w.has_id && !(f.ids || []).includes(w.has_id)) continue;
+      // 变体：同一页在不同取值下换文案/画面（如全麻睡着、局麻醒着）
+      let src = m;
+      if (m.variants) {
+        const fv = caseObj.facts[m.variants.fact];
+        const vid = fv?.ids?.[0];
+        const v = (m.variants.cases || {})[vid] || null;
+        if (v?.skip) continue;
+        src = { ...m, ...(v || {}) };
+      }
       out.push({
         id: m.id,
-        layout: m.layout || 'image_left',
-        stand: m.stand || null,
+        layout: src.layout || 'image_left',
+        stand: src.stand || null,
         draft: false,
         condition: null,
-        title: resolve(m.title, baseCtx, `${m.id}.title`),
-        text: resolve(m.text, baseCtx, `${m.id}.text`),
-        image: asset(m.asset),
-        props: (m.props || []).map(resolveProp).map(asset),
+        title: resolve(src.title, baseCtx, `${m.id}.title`),
+        text: resolve(src.text, baseCtx, `${m.id}.text`),
+        image: asset(src.asset),
+        props: (src.props || []).map(resolveProp).map(asset),
         fact: m.fact
           ? {
               key: m.fact.key,
@@ -131,6 +188,17 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     err.code = 'NO_VILLAIN';
     throw err;
   }
+
+  /**
+   * 病种可以换掉通用骨架某几页的场景：{ meet: "scene_plaster_room" }
+   *
+   * 三个新反派都有专属场景，但没有专属骨架 —— 通用骨架的遇见页本来借的是
+   * scene_ward_bed_close，三本书都用它，翻两页就看出重复。按页 id 覆盖最小，
+   * 不用为每只怪兽复制一份骨架（复制出去的骨架以后改文案要改三处）。
+   * 只覆盖骨架里真实存在的页 id，写错了不会凭空多出一页。
+   */
+  const SCENE_OVERRIDE = villainDef.scenes || {};
+  const sceneOf = (pageId, fallback) => SCENE_OVERRIDE[pageId] || fallback;
 
   const villain = { ...villainDef, line: resolve(villainDef.line, baseCtx, 'villain.line') };
   const hero = { ...sk.hero, line: resolve(sk.hero.line, baseCtx, 'hero.line') };
@@ -216,7 +284,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
         condition: null,
         title: resolve(src.title, ctx, `${p.id}.title`),
         text: resolve(src.text, ctx, `${p.id}.text`),
-        image: asset(src.asset || p.asset),
+        image: asset(sceneOf(p.id, src.asset || p.asset)),
         props: (src.props || p.props || []).map(resolveProp).map(asset),
         fact,
         badge: src.badge
@@ -234,7 +302,7 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
   if (mods.length) {
     // 禁食 / 留置针都属于「术前准备」，要排在麻醉、治疗之前；
     // 取页序里最早出现的那个锚点，而不是按数组顺序取第一个匹配
-    const ANCHORS = ['cloud', 'drip', 'battle', 'wake', 'badge'];
+    const ANCHORS = ['cloud', 'nebulizer', 'drip', 'battle', 'treatment', 'wake', 'badge'];
     const idxs = ANCHORS.map((id) => pages.findIndex((p) => p.id === id)).filter((i) => i >= 0);
     const at = idxs.length ? Math.min(...idxs) : -1;
     if (at >= 0) pages.splice(at, 0, ...mods);
@@ -261,10 +329,27 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
     book_id: caseObj.case_id,
     mode: 'story',
     version,
-    skeleton: { key: sk.key, label: sk.label },
+    // label 是内部标识（构建日志用），kicker 才是印在封面书名下方那行。
+    //
+    // 优先用「这一次选中的处置名」，而不是骨架自己的 label，原因有两个：
+    //   1) 一份骨架服务多条处置（扁桃体/腺样体共用），骨架只能写一个名字，
+    //      选了腺样体却印「扁桃体切除术」就是错的；
+    //   2) 骨架 label 容易停在旧名（injection 写着「呼吸道感染」、asthma 写着「哮喘急性发作」），
+    //      词表改了名，封面还印旧名。
+    // 通用骨架写的 {{procedure.label}} 解析出来和这条是同一个值。
+    skeleton: {
+      key: sk.key,
+      label: sk.label,
+      kicker: sk.kicker
+        ? resolve(sk.kicker, ctx, 'kicker')
+        : (caseObj.procedure?.label || sk.label),
+    },
     cover: {
-      title: resolve(sk.title, ctx, 'title'),
-      subtitle: resolve(sk.subtitle, ctx, 'subtitle'),
+      // 书名优先用病种自己的：通用骨架只有一个标题《XX和身体里的小怪兽》，
+      // 十几本书同名，而且和站在封面上的那只怪兽没关系。
+      // 病种写了 title 就用它，没写才回到骨架的（专属骨架本来就有专属标题）。
+      title: resolve(villainDef.title || sk.title, ctx, 'title'),
+      subtitle: resolve(villainDef.subtitle || sk.subtitle, ctx, 'subtitle'),
     },
     cast: { villain, hero },
     case: caseObj,

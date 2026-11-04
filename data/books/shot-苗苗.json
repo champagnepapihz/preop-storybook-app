@@ -1,10 +1,11 @@
 {
-  "book_id": "CASE-1VKT7BR",
+  "book_id": "CASE-13UDNBQ",
   "mode": "story",
-  "version": "draft",
+  "version": "confirmed",
   "skeleton": {
     "key": "injection",
-    "label": "呼吸道感染"
+    "label": "呼吸道感染",
+    "kicker": "静脉输液"
   },
   "cover": {
     "title": "《苗苗和鼻子后面的冠冠怪》",
@@ -24,7 +25,8 @@
     }
   },
   "case": {
-    "case_id": "CASE-1VKT7BR",
+    "case_id": "CASE-13UDNBQ",
+    "version": "confirmed",
     "procedure": {
       "key": "injection",
       "label": "静脉输液"
@@ -32,6 +34,7 @@
     "child": {
       "name": "苗苗",
       "age": 5,
+      "gender": "f",
       "name_source": "notice"
     },
     "facts": {
@@ -62,10 +65,7 @@
         "source_line": "住院注意：多喝温水，勤洗手，戴口罩"
       }
     ],
-    "missing": [
-      "fasting",
-      "anesthesia"
-    ],
+    "missing": [],
     "raw": "姓名：苗苗　　性别：女　　年龄：5岁\n诊断：上呼吸道感染，伴发热\n处置：静脉输液（打针）；手背留置针建立静脉通路\n住院时间：住院2天\n住院注意：多喝温水，勤洗手，戴口罩\n",
     "disease": {
       "id": "infusion",
@@ -87,10 +87,7 @@
       "source_line": "住院注意：多喝温水，勤洗手，戴口罩"
     }
   ],
-  "missing": [
-    "fasting",
-    "anesthesia"
-  ],
+  "missing": [],
   "questions": [],
   "pages": [
     {
@@ -119,9 +116,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -193,9 +190,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -275,9 +272,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -310,9 +307,9 @@
       },
       "props": [
         {
-          "id": "kid_boy__sleep",
-          "src": "assets/characters/kid_boy__sleep.png",
-          "alt": "小患者·男孩·睡着",
+          "id": "kid_girl__sleep",
+          "src": "assets/characters/kid_girl__sleep.png",
+          "alt": "小患者·女孩·睡着",
           "kind": "character",
           "scale": 0.5,
           "dy": 0
@@ -339,9 +336,9 @@
       },
       "props": [
         {
-          "id": "kid_boy__cheer",
-          "src": "assets/characters/kid_boy__cheer.png",
-          "alt": "小患者·男孩·欢呼",
+          "id": "kid_girl__cheer",
+          "src": "assets/characters/kid_girl__cheer.png",
+          "alt": "小患者·女孩·欢呼",
           "kind": "character",
           "scale": 1,
           "dy": 0

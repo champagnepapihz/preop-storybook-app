@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只头顶小皇冠、毛茸茸的小访客。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_corona__happy"
       ]
@@ -102,7 +102,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

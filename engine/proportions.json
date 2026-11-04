@@ -19,7 +19,7 @@
       "label": "妈妈"
     },
     "dad": {
-      "scale": 1.5,
+      "scale": 1.44,
       "label": "爸爸"
     },
     "doctor": {
@@ -50,9 +50,33 @@
       "scale": 0.82,
       "label": "紫色小恐龙"
     },
+    "villain_water": {
+      "scale": 0.75,
+      "label": "湖蓝水怪"
+    },
+    "villain_fuzz": {
+      "scale": 0.7,
+      "label": "驼色毛球怪"
+    },
+    "villain_eyes": {
+      "scale": 0.8,
+      "label": "珊瑚粉双眼睛"
+    },
     "badge_star": {
       "scale": 1,
       "label": "徽章"
+    },
+    "villain_cast": {
+      "scale": 0.84,
+      "label": "石膏小怪·折折"
+    },
+    "villain_guji": {
+      "scale": 0.76,
+      "label": "柠檬黄肚子怪·咕叽"
+    },
+    "villain_fever": {
+      "scale": 0.8,
+      "label": "暖橘发热怪·烫烫"
     }
   },
   "poses": {
@@ -77,7 +101,13 @@
     "villain_pebble": 0.022,
     "villain_corona": 0.02,
     "villain_dino": 0.016,
+    "villain_water": 0.018,
+    "villain_fuzz": 0.02,
+    "villain_eyes": 0.015,
     "doctor": 0,
-    "nurse": 0
+    "nurse": 0,
+    "villain_cast": 0.02,
+    "villain_guji": 0.022,
+    "villain_fever": 0.02
   }
 }

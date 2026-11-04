@@ -72,8 +72,19 @@
             {
               "id": "tympanostomy",
               "label": "鼓膜置管术",
+              "skeleton": "tympanostomy",
+              "kind": "surgical",
               "cautions": {
                 "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
                   "更换病号服",
                   "取下饰物"
                 ],
@@ -81,6 +92,30 @@
                   "耳朵不要进水",
                   "避免用力擤鼻涕",
                   "按医生要求复查听力"
+                ]
+              }
+            }
+          ],
+          "villain": {
+            "id": "villain_water",
+            "name": "咕嘟",
+            "home": "耳朵深处、小鼓的后面",
+            "line": "{{child.name}}耳朵深处有一个小房间，房间的墙上挂着一面小鼓。咕嘟赖在鼓后面不肯走，把鼓面泡得潮潮的。"
+          }
+        },
+        {
+          "id": "sinusitis",
+          "label": "慢性鼻窦炎",
+          "procedures": [
+            {
+              "id": "nasal-irrigation",
+              "label": "鼻腔冲洗",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "按医嘱做鼻腔冲洗",
+                  "避免用力擤鼻涕",
+                  "按时复查"
                 ]
               }
             }
@@ -265,7 +300,18 @@
               },
               "kind": "medical"
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_fever",
+            "name": "烫烫",
+            "home": "身体里",
+            "line": "{{child.name}}身体里有一个小火炉，叫烫烫。它一烧起来，{{child.name}}的额头就烫烫的，整个人软绵绵的，不想动。",
+            "title": "《{{child.name}}和小火炉烫烫》",
+            "subtitle": "一个关于烫烫的额头，和一天天凉下来的故事",
+            "scenes": {
+              "meet": "scene_little_stove"
+            }
+          }
         },
         {
           "id": "pneumonia",
@@ -278,8 +324,8 @@
           },
           "procedures": [
             {
-              "id": "pneumonia",
-              "label": "肺炎住院治疗",
+              "id": "pneumonia-iv",
+              "label": "静脉输液治疗",
               "skeleton": "pneumonia",
               "kind": "medical",
               "cautions": {
@@ -297,8 +343,8 @@
           "label": "高热惊厥",
           "procedures": [
             {
-              "id": "febrile-seizure",
-              "label": "高热惊厥观察",
+              "id": "antipyretic-watch",
+              "label": "退热处理与留观",
               "kind": "medical",
               "cautions": {
                 "住院注意": [
@@ -315,8 +361,9 @@
           "label": "哮喘",
           "procedures": [
             {
-              "id": "asthma",
-              "label": "哮喘急性发作",
+              "id": "nebulization",
+              "label": "雾化治疗",
+              "skeleton": "asthma",
               "kind": "medical",
               "cautions": {
                 "住院注意": [
@@ -326,15 +373,21 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_fuzz",
+            "name": "呼噜",
+            "home": "气管这条滑梯的中间",
+            "line": "气管是一条长长的滑梯。呼噜是一团圆滚滚的毛，卡在滑梯中间，气进不去、也出不来。"
+          }
         },
         {
           "id": "gastro",
           "label": "急性胃肠炎",
           "procedures": [
             {
-              "id": "gastroenteritis",
-              "label": "急性胃肠炎补液",
+              "id": "oral-rehydration",
+              "label": "口服补液",
               "kind": "medical",
               "cautions": {
                 "住院注意": [
@@ -344,7 +397,18 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_guji",
+            "name": "咕叽",
+            "home": "肚子里",
+            "line": "{{child.name}}的肚子里住着一个圆滚滚的小家伙，叫咕叽。它一着急就翻跟头，肚子里就咕噜咕噜响。",
+            "title": "《{{child.name}}和咕噜打转的小肚子》",
+            "subtitle": "一个关于肚子里打转，和一口一口喝水的故事",
+            "scenes": {
+              "meet": "scene_tummy_bubbles"
+            }
+          }
         }
       ]
     },
@@ -371,7 +435,18 @@
                 ]
               }
             }
-          ]
+          ],
+          "villain": {
+            "id": "villain_cast",
+            "name": "折折",
+            "home": "身体里一根小骨头上",
+            "line": "{{child.name}}身体里有一根小骨头，它叫折折。它平时站得直直的，这几天却弯下腰，怎么也直不起来。",
+            "title": "《{{child.name}}和弯了腰的小骨头》",
+            "subtitle": "一个关于一根小骨头、一层石膏，和慢慢直起来的故事",
+            "scenes": {
+              "meet": "scene_plaster_room"
+            }
+          }
         },
         {
           "id": "polydactyly",
@@ -443,6 +518,8 @@
             {
               "id": "strabismus",
               "label": "斜视矫正术",
+              "skeleton": "strabismus",
+              "kind": "surgical",
               "cautions": {
                 "术前准备": [
                   {
@@ -461,6 +538,61 @@
                   "不要揉眼睛",
                   "按医嘱滴眼药水",
                   "按时复查视力"
+                ]
+              }
+            }
+          ],
+          "villain": {
+            "id": "villain_eyes",
+            "name": "左左 & 右右",
+            "home": "眼睛后面的一间小房子",
+            "line": "左左和右右本来是一对好朋友，总是一起看同一样东西。"
+          }
+        },
+        {
+          "id": "amblyopia",
+          "label": "弱视",
+          "procedures": [
+            {
+              "id": "occlusion-therapy",
+              "label": "遮盖治疗",
+              "kind": "medical",
+              "cautions": {
+                "住院注意": [
+                  "按医嘱遮盖指定的眼睛",
+                  "遮盖时间遵医嘱",
+                  "定期复查视力"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "chalazion",
+          "label": "睑板腺囊肿（霰粒肿）",
+          "procedures": [
+            {
+              "id": "chalazion-excision",
+              "label": "霰粒肿切除术",
+              "kind": "surgical",
+              "cautions": {
+                "术前准备": [
+                  {
+                    "text": "手背留置针建立静脉通路",
+                    "requires": [
+                      {
+                        "fact": "device",
+                        "has_id": "iv"
+                      }
+                    ]
+                  },
+                  "更换病号服",
+                  "取下饰物"
+                ],
+                "术后注意": [
+                  "保持眼部清洁",
+                  "不要揉眼睛",
+                  "按医嘱用药与热敷"
                 ]
               }
             }
@@ -511,7 +643,8 @@
         "iv"
       ],
       "gender": "m",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "dad"
     },
     {
       "slug": "tonsil-果果",
@@ -519,14 +652,15 @@
       "age": 6,
       "procedure": "tonsillectomy",
       "anesthesia": "general",
-      "fasting": 8,
+      "fasting": 6,
       "liquid": 2,
       "stay": 3,
       "devices": [
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "shot-苗苗",
@@ -541,7 +675,8 @@
         "iv"
       ],
       "gender": "f",
-      "demo": "complete"
+      "demo": "complete",
+      "parent": "mom"
     },
     {
       "slug": "draft-只说了阑尾炎",
@@ -554,13 +689,76 @@
       "stay": null,
       "devices": [],
       "gender": "m",
-      "demo": "partial"
+      "demo": "partial",
+      "parent": "dad"
     },
     {
-      "slug": "hernia-小满",
-      "name": "小满",
+      "slug": "hernia-小鼓",
+      "name": "小鼓",
       "age": 4,
       "procedure": "hernia",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 1,
+      "devices": [
+        "iv"
+      ],
+      "gender": "m",
+      "demo": "no-story",
+      "parent": "dad"
+    },
+    {
+      "slug": "ear-朵朵",
+      "name": "朵朵",
+      "age": 5,
+      "procedure": "tympanostomy",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 1,
+      "devices": [
+        "iv"
+      ],
+      "gender": "f",
+      "demo": "complete",
+      "parent": "mom"
+    },
+    {
+      "slug": "asthma-阿宝",
+      "name": "阿宝",
+      "age": 4,
+      "procedure": "nebulization",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": 4,
+      "devices": [],
+      "gender": "m",
+      "demo": "complete",
+      "parent": "dad"
+    },
+    {
+      "slug": "eye-星星",
+      "name": "星星",
+      "age": 6,
+      "procedure": "strabismus",
+      "anesthesia": "general",
+      "fasting": 6,
+      "liquid": 2,
+      "stay": 1,
+      "devices": [
+        "iv"
+      ],
+      "gender": "f",
+      "demo": "complete",
+      "parent": "mom"
+    },
+    {
+      "slug": "cast-小树",
+      "name": "小树",
+      "age": 7,
+      "procedure": "closed-reduction",
       "anesthesia": "general",
       "fasting": 6,
       "liquid": 2,
@@ -569,7 +767,36 @@
         "iv"
       ],
       "gender": "m",
-      "demo": "no-story"
+      "demo": "complete",
+      "parent": "dad"
+    },
+    {
+      "slug": "gastro-豆包",
+      "name": "豆包",
+      "age": 3,
+      "procedure": "oral-rehydration",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": 2,
+      "devices": [],
+      "gender": "m",
+      "demo": "complete",
+      "parent": "dad"
+    },
+    {
+      "slug": "fever-点点",
+      "name": "点点",
+      "age": 2,
+      "procedure": "fever-watch",
+      "anesthesia": null,
+      "fasting": null,
+      "liquid": null,
+      "stay": 3,
+      "devices": [],
+      "gender": "f",
+      "demo": "complete",
+      "parent": "mom"
     }
   ],
   "default_villain": {

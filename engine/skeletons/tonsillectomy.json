@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一位小勇士，还有一只住在喉咙里的火山怪。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_volcano__wow"
       ]
@@ -58,6 +58,14 @@
         "key": "fasting",
         "label": "术前空腹",
         "display": "value_text"
+      },
+      "variants": {
+        "fact": "fasting",
+        "cases": {
+          "food-only": {
+            "text": "医生说，火山怪的力气来自{{child.name}}肚子里的食物。所以手术前要{{fact.fasting.short}}不吃东西。肚子空空的不是惩罚，是在帮火山怪变小一点。能不能喝水，护士会再跟你确认一次。"
+          }
+        }
       }
     },
     {
@@ -145,7 +153,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

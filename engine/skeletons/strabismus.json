@@ -1,0 +1,141 @@
+{
+  "key": "strabismus",
+  "label": "斜视矫正术",
+  "title": "《{{child.name}}和两只吵架的小眼睛》",
+  "subtitle": "一个关于好朋友、一场别扭，和重新看齐的故事",
+  "hero": {
+    "id": "doctor",
+    "name": "白大褂医生",
+    "line": "白大褂医生不打人，他只是蹲下来，跟{{child.name}}的眼睛说悄悄话。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和两只吵架的小眼睛",
+      "text": "这是{{child.name}}的故事。故事里有两只闹别扭的小眼睛，还有一次重新看齐的小事。",
+      "asset": "scene_cover",
+      "props": [
+        "parent:hug",
+        "kid:stand",
+        "villain_eyes__peek"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "一个看左，一个看右",
+      "text": "{{villain.line}}可是有一天，它们闹起了别扭——一个看左，一个看右，谁也不肯等谁。",
+      "asset": "scene_eye_room",
+      "props": [
+        "villain_eyes__stand"
+      ]
+    },
+    {
+      "id": "double",
+      "layout": "image_left",
+      "title": "看什么都变成两份",
+      "text": "两只眼睛看的不是同一个地方，{{child.name}}眼前的东西就变成了两份：一盏灯变成两盏，一个{{child.parent_label}}变成两个。走楼梯的时候，脚也不知道往哪儿落。",
+      "asset": "scene_ward_bed_close",
+      "props": [
+        "kid:hug"
+      ]
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "医生说，没坏，只是没对齐",
+      "text": "白大褂医生说：两只眼睛都好着呢，谁也没有坏。它们只是站歪了一点点，我们把位置调回来，它们就能重新看齐。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "doctor__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "title": "睡一小觉",
+      "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。",
+      "asset": "scene_cloud_anesthesia",
+      "props": [
+        "kid:sleep"
+      ],
+      "stand": "bed",
+      "requires": [
+        "anesthesia"
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "display": "value_text"
+      },
+      "variants": {
+        "fact": "anesthesia",
+        "cases": {
+          "regional": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让眼睛周围那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "local": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让眼睛周围那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "none": {
+            "skip": true
+          }
+        }
+      }
+    },
+    {
+      "id": "reunion",
+      "layout": "image_right",
+      "title": "它们和好了",
+      "text": "{{child.name}}再睁开眼睛的时候，左左和右右又站回了同一个方向。眼前的东西只有一份了——一盏灯，就是一盏灯。",
+      "asset": "scene_hospital_front",
+      "props": [
+        "doctor__wave",
+        "kid:cheer",
+        "villain_eyes__cheer"
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "一起看同一样东西",
+      "text": "{{child.name}}可以慢慢看清楚了，看图画书的时候，眼睛不再各看各的。医生说：{{fact.stay.short}}，就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "parent:hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "左左和右右不吵了，它们又成了好朋友。{{child.name}}的眼睛，重新一起看同一样东西。这枚徽章，是你的小眼睛和好的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "左左右右和好了",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}

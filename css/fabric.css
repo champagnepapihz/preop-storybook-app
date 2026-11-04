@@ -577,8 +577,8 @@ textarea:focus {
 .flip-catcher { position: absolute; inset: 0; }
 
 /* 封面是右半单页、封底是左半单页：各挪半页宽让可见单页落在阅读区正中；翻开后滑回原位 */
-.reader--cover .book { transform: translateX(-25%); }
-.reader--back .book { transform: translateX(25%); }
+.reader--cover .book:not(.book--idle) { transform: translateX(-25%); }
+.reader--back .book:not(.book--idle) { transform: translateX(25%); }
 
 /* 封面守卫：只在封面位姿出现，盖住书接管指针手势做“先挪后翻”序列；
    位姿解除自动隐藏，书内恢复 PageFlip 直接拖拽。z-index 压过书页行内层级。 */

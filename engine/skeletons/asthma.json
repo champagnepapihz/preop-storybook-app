@@ -1,0 +1,87 @@
+{
+  "key": "asthma",
+  "label": "哮喘急性发作",
+  "title": "《{{child.name}}和气管里的毛毛怪》",
+  "subtitle": "一个关于滑梯、一团毛，和一口顺气的故事",
+  "hero": {
+    "id": "nurse",
+    "name": "护士阿姨",
+    "line": "护士阿姨走路很轻，说话也很轻。她来的时候，会先把雾化面罩焐温。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和气管里的毛毛怪",
+      "text": "这是{{child.name}}的故事。故事里有一团赖在滑梯中间的毛，还有一场软软的雾。",
+      "asset": "scene_cover",
+      "props": [
+        "parent:hug",
+        "kid:stand",
+        "villain_fuzz__stand"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "滑梯被堵住了",
+      "text": "{{villain.line}}气想滑下去，滑到一半就被挡住了；想退回去，也退不动。{{child.name}}只好用力地吸，胸口一耸一耸的。",
+      "asset": "scene_airway_slide",
+      "props": [
+        "villain_fuzz__shy"
+      ]
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "护士阿姨说，下一场雾",
+      "text": "护士阿姨说：呼噜怕雾。我们给你下一场软软的雾，雾钻进去，它就缩起来。{{child.name}}点点头，把肩膀放松。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "nurse__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "nebulizer",
+      "layout": "full",
+      "title": "下了一场雾",
+      "text": "面罩扣在小鼻子上，凉凉的雾一点一点钻进去，像给滑梯洗了个澡。呼噜被雾裹住，越缩越小。",
+      "asset": "scene_nebulizer",
+      "props": [
+        "kid:sleep",
+        "villain_fuzz__shy"
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "一口顺气",
+      "text": "{{child.name}}吸了一口气，顺顺地滑到了底——不堵了。护士阿姨说：{{fact.stay.short}}，就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "parent:hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "呼噜缩成了一小团，躲在角落里不敢出来。{{child.name}}的呼吸又顺又长。这枚徽章，是今天勇敢的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "呼噜缩成一小团",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}

@@ -16,7 +16,7 @@
       "text": "这是{{child.name}}的故事。故事里有一群不请自来的小冠冠，还有一场下在身体里的雨。",
       "asset": "scene_cover",
       "props": [
-        "mom__hug",
+        "parent:hug",
         "kid:stand",
         "villain_corona__smug"
       ]
@@ -51,15 +51,10 @@
       "text": "凉凉的药水一点一点进到身体里，像下了一场小雨。小冠冠不喜欢这场雨。",
       "asset": "scene_drip_rain",
       "props": [
-        "kid:sleep"
+        "kid:sleep",
+        "villain_corona__sad"
       ],
-      "stand": "bed",
-      "requires": [
-        {
-          "fact": "device",
-          "has_id": "iv"
-        }
-      ]
+      "stand": "bed"
     },
     {
       "id": "wake",
@@ -69,7 +64,7 @@
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",
-        "mom__hug"
+        "parent:hug"
       ],
       "requires": [
         "stay"

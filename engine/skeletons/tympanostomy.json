@@ -1,0 +1,130 @@
+{
+  "key": "tympanostomy",
+  "label": "鼓膜置管术",
+  "title": "《{{child.name}}和耳朵里的小水洼》",
+  "subtitle": "一个关于小鼓、一扇小窗，和听见声音的故事",
+  "hero": {
+    "id": "doctor",
+    "name": "白大褂医生",
+    "line": "白大褂医生不打人，他只是把手掌焐热，再轻轻贴一贴{{child.name}}的耳朵。"
+  },
+  "pages": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "title": "{{child.name}}和耳朵里的小水洼",
+      "text": "这是{{child.name}}的故事。故事里有一只赖着不走的咕嘟，还有一扇开在耳朵里的小窗。",
+      "asset": "scene_cover",
+      "props": [
+        "parent:hug",
+        "kid:stand",
+        "villain_water__peek"
+      ]
+    },
+    {
+      "id": "meet",
+      "layout": "image_right",
+      "title": "小鼓被泡潮了",
+      "text": "{{villain.line}}敲起来闷闷的，像隔着一层厚厚的被子。",
+      "asset": "scene_ear_room",
+      "props": [
+        "villain_water__stand"
+      ]
+    },
+    {
+      "id": "invite",
+      "layout": "image_left",
+      "title": "医生说，开一扇小窗",
+      "text": "白大褂医生说：小鼓没有坏，只是被水挡住了。我们在小鼓上开一扇小小的窗，水就能自己流走。{{child.name}}点点头。",
+      "asset": "scene_ward_talk",
+      "props": [
+        "doctor__wave",
+        "kid:stand"
+      ]
+    },
+    {
+      "id": "cloud",
+      "layout": "image_left",
+      "title": "睡一小觉",
+      "text": "麻醉医生会送来一朵软软的云。{{child.name}}坐上{{fact.anesthesia.short}}，数到三，就睡着了。",
+      "asset": "scene_cloud_anesthesia",
+      "props": [
+        "kid:sleep"
+      ],
+      "stand": "bed",
+      "requires": [
+        "anesthesia"
+      ],
+      "fact": {
+        "key": "anesthesia",
+        "label": "麻醉方式",
+        "display": "value_text"
+      },
+      "variants": {
+        "fact": "anesthesia",
+        "cases": {
+          "regional": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让耳朵那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "local": {
+            "title": "让那一小块先睡着",
+            "text": "{{fact.anesthesia.short}}——{{child.name}}是醒着的。医生只让耳朵那一小块睡着，做的时候不疼，但人是清醒的。",
+            "props": [
+              "kid:hug"
+            ],
+            "stand": "seated"
+          },
+          "none": {
+            "skip": true
+          }
+        }
+      }
+    },
+    {
+      "id": "window",
+      "layout": "image_right",
+      "title": "窗户开好了",
+      "text": "医生在小鼓上开了一扇小窗，放进一根米粒大的小管子。咕嘟泡着的水，顺着这扇小窗慢慢流走了。小鼓又能咚咚地响。",
+      "asset": "scene_ear_window",
+      "props": [
+        "doctor__wave",
+        "villain_water__shy"
+      ]
+    },
+    {
+      "id": "wake",
+      "layout": "image_left",
+      "title": "小鼓清亮了",
+      "text": "{{child.name}}睁开眼睛，听见{{child.parent_label}}在床边轻轻叫自己的名字。声音清亮亮的，不再隔着被子。医生说：{{fact.stay.short}}，就能回家。",
+      "asset": "scene_wake_up",
+      "props": [
+        "kid:cheer",
+        "parent:hug"
+      ],
+      "requires": [
+        "stay"
+      ],
+      "fact": {
+        "key": "stay",
+        "label": "住院时长",
+        "display": "value_text"
+      }
+    },
+    {
+      "id": "badge",
+      "layout": "badge",
+      "title": "小勇士徽章",
+      "text": "咕嘟顺着小窗流走了，{{child.name}}的小鼓清清爽爽的。这枚徽章，是今天勇敢的证明。",
+      "asset": "badge_star",
+      "badge": {
+        "name": "咕嘟走了",
+        "engrave": "{{child.name}}"
+      }
+    }
+  ]
+}

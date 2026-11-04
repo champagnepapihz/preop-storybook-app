@@ -1,10 +1,11 @@
 {
-  "book_id": "CASE-0RH5B0P",
+  "book_id": "CASE-0IHG9RT",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
     "key": "tonsillectomy",
-    "label": "扁桃体切除术"
+    "label": "扁桃体切除术",
+    "kicker": "扁桃体切除术"
   },
   "cover": {
     "title": "《果果和喉咙里的火山怪》",
@@ -24,7 +25,8 @@
     }
   },
   "case": {
-    "case_id": "CASE-0RH5B0P",
+    "case_id": "CASE-0IHG9RT",
+    "version": "confirmed",
     "procedure": {
       "key": "tonsillectomy",
       "label": "扁桃体切除术"
@@ -32,6 +34,7 @@
     "child": {
       "name": "果果",
       "age": 6,
+      "gender": "f",
       "name_source": "notice"
     },
     "facts": {
@@ -41,6 +44,9 @@
         "short": "8小时",
         "short_liquid": "2小时",
         "value_text": "禁食8小时、禁水2小时",
+        "ids": [
+          "with-liquid"
+        ],
         "evidence": [
           "禁食：禁食8小时",
           "禁水2小时"
@@ -51,6 +57,9 @@
         "label": "麻醉方式",
         "short": "全身麻醉",
         "value_text": "全身麻醉",
+        "ids": [
+          "general"
+        ],
         "evidence": "全身麻醉"
       },
       "device": {
@@ -149,9 +158,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -223,9 +232,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -252,9 +261,9 @@
       },
       "props": [
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -290,9 +299,9 @@
       },
       "props": [
         {
-          "id": "kid_boy__sleep",
-          "src": "assets/characters/kid_boy__sleep.png",
-          "alt": "小患者·男孩·睡着",
+          "id": "kid_girl__sleep",
+          "src": "assets/characters/kid_girl__sleep.png",
+          "alt": "小患者·女孩·睡着",
           "kind": "character",
           "scale": 0.5,
           "dy": 0
@@ -333,9 +342,9 @@
           "dy": 0
         },
         {
-          "id": "kid_boy__stand",
-          "src": "assets/characters/kid_boy__stand.png",
-          "alt": "小患者·男孩·站",
+          "id": "kid_girl__stand",
+          "src": "assets/characters/kid_girl__stand.png",
+          "alt": "小患者·女孩·站",
           "kind": "character",
           "scale": 1,
           "dy": 0
@@ -405,9 +414,9 @@
       },
       "props": [
         {
-          "id": "kid_boy__cheer",
-          "src": "assets/characters/kid_boy__cheer.png",
-          "alt": "小患者·男孩·欢呼",
+          "id": "kid_girl__cheer",
+          "src": "assets/characters/kid_girl__cheer.png",
+          "alt": "小患者·女孩·欢呼",
           "kind": "character",
           "scale": 1,
           "dy": 0
