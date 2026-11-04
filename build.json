@@ -1,4 +1,4 @@
 {
-  "built_at": "2026-11-04T14:33:19.556Z",
+  "built_at": "2026-11-04T14:58:01.681Z",
   "pages": "{\n  \"books\": [\n    {\n      \"slug\": \"append-豆豆\",\n      \"title\": \"《豆豆和肚子里的小尾巴怪》\",\n      \"procedure\": \"腹腔镜阑尾切除术\",\n      \"child\": \"豆豆\",\n      \"pages\": 9,\n      \"valid\": true\n    },\n    {\n      \"slug\": \"shot-苗苗\",\n      \"title\": \"《苗苗和鼻子后面的冠冠怪》\",\n      \"procedure\": \"呼吸道感染\",\n      \"child\": \"苗苗\",\n      \"pages\": 9,\n      \"valid\": true\n    },\n    {\n      \"slug\": \"tonsil-果果\",\n      \"title\": \"《果果和喉咙里的火山怪》\",\n      \"procedure\": \"扁桃体切除术\",\n      \"child\": \"果果\",\n      \"pages\": 9,\n      \"valid\": true\n    }\n  ]\n}"
 }

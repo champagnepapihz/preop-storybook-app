@@ -123,25 +123,25 @@
       "placeholder": false
     },
     "dad__hug": {
-      "src": "assets/characters/dad__hug.png",
+      "src": "assets/characters/dad__hug.webp",
       "alt": "爸爸·抱抱",
       "kind": "character",
       "placeholder": false
     },
     "dad__sit": {
-      "src": "assets/characters/dad__sit.png",
+      "src": "assets/characters/dad__sit.webp",
       "alt": "爸爸·坐",
       "kind": "character",
       "placeholder": false
     },
     "dad__stand": {
-      "src": "assets/characters/dad__stand.png",
+      "src": "assets/characters/dad__stand.webp",
       "alt": "爸爸·站",
       "kind": "character",
       "placeholder": false
     },
     "dad__thumb": {
-      "src": "assets/characters/dad__thumb.png",
+      "src": "assets/characters/dad__thumb.webp",
       "alt": "爸爸·点赞",
       "kind": "character",
       "placeholder": false
@@ -165,97 +165,97 @@
       "placeholder": false
     },
     "friend__bear": {
-      "src": "assets/characters/friend__bear.png",
+      "src": "assets/characters/friend__bear.webp",
       "alt": "病房朋友·抱熊",
       "kind": "character",
       "placeholder": false
     },
     "friend__bed": {
-      "src": "assets/characters/friend__bed.png",
+      "src": "assets/characters/friend__bed.webp",
       "alt": "病房朋友·病床",
       "kind": "character",
       "placeholder": false
     },
     "friend__stand": {
-      "src": "assets/characters/friend__stand.png",
+      "src": "assets/characters/friend__stand.webp",
       "alt": "病房朋友·站",
       "kind": "character",
       "placeholder": false
     },
     "friend__wave": {
-      "src": "assets/characters/friend__wave.png",
+      "src": "assets/characters/friend__wave.webp",
       "alt": "病房朋友·挥手",
       "kind": "character",
       "placeholder": false
     },
     "kid_boy__cheer": {
-      "src": "assets/characters/kid_boy__cheer.png",
+      "src": "assets/characters/kid_boy__cheer.webp",
       "alt": "小患者·男孩·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "kid_boy__hug": {
-      "src": "assets/characters/kid_boy__hug.png",
+      "src": "assets/characters/kid_boy__hug.webp",
       "alt": "小患者·男孩·抱抱",
       "kind": "character",
       "placeholder": false
     },
     "kid_boy__sleep": {
-      "src": "assets/characters/kid_boy__sleep.png",
+      "src": "assets/characters/kid_boy__sleep.webp",
       "alt": "小患者·男孩·睡着",
       "kind": "character",
       "placeholder": false
     },
     "kid_boy__stand": {
-      "src": "assets/characters/kid_boy__stand.png",
+      "src": "assets/characters/kid_boy__stand.webp",
       "alt": "小患者·男孩·站",
       "kind": "character",
       "placeholder": false
     },
     "kid_girl__cheer": {
-      "src": "assets/characters/kid_girl__cheer.png",
+      "src": "assets/characters/kid_girl__cheer.webp",
       "alt": "小患者·女孩·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "kid_girl__hug": {
-      "src": "assets/characters/kid_girl__hug.png",
+      "src": "assets/characters/kid_girl__hug.webp",
       "alt": "小患者·女孩·抱抱",
       "kind": "character",
       "placeholder": false
     },
     "kid_girl__sleep": {
-      "src": "assets/characters/kid_girl__sleep.png",
+      "src": "assets/characters/kid_girl__sleep.webp",
       "alt": "小患者·女孩·睡着",
       "kind": "character",
       "placeholder": false
     },
     "kid_girl__stand": {
-      "src": "assets/characters/kid_girl__stand.png",
+      "src": "assets/characters/kid_girl__stand.webp",
       "alt": "小患者·女孩·站",
       "kind": "character",
       "placeholder": false
     },
     "mom__hug": {
-      "src": "assets/characters/mom__hug.png",
+      "src": "assets/characters/mom__hug.webp",
       "alt": "妈妈·抱抱",
       "kind": "character",
       "placeholder": false
     },
     "mom__sit": {
-      "src": "assets/characters/mom__sit.png",
+      "src": "assets/characters/mom__sit.webp",
       "alt": "妈妈·坐",
       "kind": "character",
       "placeholder": false
     },
     "mom__stand": {
-      "src": "assets/characters/mom__stand.png",
+      "src": "assets/characters/mom__stand.webp",
       "alt": "妈妈·站",
       "kind": "character",
       "placeholder": false
     },
     "mom__wave": {
-      "src": "assets/characters/mom__wave.png",
+      "src": "assets/characters/mom__wave.webp",
       "alt": "妈妈·挥手",
       "kind": "character",
       "placeholder": false
@@ -291,25 +291,25 @@
       "placeholder": false
     },
     "villain_cast__cheer": {
-      "src": "assets/characters/villain_cast__cheer.png",
+      "src": "assets/characters/villain_cast__cheer.webp",
       "alt": "石膏小怪折折·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "villain_cast__shy": {
-      "src": "assets/characters/villain_cast__shy.png",
+      "src": "assets/characters/villain_cast__shy.webp",
       "alt": "石膏小怪折折·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_cast__sleep": {
-      "src": "assets/characters/villain_cast__sleep.png",
+      "src": "assets/characters/villain_cast__sleep.webp",
       "alt": "石膏小怪折折·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_cast__stand": {
-      "src": "assets/characters/villain_cast__stand.png",
+      "src": "assets/characters/villain_cast__stand.webp",
       "alt": "石膏小怪折折·站",
       "kind": "character",
       "placeholder": false
@@ -339,115 +339,115 @@
       "placeholder": false
     },
     "villain_dino__back": {
-      "src": "assets/characters/villain_dino__back.png",
+      "src": "assets/characters/villain_dino__back.webp",
       "alt": "紫色小恐龙·背影",
       "kind": "character",
       "placeholder": false
     },
     "villain_dino__peek": {
-      "src": "assets/characters/villain_dino__peek.png",
+      "src": "assets/characters/villain_dino__peek.webp",
       "alt": "紫色小恐龙·偷看",
       "kind": "character",
       "placeholder": false
     },
     "villain_dino__shy": {
-      "src": "assets/characters/villain_dino__shy.png",
+      "src": "assets/characters/villain_dino__shy.webp",
       "alt": "紫色小恐龙·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_dino__sleep": {
-      "src": "assets/characters/villain_dino__sleep.png",
+      "src": "assets/characters/villain_dino__sleep.webp",
       "alt": "紫色小恐龙·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_eyes__cheer": {
-      "src": "assets/characters/villain_eyes__cheer.png",
+      "src": "assets/characters/villain_eyes__cheer.webp",
       "alt": "眼睛怪左左右右·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "villain_eyes__peek": {
-      "src": "assets/characters/villain_eyes__peek.png",
+      "src": "assets/characters/villain_eyes__peek.webp",
       "alt": "眼睛怪左左右右·偷看",
       "kind": "character",
       "placeholder": false
     },
     "villain_eyes__shy": {
-      "src": "assets/characters/villain_eyes__shy.png",
+      "src": "assets/characters/villain_eyes__shy.webp",
       "alt": "眼睛怪左左右右·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_eyes__stand": {
-      "src": "assets/characters/villain_eyes__stand.png",
+      "src": "assets/characters/villain_eyes__stand.webp",
       "alt": "眼睛怪左左右右·站",
       "kind": "character",
       "placeholder": false
     },
     "villain_fever__shy": {
-      "src": "assets/characters/villain_fever__shy.png",
+      "src": "assets/characters/villain_fever__shy.webp",
       "alt": "发热怪烫烫·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_fever__sleep": {
-      "src": "assets/characters/villain_fever__sleep.png",
+      "src": "assets/characters/villain_fever__sleep.webp",
       "alt": "发热怪烫烫·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_fever__stand": {
-      "src": "assets/characters/villain_fever__stand.png",
+      "src": "assets/characters/villain_fever__stand.webp",
       "alt": "发热怪烫烫·站",
       "kind": "character",
       "placeholder": false
     },
     "villain_fuzz__cheer": {
-      "src": "assets/characters/villain_fuzz__cheer.png",
+      "src": "assets/characters/villain_fuzz__cheer.webp",
       "alt": "毛球怪呼噜·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "villain_fuzz__shy": {
-      "src": "assets/characters/villain_fuzz__shy.png",
+      "src": "assets/characters/villain_fuzz__shy.webp",
       "alt": "毛球怪呼噜·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_fuzz__sleep": {
-      "src": "assets/characters/villain_fuzz__sleep.png",
+      "src": "assets/characters/villain_fuzz__sleep.webp",
       "alt": "毛球怪呼噜·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_fuzz__stand": {
-      "src": "assets/characters/villain_fuzz__stand.png",
+      "src": "assets/characters/villain_fuzz__stand.webp",
       "alt": "毛球怪呼噜·站",
       "kind": "character",
       "placeholder": false
     },
     "villain_guji__cheer": {
-      "src": "assets/characters/villain_guji__cheer.png",
+      "src": "assets/characters/villain_guji__cheer.webp",
       "alt": "肚子怪咕叽·欢呼",
       "kind": "character",
       "placeholder": false
     },
     "villain_guji__shy": {
-      "src": "assets/characters/villain_guji__shy.png",
+      "src": "assets/characters/villain_guji__shy.webp",
       "alt": "肚子怪咕叽·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_guji__sleep": {
-      "src": "assets/characters/villain_guji__sleep.png",
+      "src": "assets/characters/villain_guji__sleep.webp",
       "alt": "肚子怪咕叽·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_guji__stand": {
-      "src": "assets/characters/villain_guji__stand.png",
+      "src": "assets/characters/villain_guji__stand.webp",
       "alt": "肚子怪咕叽·站",
       "kind": "character",
       "placeholder": false
@@ -513,25 +513,25 @@
       "placeholder": false
     },
     "villain_water__peek": {
-      "src": "assets/characters/villain_water__peek.png",
+      "src": "assets/characters/villain_water__peek.webp",
       "alt": "小水洼怪咕嘟·偷看",
       "kind": "character",
       "placeholder": false
     },
     "villain_water__shy": {
-      "src": "assets/characters/villain_water__shy.png",
+      "src": "assets/characters/villain_water__shy.webp",
       "alt": "小水洼怪咕嘟·害羞",
       "kind": "character",
       "placeholder": false
     },
     "villain_water__sleep": {
-      "src": "assets/characters/villain_water__sleep.png",
+      "src": "assets/characters/villain_water__sleep.webp",
       "alt": "小水洼怪咕嘟·睡着",
       "kind": "character",
       "placeholder": false
     },
     "villain_water__stand": {
-      "src": "assets/characters/villain_water__stand.png",
+      "src": "assets/characters/villain_water__stand.webp",
       "alt": "小水洼怪咕嘟·站",
       "kind": "character",
       "placeholder": false
