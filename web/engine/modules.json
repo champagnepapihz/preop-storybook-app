@@ -8,7 +8,7 @@
       },
       "layout": "image_left",
       "title": "肚子空一会儿",
-      "text": "从术前{{fact.fasting.short}}开始，{{child.name}}的肚子要空着 —— 不吃东西，也不喝水。空肚子是为了让手术更安全，不是罚站。",
+      "text": "从术前{{fact.fasting.short}}开始，{{child.name}}不能吃东西；从术前{{fact.fasting.short_liquid}}开始，也不能喝水。空肚子是为了让手术更安全，不是罚站。",
       "asset": "scene_fasting_moon",
       "props": [
         "kid:stand"
@@ -17,6 +17,14 @@
         "key": "fasting",
         "label": "术前空腹",
         "display": "value_text"
+      },
+      "variants": {
+        "fact": "fasting",
+        "cases": {
+          "food-only": {
+            "text": "从术前{{fact.fasting.short}}开始，{{child.name}}不能吃东西。空肚子是为了让手术更安全，不是罚站。能不能喝水，护士会再跟你确认一次。"
+          }
+        }
       }
     },
     {

@@ -1,5 +1,5 @@
 ﻿import { assembleBook } from '../engine/assemble.mjs';
-import { composeCase, findProcedure } from '../engine/compose.mjs';
+import { composeCase, findProcedure, kindOf } from '../engine/compose.mjs';
 import { validateBook, auditCase } from '../engine/validate.mjs';
 import { esc, pageHTML as renderPageHTML, colophonHTML } from './book-render.mjs';
 
@@ -79,11 +79,13 @@ async function boot() {
 /* ---------------- 空白态 ---------------- */
 
 function renderIdle(hint) {
+  seqBusy = false;
   setFlipDetached(false);
   if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
   state.book = null;
 
   const reader = document.querySelector('.reader');
+  reader?.classList.remove('reader--cover', 'reader--back');
   document.getElementById('book')?.remove();
   const host = document.createElement('div');
   host.className = 'book book--idle';
@@ -126,6 +128,14 @@ function buildPicker() {
   $('#f-dept').innerHTML = opt('', '未选择') + c.departments.map((d) => opt(d.id, d.label)).join('');
   $('#f-dept').addEventListener('change', () => { fillGroups(false); });
   $('#f-group').addEventListener('change', () => { fillProcedures(false); });
+  $('#f-proc').addEventListener('change', () => {
+    const p = findProcedure(state.catalog, $('#f-proc').value);
+    if (p && kindOf(p, p.skeleton) === 'medical') {
+      $('#f-anes').value = '';
+      $('#f-fast').value = '';
+      $('#f-liquid').value = '';
+    }
+  });
 
   // 麻醉：默认"未确认"
   $('#f-anes').innerHTML = opt('', '未确认') + c.anesthesia.map((a) => opt(a.id, a.label)).join('');
@@ -184,6 +194,7 @@ function resetForm() {
   $('#f-name').value = '';
   $('#f-age').value = '';
   $('#f-gender').value = '';
+  $('#f-parent').value = 'mom';
   $('#f-anes').value = '';
   $('#f-fast').value = '';
   $('#f-liquid').value = '';
@@ -241,7 +252,10 @@ function applyPresetByObject(p) {
 let generating = false;
 
 function readForm() {
-  const num = (v) => (v === '' ? null : Number(v));
+  const num = (v) => {
+    const s = String(v ?? '').trim();
+    return s === '' ? null : Number(s);
+  };
   return {
     procedureId: $('#f-proc').value,
     childName: $('#f-name').value.trim(),
@@ -350,10 +364,10 @@ async function goNext() {
     readerEl().classList.remove('reader--cover');
     await wait(POSE_GLIDE_MS);
     seqBusy = false;
-    if (flip.getCurrentPageIndex() === 0) flip.flipNext();
+    if (state.flip === flip && flip.getCurrentPageIndex() === 0) flip.flipNext();
     return;
   }
-  flip.flipNext();
+  if (state.flip === flip) flip.flipNext();
 }
 
 // 从封底往前翻：先向左挪书、停稳，再翻回（落在封面是翻完再往中挪，由 flip 事件处理）
@@ -365,10 +379,10 @@ async function goPrev() {
     readerEl().classList.remove('reader--back');
     await wait(POSE_GLIDE_MS);
     seqBusy = false;
-    if (flip.getCurrentPageIndex() === flip.getPageCount() - 1) flip.flipPrev();
+    if (state.flip === flip && flip.getCurrentPageIndex() === flip.getPageCount() - 1) flip.flipPrev();
     return;
   }
-  flip.flipPrev();
+  if (state.flip === flip) flip.flipPrev();
 }
 
 /* ---------------- 侧栏：事实与校验 ---------------- */
@@ -551,11 +565,13 @@ async function printBook() {
 }
 
 function renderBook(book) {
+  seqBusy = false;
   setFlipDetached(false); // 换病例时若正处翻页先把搬走的节点送回去避免孤儿
   if (state.flip) { try { state.flip.destroy(); } catch {} state.flip = null; }
 
   // PageFlip.destroy() 会把宿主节点一起摘掉，换病例时重建一个新的
   const reader = document.querySelector('.reader');
+  reader?.classList.remove('reader--cover', 'reader--back');
   document.getElementById('book')?.remove();
   const host = document.createElement('div');
   host.className = 'book';

@@ -120,7 +120,11 @@ export function assembleBook(caseObj, manifest, skeletons, modules) {
   const version = caseObj.version || (caseObj.missing?.length ? 'draft' : 'confirmed');
 
   // procedure 也进上下文：通用骨架要用 {{procedure.label}} 说出这次是什么术式
-  const baseCtx = { child: caseObj.child, fact: caseObj.facts, procedure: caseObj.procedure || {} };
+  const childCtx = {
+    ...caseObj.child,
+    parent_label: caseObj.child?.parent_label || (caseObj.child?.parent === 'dad' ? '爸爸' : '妈妈'),
+  };
+  const baseCtx = { child: childCtx, fact: caseObj.facts, procedure: caseObj.procedure || {} };
 
   /**
    * 通用模块页：只看「某一项事实有没有」，与术式无关。

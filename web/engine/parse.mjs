@@ -7,7 +7,7 @@
  *   3. 抽不到的字段标记 missing，装配层据此降级或跳过整页，绝不编造。
  */
 
-import { caseId } from './compose.mjs';
+import { caseId, requiredFields } from './compose.mjs';
 
 const PROCEDURE_RULES = [
   { key: 'tonsillectomy', label: '扁桃体切除术', match: /扁桃体|腺样体|tonsil/i },
@@ -78,10 +78,9 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
       value_text: fastLiquid
         ? `禁食${hours}小时、禁水${fastLiquid.value}小时`
         : `禁食${hours}小时`,
+      ids: [fastLiquid ? 'with-liquid' : 'food-only'],
       evidence: [fastSolid.evidence, fastLiquid?.evidence].filter(Boolean),
     };
-  } else {
-    missing.push('fasting');
   }
 
   // —— 麻醉 ——
@@ -92,10 +91,9 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
       label: '麻醉方式',
       short: anes.label,
       value_text: anes.label,
+      ids: [anes.key],
       evidence: (raw.match(anes.match) || [anes.label])[0],
     };
-  } else {
-    missing.push('anesthesia');
   }
 
   // —— 手上装置 ——
@@ -109,8 +107,6 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
       ids: [device.key],            // 与词表路径对齐：页面按 id 判断该不该插
       evidence: (raw.match(device.match) || [device.label])[0],
     };
-  } else {
-    missing.push('device');
   }
 
   // —— 住院时长 ——
@@ -123,21 +119,26 @@ export function parseNotice(text, { childName = '', ageHint = null } = {}) {
       value_text: `住院${stay.value}天`,
       evidence: stay.evidence,
     };
-  } else {
-    missing.push('stay');
   }
 
-  // —— 患儿姓名 ——
+  for (const k of requiredFields(procedure.key)) {
+    if (!facts[k]) missing.push(k);
+  }
+
+  // —— 患儿姓名 / 性别 / 年龄 ——
   const nameMatch = raw.match(/姓名[：:\s]*([^\s，,。；;\n]{1,8})/);
+  const genderMatch = raw.match(/性别[：:\s]*(男|女)/);
   const ageInNotice = Number(raw.match(/年龄[：:\s]*(\d{1,2})/)?.[1]);
   const child = {
     name: (childName || nameMatch?.[1] || '小勇士').trim(),
     age: ageHint ?? (Number.isFinite(ageInNotice) && ageInNotice > 0 ? ageInNotice : null),
+    gender: genderMatch?.[1] === '女' ? 'f' : genderMatch?.[1] === '男' ? 'm' : null,
     name_source: childName ? 'input' : nameMatch ? 'notice' : 'fallback',
   };
 
   return {
     case_id: caseId(JSON.stringify([procedure, child, facts])),
+    version: missing.length ? 'draft' : 'confirmed',
     procedure,
     child,
     facts,

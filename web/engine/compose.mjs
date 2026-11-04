@@ -114,10 +114,12 @@ export function composeCase(input) {
   const skeletonKey = procedure.skeleton || null;
   const kind = kindOf(procedure, skeletonKey);
   const facts = {};
+  // 录入层的自洽性提醒（不进书，只进侧栏）。用"说清楚丢在哪"，代替静默丢字段。
+  const warnings = [];
 
-  // —— 麻醉 ——
+  // —— 麻醉（手术类才适用；内科处置不写麻醉页）——
   const anes = (catalog.anesthesia || []).find((a) => a.id === input.anesthesiaId);
-  if (anes) {
+  if (anes && kind === 'surgical') {
     facts.anesthesia = {
       key: 'anesthesia',
       label: '麻醉方式',
@@ -127,21 +129,34 @@ export function composeCase(input) {
       evidence: null,
       source: 'catalog',
     };
+  } else if (anes && anes.id !== 'none' && kind === 'medical') {
+    warnings.push('当前为内科/非手术处置，不涉及手术麻醉，所选麻醉方式不会写进书里。');
   }
 
   // —— 禁食 / 禁水（手术类才需要）——
   const fasting = Number.isFinite(input.fastingHours) ? input.fastingHours : null;
   const liquid = Number.isFinite(input.liquidHours) ? input.liquidHours : null;
-  if (fasting != null) {
+  if (kind === 'medical') {
+    if (fasting != null || liquid != null) {
+      warnings.push('当前为内科/非手术处置，不涉及术前禁食禁水，相关时长不会写进书里。');
+    }
+  } else if (fasting != null) {
     facts.fasting = {
       key: 'fasting',
       label: '术前空腹',
       short: `${fasting}小时`,
       short_liquid: liquid != null ? `${liquid}小时` : '足够时间',
       value_text: liquid != null ? `禁食${fasting}小时、禁水${liquid}小时` : `禁食${fasting}小时`,
+      // 页面按取值切换文案：有禁水时长才敢写"几小时不能喝水"，
+      // 没录到禁水就只讲禁食 —— 不让模板里那句"足够时间不喝水"漏到纸上。
+      ids: [liquid != null ? 'with-liquid' : 'food-only'],
       evidence: null,
       source: 'catalog',
     };
+  } else if (liquid != null) {
+    // 禁食和禁水写在同一页：禁食未确认，这一页就不存在，
+    // 禁水时长会跟着一起丢掉。这里必须说出来，不能让它静默消失。
+    warnings.push('填了禁水时长，但禁食未确认 —— 两者写在同一页，这一页不会生成，禁水时长也不会写进书里。');
   }
 
   // —— 留置针（"有 / 没有"两种都算确认过；只有"未确认"才进 missing）——
@@ -217,7 +232,7 @@ export function composeCase(input) {
   }
 
   const out = {
-    case_id: caseId(JSON.stringify([procedure.id, input.childName || '', input.age ?? null, facts])),
+    case_id: caseId(JSON.stringify([procedure.id, input.childName || '', input.age ?? null, input.gender || '', input.parent === 'dad' ? 'dad' : 'mom', facts])),
     source: 'catalog',
     version: missing.length ? 'draft' : 'confirmed',
     procedure: { key: skeletonKey || 'generic', id: procedure.id, label: procedure.label, kind },
@@ -227,12 +242,14 @@ export function composeCase(input) {
       gender: input.gender === 'f' || input.gender === 'm' ? input.gender : null,
       // 陪同家长：封面上的那个成年人。默认妈妈，不选就是妈妈。
       parent: input.parent === 'dad' ? 'dad' : 'mom',
+      parent_label: input.parent === 'dad' ? '爸爸' : '妈妈',
       name_source: (input.childName || '').trim() ? 'input' : 'fallback',
     },
     facts,
     cautions,
     missing,
     questions: buildQuestions(missing),
+    audit_warnings: warnings,
     raw: null,
   };
   return attachDisease(out, catalog);

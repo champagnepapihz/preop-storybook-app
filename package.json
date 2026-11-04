@@ -10,6 +10,7 @@
     "dev": "node tooling/serve.mjs",
     "cases": "node tooling/make-cases.mjs",
     "mcp": "node mcp/server.mjs",
+    "test": "node tooling/check-unconfirmed.mjs",
     "trim": "node tooling/trim-webp.mjs"
   },
   "dependencies": {

@@ -40,7 +40,8 @@ const MIME = {
 };
 
 http.createServer((req, res) => {
-  const url = decodeURIComponent((req.url || '/').split('?')[0]);
+  let url = '/';
+  try { url = decodeURIComponent((req.url || '/').split('?')[0]); } catch { url = '/'; }
   let rel = url.replace(/^\/+/, '');
   if (!rel || rel.endsWith('/')) rel += 'index.html';
   const file = path.join(ROOT, rel);

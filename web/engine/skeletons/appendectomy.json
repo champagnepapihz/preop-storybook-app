@@ -58,6 +58,14 @@
         "key": "fasting",
         "label": "术前空腹",
         "display": "value_text"
+      },
+      "variants": {
+        "fact": "fasting",
+        "cases": {
+          "food-only": {
+            "text": "医生说要{{fact.fasting.short}}不吃东西。肚子空着，小尾巴怪就藏不住，医生也看得更清楚。能不能喝水，护士会再跟你确认一次。饿的时候可以想一想，等事情办完，第一口粥会有多香。"
+          }
+        }
       }
     },
     {

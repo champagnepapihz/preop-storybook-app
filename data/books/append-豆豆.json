@@ -1,5 +1,5 @@
 {
-  "book_id": "CASE-0BDTASU",
+  "book_id": "CASE-0BXG2V9",
   "mode": "story",
   "version": "confirmed",
   "skeleton": {
@@ -25,7 +25,8 @@
     }
   },
   "case": {
-    "case_id": "CASE-0BDTASU",
+    "case_id": "CASE-0BXG2V9",
+    "version": "confirmed",
     "procedure": {
       "key": "appendectomy",
       "label": "腹腔镜阑尾切除术"
@@ -33,6 +34,7 @@
     "child": {
       "name": "豆豆",
       "age": 8,
+      "gender": "m",
       "name_source": "notice"
     },
     "facts": {
@@ -42,6 +44,9 @@
         "short": "6小时",
         "short_liquid": "2小时",
         "value_text": "禁食6小时、禁水2小时",
+        "ids": [
+          "with-liquid"
+        ],
         "evidence": [
           "禁食时间 6 小时",
           "禁水 2 小时"
@@ -52,6 +57,9 @@
         "label": "麻醉方式",
         "short": "全身麻醉",
         "value_text": "全身麻醉",
+        "ids": [
+          "general"
+        ],
         "evidence": "全身麻醉"
       },
       "device": {

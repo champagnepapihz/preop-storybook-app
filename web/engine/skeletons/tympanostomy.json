@@ -100,7 +100,7 @@
       "id": "wake",
       "layout": "image_left",
       "title": "小鼓清亮了",
-      "text": "{{child.name}}睁开眼睛，听见妈妈在床边轻轻叫他。声音清亮亮的，不再隔着被子。医生说：{{fact.stay.short}}，就能回家。",
+      "text": "{{child.name}}睁开眼睛，听见{{child.parent_label}}在床边轻轻叫自己的名字。声音清亮亮的，不再隔着被子。医生说：{{fact.stay.short}}，就能回家。",
       "asset": "scene_wake_up",
       "props": [
         "kid:cheer",

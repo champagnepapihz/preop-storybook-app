@@ -35,7 +35,7 @@
       "id": "double",
       "layout": "image_left",
       "title": "看什么都变成两份",
-      "text": "两只眼睛看的不是同一个地方，{{child.name}}眼前的东西就变成了两份：一盏灯变成两盏，一个妈妈变成两个。走楼梯的时候，脚也不知道往哪儿落。",
+      "text": "两只眼睛看的不是同一个地方，{{child.name}}眼前的东西就变成了两份：一盏灯变成两盏，一个{{child.parent_label}}变成两个。走楼梯的时候，脚也不知道往哪儿落。",
       "asset": "scene_ward_bed_close",
       "props": [
         "kid:hug"

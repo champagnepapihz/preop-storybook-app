@@ -17,21 +17,26 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.woff2': 'font/woff2',
   '.txt': 'text/plain; charset=utf-8',
+  '.pdf': 'application/pdf',
+  '.ico': 'image/x-icon',
 };
 
 createServer(async (req, res) => {
   try {
-    const url = decodeURIComponent((req.url || '/').split('?')[0]);
+    let url = '/';
+    try { url = decodeURIComponent((req.url || '/').split('?')[0]); } catch { url = '/'; }
     let p = join(DIST, url === '/' ? '/index.html' : url);
+    if (!p.startsWith(DIST)) throw new Error('forbidden');
     try {
       if ((await stat(p)).isDirectory()) p = join(p, 'index.html');
     } catch {}
     const buf = await readFile(p);
     res.writeHead(200, {
-      'Content-Type': MIME[extname(p)] || 'application/octet-stream',
+      'Content-Type': MIME[extname(p).toLowerCase()] || 'application/octet-stream',
       'Cache-Control': 'no-store',
     });
     res.end(buf);

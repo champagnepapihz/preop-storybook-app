@@ -157,21 +157,32 @@ export function auditCase(caseObj) {
   const f = caseObj.facts || {};
   const push = (level, text) => notes.push({ level, text });
 
+  // 引擎侧录入警告：例如"填了禁水但禁食未确认，禁水会跟着这一页一起消失"
+  for (const w of caseObj.audit_warnings || []) push('warn', w);
+
   const solid = f.fasting ? Number((f.fasting.short || '').replace(/[^\d.]/g, '')) : NaN;
+  const liqRaw = f.fasting?.short_liquid && f.fasting.short_liquid !== '足够时间'
+    ? Number(String(f.fasting.short_liquid).replace(/[^\d.]/g, ''))
+    : NaN;
   if (f.fasting) {
-    if (!Number.isFinite(solid) || solid <= 0) {
+    if (!Number.isFinite(solid) || solid < 0) {
       push('warn', '禁食时长未能解析出具体小时数，请核对录入原文。');
+    } else if (solid === 0) {
+      push('warn', '禁食时长为 0 小时，请复核是否无需禁食或录入有误。');
     } else if (solid > 12) {
       push('warn', `禁食 ${solid} 小时，超出常见范围，请复核是不是录入错误。`);
     }
+    if (Number.isFinite(liqRaw) && Number.isFinite(solid) && liqRaw > solid) {
+      push('warn', `禁水 ${liqRaw} 小时大于禁食 ${solid} 小时，请核对两项是否填反。`);
+    }
     if (!f.fasting.short_liquid || f.fasting.short_liquid === '足够时间') {
-      push('info', '未录到禁水时长，绘本里只会写禁食。');
+      push('info', '未录到禁水时长：这一页只写禁食，能不能喝水请再向病房确认。');
     }
   }
 
   const age = caseObj.child?.age;
-  if (Number.isFinite(age) && (age < 1 || age > 14)) {
-    push('warn', `患儿年龄 ${age} 岁，超出儿科常见区间，请核对。`);
+  if (Number.isFinite(age) && (age < 0 || age > 18)) {
+    push('warn', `患儿年龄 ${age} 岁，超出 0–18 岁的录入范围，请核对。`);
   }
 
   if (caseObj.child?.name === '小勇士') {
